@@ -5,72 +5,142 @@ import raccoonman.reterraforged.RTFCommon;
 import raccoonman.reterraforged.client.gui.Tooltips;
 
 // TODO add some more languages
+/**
+ * RTFLanguageProvider类用于为ReTerraForged Minecraft模组提供语言资源。
+ * 此类目前包含一个用于英语（美国）翻译的静态内部类，未来可以扩展以支持更多语言。
+ * 这个类是客户端数据操作的一部分，用于将模组的用户界面国际化。
+ */
 public class RTFLanguageProvider {
 
+    /**
+     * 静态内部类，用于提供ReTerraForged模组的英语（美国）翻译。
+     */
     public static class EnglishUS extends LanguageProvider {
 
+        /**
+         * 构造一个新的EnglishUS翻译提供者。
+         * 
+         * @param output 翻译文件将写入的PackOutput。
+         */
         public EnglishUS(PackOutput output) {
             super(output, RTFCommon.MOD_ID, "en_us");
         }
 
+        /**
+         * 为英语（美国）语言添加所有的翻译。
+         */
         @Override
         protected void addTranslations() {
+            // 添加ReTerraForged模组资源的元数据描述翻译。
             this.add(RTFTranslationKeys.METADATA_DESCRIPTION, "ReTerraForged resources");
+            // 为ReTerraForged预设的元数据描述添加翻译。
             this.add(RTFTranslationKeys.PRESET_METADATA_DESCRIPTION, "ReTerraForged preset");
+            // 将沼泽地材质更改为泥的元数据描述翻译。
             this.add(RTFTranslationKeys.MUD_SWAMPS_METADATA_DESCRIPTION, "Changes the swamp material to mud");
+            // 定义无错误信息时的占位翻译。
             this.add(RTFTranslationKeys.NO_ERROR_MESSAGE, "{No error message}");
 
+            // 设置GUI输入提示，提示用户输入预设名称。
             this.add(RTFTranslationKeys.GUI_INPUT_PROMPT, "Type preset name");
 
+            // 添加提示信息，说明找不到任何旧版预设。
             this.add(RTFTranslationKeys.GUI_SELECT_PRESET_MISSING_LEGACY_PRESETS, "Couldn't find any legacy presets");
+            // 添加预设选择界面的标题。
             this.add(RTFTranslationKeys.GUI_SELECT_PRESET_TITLE, "Presets & Defaults");
+            // 添加ReTerraForged默认预设的名称。
             this.add(RTFTranslationKeys.GUI_DEFAULT_PRESET_NAME, "ReTerraForged - Default");
+            // 添加TerraForged默认旧版预设的名称。
             this.add(RTFTranslationKeys.GUI_DEFAULT_LEGACY_PRESET_NAME, "TerraForged - Default");
+            // 添加TerraForged美丽预设的名称。
             this.add(RTFTranslationKeys.GUI_BEAUTIFUL_PRESET_NAME, "TerraForged - Beautiful");
+            // 添加TerraForged巨大生态预设的名称。
             this.add(RTFTranslationKeys.GUI_HUGE_BIOMES_PRESET_NAME, "TerraForged - Huge Biomes");
+            // 添加TerraForged精简预设的名称。
             this.add(RTFTranslationKeys.GUI_LITE_PRESET_NAME, "TerraForged - Lite");
+            // 添加TerraForged接近原版风格的预设名称。
             this.add(RTFTranslationKeys.GUI_VANILLAISH_PRESET_NAME, "TerraForged - Vanilla-ish");
+            // 添加世界设置界面的标题。
             this.add(RTFTranslationKeys.GUI_WORLD_SETTINGS_TITLE, "World Settings");
+            // 添加实验性表面设置界面的标题。
             this.add(RTFTranslationKeys.GUI_SURFACE_SETTINGS_TITLE, "Surface Settings (Experimental)");
+            // 添加实验性洞穴设置界面的标题。
             this.add(RTFTranslationKeys.GUI_CAVE_SETTINGS_TITLE, "Cave Settings (Experimental)");
+            // 添加气候设置界面的标题。
             this.add(RTFTranslationKeys.GUI_CLIMATE_SETTINGS_TITLE, "Climate Settings");
+            // 添加地形设置界面的标题。
             this.add(RTFTranslationKeys.GUI_TERRAIN_SETTINGS_TITLE, "Terrain Settings");
+            // 添加河流设置界面的标题。
             this.add(RTFTranslationKeys.GUI_RIVER_SETTINGS_TITLE, "River Settings");
+            // 添加筛选设置界面的标题。
             this.add(RTFTranslationKeys.GUI_FILTER_SETTINGS_TITLE, "Filter Settings");
+            // 添加结构设置界面的标题。
             this.add(RTFTranslationKeys.GUI_STRUCTURE_SETTINGS_TITLE, "Structure Settings");
+            // 添加杂项设置界面的标题。
             this.add(RTFTranslationKeys.GUI_MISCELLANEOUS_SETTINGS_TITLE, "Miscellaneous Settings");
 
+            // 翻译“真”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_TRUE, "true");
+            // 翻译“假”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_FALSE, "false");
+            // 翻译“创建”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_CREATE, "Create");
+            // 翻译“复制”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_COPY, "Copy");
+            // 翻译“删除”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_DELETE, "Delete");
+            // 翻译“打开预设文件夹”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_OPEN_PRESET_FOLDER, "Open Preset Folder");
+            // 翻译“打开导出文件夹”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_OPEN_EXPORT_FOLDER, "Open Export Folder");
+            // 翻译“导出为数据包”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_EXPORT_AS_DATAPACK, "Export As Datapack");
+            // 翻译“导出预设”成功提示
             this.add(RTFTranslationKeys.GUI_BUTTON_EXPORT_SUCCESS, "Exported Preset");
+            // 翻译“种子”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_SEED, "Seed");
+            // 翻译“大陆类型”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_CONTINENT_TYPE, "Continent Type");
+            // 翻译“大陆形状”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_CONTINENT_SHAPE, "Continent Shape");
+            // 翻译“生成类型”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_SPAWN_TYPE, "Spawn Type");
+            // 翻译“大型矿脉”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_LARGE_ORE_VEINS, "Large Ore Veins");
+            // 翻译“旧版雕刻器分布”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_LEGACY_CARVER_DISTRIBUTION, "Legacy Carver Distribution");
+            // 翻译“气候种子偏移”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_CLIMATE_SEED_OFFSET, "Seed Offset");
+            // 翻译“生态边缘类型”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_BIOME_EDGE_TYPE, "Type");
+            // 翻译“地形种子偏移”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_TERRAIN_SEED_OFFSET, "Terrain Seed Offset");
+            // 翻译“华丽山脉”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_FANCY_MOUNTAINS, "Fancy Mountains");
+            // 翻译“河流种子偏移”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_RIVER_SEED_OFFSET, "Seed Offset");
+            // 翻译“盐”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_SALT, "Salt");
+            // 翻译“禁用”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_DISABLED, "Disabled");
+            // 翻译“平滑层装饰”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_SMOOTH_LAYER_DECORATOR, "Smooth Layer Decorator");
+            // 翻译“地层装饰”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_STRATA_DECORATOR, "Strata Decorator");
+            // 翻译“仅矿石兼容石材”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_ORE_COMPATIBLE_STONE_ONLY, "Ore Compatible Stone Only");
+            // 翻译“侵蚀装饰”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_EROSION_DECORATOR, "Erosion Decorator");
+            // 翻译“普通石材侵蚀”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_PLAIN_STONE_EROSION, "Plain Stone Erosion");
+            // 翻译“自然降雪装饰”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_NATURAL_SNOW_DECORATOR, "Natural Snow Decorator");
+            // 翻译“自定义生态特征”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_CUSTOM_BIOME_FEATURES, "Custom Biome Features");
+            // 翻译“原版泉水”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_VANILLA_SPRINGS, "Vanilla Springs");
+            // 翻译“原版熔岩湖”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_VANILLA_LAVA_LAKES, "Vanilla Lava Lakes");
+            // 翻译“原版熔岩泉”按钮
             this.add(RTFTranslationKeys.GUI_BUTTON_VANILLA_LAVA_SPRINGS, "Vanilla Lava Springs");
 
             this.add(RTFTranslationKeys.GUI_SLIDER_ZOOM, "Zoom");
