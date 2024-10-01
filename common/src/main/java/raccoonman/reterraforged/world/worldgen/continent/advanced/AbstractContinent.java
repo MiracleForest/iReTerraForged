@@ -19,7 +19,7 @@ public abstract class AbstractContinent implements SimpleContinent {
     protected float skipThreshold;
     protected RiverCache riverCache;
     protected ControlPoints controlPoints;
-    
+
     public AbstractContinent(Seed seed, GeneratorContext context) {
         WorldSettings settings = context.preset.world();
         this.seed = seed.next();
@@ -31,7 +31,7 @@ public abstract class AbstractContinent implements SimpleContinent {
         this.controlPoints = settings.controlPoints;
         this.riverCache = new RiverCache(new SimpleRiverGenerator(this, context));
     }
-    
+
     @Override
     public float getDistanceToOcean(int cx, int cz, float dx, float dz) {
         float high = this.getDistanceToEdge(cx, cz, dx, dz);
@@ -52,10 +52,10 @@ public abstract class AbstractContinent implements SimpleContinent {
         }
         return high;
     }
-    
+
     @Override
     public float getDistanceToEdge(int cx, int cz, float dx, float dz) {
-        float distance = (float)(this.continentScale * 4);
+        float distance = (float) (this.continentScale * 4);
         for (int i = 0; i < 10; ++i) {
             float x = cx + dx * distance;
             float z = cz + dz * distance;
@@ -91,7 +91,7 @@ public abstract class AbstractContinent implements SimpleContinent {
     protected boolean isDefaultContinent(int cellX, int cellY) {
         return cellX == 0 && cellY == 0;
     }
-    
+
     protected boolean shouldSkip(int cellX, int cellY) {
         if (this.hasSkipping && !this.isDefaultContinent(cellX, cellY)) {
             float skipValue = getCellValue(this.skippingSeed, cellX, cellY);
@@ -99,7 +99,7 @@ public abstract class AbstractContinent implements SimpleContinent {
         }
         return false;
     }
-    
+
     protected static float getCellValue(int seed, int cellX, int cellY) {
         return 0.5F + NoiseUtil.valCoord2D(seed, cellX, cellY) * 0.5F;
     }

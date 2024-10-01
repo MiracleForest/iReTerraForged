@@ -12,26 +12,26 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import raccoonman.reterraforged.world.worldgen.noise.module.Noise;
 
 class NoiseFilter extends PlacementFilter {
-	public static final Codec<NoiseFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		Noise.CODEC.fieldOf("noise").forGetter((filter) -> filter.noise),
-		Codec.FLOAT.fieldOf("threshold").forGetter((filter) -> filter.threshold)
-	).apply(instance, NoiseFilter::new));
+    public static final Codec<NoiseFilter> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Noise.CODEC.fieldOf("noise").forGetter((filter) -> filter.noise),
+            Codec.FLOAT.fieldOf("threshold").forGetter((filter) -> filter.threshold)
+    ).apply(instance, NoiseFilter::new));
 
-	private Holder<Noise> noise;
-	private float threshold;
-	
-	public NoiseFilter(Holder<Noise> noise, float threshold) {
-		this.noise = noise;
-		this.threshold = threshold;
-	}
-	
-	@Override
-	protected boolean shouldPlace(PlacementContext ctx, RandomSource rand, BlockPos pos) {
-		return this.noise.value().compute(pos.getX(), pos.getZ(), (int) ctx.getLevel().getSeed()) > this.threshold;
-	}
-	
-	@Override
-	public PlacementModifierType<NoiseFilter> type() {
-		return RTFPlacementModifiers.NOISE_FILTER;
-	}
+    private Holder<Noise> noise;
+    private float threshold;
+
+    public NoiseFilter(Holder<Noise> noise, float threshold) {
+        this.noise = noise;
+        this.threshold = threshold;
+    }
+
+    @Override
+    protected boolean shouldPlace(PlacementContext ctx, RandomSource rand, BlockPos pos) {
+        return this.noise.value().compute(pos.getX(), pos.getZ(), (int) ctx.getLevel().getSeed()) > this.threshold;
+    }
+
+    @Override
+    public PlacementModifierType<NoiseFilter> type() {
+        return RTFPlacementModifiers.NOISE_FILTER;
+    }
 }

@@ -18,25 +18,25 @@ import raccoonman.reterraforged.compat.terrablender.TBTargetPoint;
 @Mixin(Climate.Sampler.class)
 @Implements(@Interface(iface = TBClimateSampler.class, prefix = "reterraforged$TBClimateSampler$"))
 class MixinClimateSampler {
-	@Nullable
-	private DensityFunction uniqueness;
-	
-	@Inject(
-		at = @At("RETURN"), 
-		method = "sample",
-		locals = LocalCapture.CAPTURE_FAILHARD
-	)
-	public void sample(int i, int j, int k, CallbackInfoReturnable<TargetPoint> callback, int l, int m, int n, DensityFunction.SinglePointContext ctx) {
-		if(this.uniqueness != null && (Object) callback.getReturnValue() instanceof TBTargetPoint tbTargetPoint) {
-			tbTargetPoint.setUniqueness(this.uniqueness.compute(ctx));
-		}
-	}
-	
-	public void reterraforged$TBClimateSampler$setUniqueness(DensityFunction uniqueness) {
-		this.uniqueness = uniqueness;
-	}
-	
-	public DensityFunction reterraforged$TBClimateSampler$getUniqueness() {
-		return this.uniqueness;
-	}
+    @Nullable
+    private DensityFunction uniqueness;
+
+    @Inject(
+            at = @At("RETURN"),
+            method = "sample",
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    public void sample(int i, int j, int k, CallbackInfoReturnable<TargetPoint> callback, int l, int m, int n, DensityFunction.SinglePointContext ctx) {
+        if (this.uniqueness != null && (Object) callback.getReturnValue() instanceof TBTargetPoint tbTargetPoint) {
+            tbTargetPoint.setUniqueness(this.uniqueness.compute(ctx));
+        }
+    }
+
+    public void reterraforged$TBClimateSampler$setUniqueness(DensityFunction uniqueness) {
+        this.uniqueness = uniqueness;
+    }
+
+    public DensityFunction reterraforged$TBClimateSampler$getUniqueness() {
+        return this.uniqueness;
+    }
 }

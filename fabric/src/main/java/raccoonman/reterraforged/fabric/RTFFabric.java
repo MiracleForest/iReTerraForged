@@ -8,13 +8,13 @@ import raccoonman.reterraforged.data.RTFDataGen;
 
 public class RTFFabric implements ModInitializer, DataGeneratorEntrypoint {
 
-	@Override
-	public void onInitialize() {
-		RTFCommon.bootstrap();
-	}
+    @Override
+    public void onInitialize() {
+        RTFCommon.bootstrap();
+    }
 
-	@Override
-	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-		RTFDataGen.generateResourcePacks(fabricDataGenerator::createPack);
-	}
+    @Override
+    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
+        RTFDataGen.generateResourcePacks(fabricDataGenerator::createPack);
+    }
 }

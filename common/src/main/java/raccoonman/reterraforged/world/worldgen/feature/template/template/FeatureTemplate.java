@@ -92,12 +92,12 @@ public class FeatureTemplate {
     }
 
     private static <T extends TemplateContext> BlockSetter setter(LevelAccessor world, T ctx) {
-    	return (pos, state, flags) -> {
-        	world.setBlock(pos, state, flags);
-        	ctx.recordState(pos, state);
+        return (pos, state, flags) -> {
+            world.setBlock(pos, state, flags);
+            ctx.recordState(pos, state);
         };
     }
-    
+
     public <T extends TemplateContext> boolean pasteWorldGen(LevelAccessor world, T ctx, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config) {
         if (config.checkBounds()) {
             ChunkAccess chunk = world.getChunk(origin);
@@ -119,7 +119,7 @@ public class FeatureTemplate {
         BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
 
         BlockSetter setter = setter(world, ctx);
-        
+
         BlockInfo[] blocks = this.template.get(mirror, rotation);
         for (int i = 0; i < blocks.length; i++) {
             BlockInfo block = blocks[i];
@@ -142,7 +142,7 @@ public class FeatureTemplate {
 
             // generate a base going downwards if necessary
             if (block.pos().getY() <= 0 && block.state().isCollisionShapeFullBlock(reader.setState(block.state()), BlockPos.ZERO)) {
-            	this.placeBase(world, setter, pos1, pos2, block.state(), config.baseDepth());
+                this.placeBase(world, setter, pos1, pos2, block.state(), config.baseDepth());
             }
 
             setter.setBlock(pos1, block.state(), 2);
@@ -169,7 +169,7 @@ public class FeatureTemplate {
         BlockInfo[] blocks = template.get(mirror, rotation);
 
         BlockSetter setter = setter(world, ctx);
-        
+
         // record valid BlockInfos into the buffer
         for (int i = 0; i < blocks.length; i++) {
             BlockInfo block = blocks[i];
@@ -191,7 +191,7 @@ public class FeatureTemplate {
             addPos(pos1, origin, block.pos());
 
             if (pos1.getY() <= origin.getY() && block.state().isCollisionShapeFullBlock(reader.setState(block.state()), BlockPos.ZERO)) {
-            	this.placeBase(world, setter, pos1, pos2, block.state(), config.baseDepth());
+                this.placeBase(world, setter, pos1, pos2, block.state(), config.baseDepth());
                 setter.setBlock(pos1, block.state(), 2);
                 placed = true;
             } else if (buffer.test(pos1)) {
@@ -221,30 +221,30 @@ public class FeatureTemplate {
     private Paste getWorldGenPaste() {
         return new Paste() {
 
-			@Override
-			public <T extends TemplateContext> boolean apply(LevelAccessor world, T ctx, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config) {
-				return FeatureTemplate.this.pasteWorldGen(world, ctx, origin, mirror, rotation, placement, config);
-			}
+            @Override
+            public <T extends TemplateContext> boolean apply(LevelAccessor world, T ctx, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config) {
+                return FeatureTemplate.this.pasteWorldGen(world, ctx, origin, mirror, rotation, placement, config);
+            }
         };
     }
 
     private Paste getCheckedPaste() {
         return new Paste() {
 
-			@Override
-			public <T extends TemplateContext> boolean apply(LevelAccessor world, T ctx, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config) {
-				return FeatureTemplate.this.pasteChecked(world, ctx, origin, mirror, rotation, placement, config);
-			}
+            @Override
+            public <T extends TemplateContext> boolean apply(LevelAccessor world, T ctx, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config) {
+                return FeatureTemplate.this.pasteChecked(world, ctx, origin, mirror, rotation, placement, config);
+            }
         };
     }
 
     private Paste getUnCheckedPaste() {
         return new Paste() {
 
-			@Override
-			public <T extends TemplateContext> boolean apply(LevelAccessor world, T ctx, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config) {
-				return FeatureTemplate.this.pasteUnChecked(world, ctx, origin, mirror, rotation, placement, config);
-			}
+            @Override
+            public <T extends TemplateContext> boolean apply(LevelAccessor world, T ctx, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config) {
+                return FeatureTemplate.this.pasteUnChecked(world, ctx, origin, mirror, rotation, placement, config);
+            }
         };
     }
 
@@ -275,13 +275,13 @@ public class FeatureTemplate {
         // update state at pos1 - the input position
         BlockState result1 = state1.updateShape(direction, state2, world, pos1, pos2);
         if (result1 != state1) {
-        	setter.setBlock(pos1, result1, PASTE_FLAG);
+            setter.setBlock(pos1, result1, PASTE_FLAG);
         }
 
         // update state at pos2 - the neighbour
         BlockState result2 = state2.updateShape(direction.getOpposite(), result1, world, pos2, pos1);
         if (result2 != state2) {
-        	setter.setBlock(pos2, result2, PASTE_FLAG);
+            setter.setBlock(pos2, result2, PASTE_FLAG);
         }
     }
 
@@ -399,8 +399,8 @@ public class FeatureTemplate {
     public interface PasteFunction {
         <T extends TemplateContext> boolean paste(LevelAccessor world, BlockPos origin, Mirror mirror, Rotation rotation, TemplatePlacement<T> placement, PasteConfig config);
     }
-    
+
     public interface BlockSetter {
-    	void setBlock(BlockPos pos, BlockState state, int flags);
+        void setBlock(BlockPos pos, BlockState state, int flags);
     }
 }

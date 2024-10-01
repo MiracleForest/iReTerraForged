@@ -15,18 +15,18 @@ import terrablender.api.RegionType;
 import terrablender.api.Regions;
 
 @Mixin(
-	value = Climate.ParameterList.class,
-	priority = 1001
+        value = Climate.ParameterList.class,
+        priority = 1001
 )
 class MixinParameterList<T> {
-	private int maxIndex;
+    private int maxIndex;
 
-	@Inject(
-		at = @At("HEAD"),
-		method = "initializeForTerraBlender"
-	)
+    @Inject(
+            at = @At("HEAD"),
+            method = "initializeForTerraBlender"
+    )
     public void initializeForTerraBlender(RegistryAccess registryAccess, RegionType regionType, long seed, CallbackInfo callback) {
-    	this.maxIndex = Regions.getCount(regionType) - 1;
+        this.maxIndex = Regions.getCount(regionType) - 1;
 //
 //    	registryAccess.lookup(RTFRegistries.PRESET).flatMap((registry) -> {
 //    		return registry.get(Preset.KEY);
@@ -38,27 +38,27 @@ class MixinParameterList<T> {
 //    	});
     }
 
-	@Redirect(
-		method = "findValuePositional",
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/world/level/biome/Climate$ParameterList;getUniqueness(III)I"
-		)
-	)
+    @Redirect(
+            method = "findValuePositional",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/biome/Climate$ParameterList;getUniqueness(III)I"
+            )
+    )
     public int getUniqueness(Climate.ParameterList<T> parameterList, int x, int y, int z, Climate.TargetPoint targetPoint) {
-		if((Object) targetPoint instanceof TBTargetPoint tbTargetPoint) {
-			double uniqueness = tbTargetPoint.getUniqueness();
-			if(Double.isNaN(uniqueness)) {
-				return this.getUniqueness(x, y, z);
-			}
-			return NoiseUtil.round(this.maxIndex * (float) uniqueness);
-		} else {
-			throw new IllegalStateException();
-		}
+        if ((Object) targetPoint instanceof TBTargetPoint tbTargetPoint) {
+            double uniqueness = tbTargetPoint.getUniqueness();
+            if (Double.isNaN(uniqueness)) {
+                return this.getUniqueness(x, y, z);
+            }
+            return NoiseUtil.round(this.maxIndex * (float) uniqueness);
+        } else {
+            throw new IllegalStateException();
+        }
     }
 
-	@Shadow
+    @Shadow
     public int getUniqueness(int x, int y, int z) {
-    	throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 }

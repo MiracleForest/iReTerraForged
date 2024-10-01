@@ -33,7 +33,7 @@ import raccoonman.reterraforged.world.worldgen.tile.Tile;
 public class BiomeVariance implements Noise {
     public static final BiomeVariance NONE = new BiomeVariance(null, 0.0F) {
 
-    	@Override
+        @Override
         public float compute(float x, float y, int seed) {
             return NO_SPREAD;
         }
@@ -55,7 +55,7 @@ public class BiomeVariance implements Noise {
     }
 
     @Override
-	public float compute(float x, float z, int seed) {
+    public float compute(float x, float z, int seed) {
         Cell cell = this.chunk.getCell((int) x, (int) z);
         float edge = 0.02F + cell.biomeRegionEdge;
 
@@ -78,22 +78,22 @@ public class BiomeVariance implements Noise {
     }
 
     @Override
-	public float minValue() {
-		return 0.0F;
-	}
+    public float minValue() {
+        return 0.0F;
+    }
 
-	@Override
-	public float maxValue() {
-		return 1.0F;
-	}
+    @Override
+    public float maxValue() {
+        return 1.0F;
+    }
 
-	@Override
-	public Noise mapAll(Visitor visitor) {
-		return visitor.apply(this);
-	}
+    @Override
+    public Noise mapAll(Visitor visitor) {
+        return visitor.apply(this);
+    }
 
-	@Override
-	public Codec<BiomeVariance> codec() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public Codec<BiomeVariance> codec() {
+        throw new UnsupportedOperationException();
+    }
 }

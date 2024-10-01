@@ -1,12 +1,16 @@
 package raccoonman.reterraforged.concurrent.cache.map;
 
 import it.unimi.dsi.fastutil.HashCommon;
+
 import java.util.function.LongFunction;
+
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+
 import java.util.function.Predicate;
 import java.util.function.Consumer;
 import java.util.concurrent.locks.StampedLock;
+
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
 
 public class LoadBalanceLongMap<T> implements LongMap<T> {
@@ -14,9 +18,9 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
     private int sectionCapacity;
     private Long2ObjectLinkedOpenHashMap<T>[] maps;
     private StampedLock[] locks;
-    
+
     @SuppressWarnings("unchecked")
-	public LoadBalanceLongMap(int factor, int size) {
+    public LoadBalanceLongMap(int factor, int size) {
         factor = getNearestFactor(factor);
         size = getSectionSize(size, factor);
         this.mask = factor - 1;
@@ -28,7 +32,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
             this.locks[i] = new StampedLock();
         }
     }
-    
+
     @Override
     public int size() {
         int size = 0;
@@ -43,7 +47,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
         }
         return size;
     }
-    
+
     @Override
     public void clear() {
         for (int i = 0; i < this.locks.length; ++i) {
@@ -56,7 +60,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
             }
         }
     }
-    
+
     @Override
     public void remove(long key) {
         int index = this.getIndex(key);
@@ -68,7 +72,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
             lock.unlockWrite(stamp);
         }
     }
-    
+
     @Override
     public void remove(long key, Consumer<T> consumer) {
         int index = this.getIndex(key);
@@ -80,7 +84,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
             lock.unlockWrite(stamp);
         }
     }
-    
+
     @Override
     public int removeIf(Predicate<T> predicate) {
         int count = 0;
@@ -104,7 +108,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
         }
         return count;
     }
-    
+
     @Override
     public void put(long key, T value) {
         int index = this.getIndex(key);
@@ -120,7 +124,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
             lock.unlockWrite(stamp);
         }
     }
-    
+
     @Override
     public T get(long key) {
         int index = this.getIndex(key);
@@ -132,7 +136,7 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
             lock.unlockRead(stamp);
         }
     }
-    
+
     @Override
     public T computeIfAbsent(long key, LongFunction<T> factory) {
         int index = this.getIndex(key);
@@ -157,11 +161,11 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
             lock.unlockWrite(writeStamp);
         }
     }
-    
+
     private int getIndex(long key) {
         return HashCommon.long2int(key) & this.mask;
     }
-    
+
     private static int getSectionSize(int size, int factor) {
         int section = size / factor;
         if (section * factor < size) {
@@ -169,10 +173,11 @@ public class LoadBalanceLongMap<T> implements LongMap<T> {
         }
         return section;
     }
-    
+
     private static int getNearestFactor(int i) {
         int j;
-        for (j = 0; i != 0; i >>= 1, ++j) {}
+        for (j = 0; i != 0; i >>= 1, ++j) {
+        }
         return j;
     }
 }

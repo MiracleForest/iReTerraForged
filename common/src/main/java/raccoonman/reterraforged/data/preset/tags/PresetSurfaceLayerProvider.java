@@ -13,16 +13,16 @@ import raccoonman.reterraforged.tags.RTFSurfaceLayerTags;
 import raccoonman.reterraforged.world.worldgen.surface.rule.LayeredSurfaceRule;
 
 public class PresetSurfaceLayerProvider extends TagsProvider<LayeredSurfaceRule.Layer> {
-	private Preset preset;
-	
-	public PresetSurfaceLayerProvider(Preset preset, PackOutput packOutput, CompletableFuture<Provider> completableFuture) {
-		super(packOutput, RTFRegistries.SURFACE_LAYERS, completableFuture);
-		
-		this.preset = preset;
-	}
+    private Preset preset;
 
-	@Override
-	protected void addTags(HolderLookup.Provider provider) {
+    public PresetSurfaceLayerProvider(Preset preset, PackOutput packOutput, CompletableFuture<Provider> completableFuture) {
+        super(packOutput, RTFRegistries.SURFACE_LAYERS, completableFuture);
 
-	}
+        this.preset = preset;
+    }
+
+    @Override
+    protected void addTags(HolderLookup.Provider provider) {
+
+    }
 }

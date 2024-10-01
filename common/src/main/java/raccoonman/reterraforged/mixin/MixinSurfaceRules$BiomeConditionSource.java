@@ -17,18 +17,18 @@ import raccoonman.reterraforged.world.worldgen.surface.RTFSurfaceContext;
 
 @Mixin(targets = "net.minecraft.world.level.levelgen.SurfaceRules$BiomeConditionSource")
 public class MixinSurfaceRules$BiomeConditionSource {
-	@Shadow
-	@Final
+    @Shadow
+    @Final
     Predicate<ResourceKey<Biome>> biomeNameTest;
 
     @Inject(at = @At("HEAD"), method = "apply", cancellable = true)
     public void apply(SurfaceRules.Context ctx, CallbackInfoReturnable<SurfaceRules.Condition> callback) {
-    	Set<ResourceKey<Biome>> surroundingBiomes;
-    	if((Object) ctx instanceof RTFSurfaceContext rtfSurfaceContext && (surroundingBiomes = rtfSurfaceContext.getSurroundingBiomes()) != null) {
-    		boolean result = surroundingBiomes.stream().filter(this.biomeNameTest).findAny().isPresent();
-    		if(!result || surroundingBiomes.size() == 1) {
-    			callback.setReturnValue(() -> result);
-    		}
-    	}
+        Set<ResourceKey<Biome>> surroundingBiomes;
+        if ((Object) ctx instanceof RTFSurfaceContext rtfSurfaceContext && (surroundingBiomes = rtfSurfaceContext.getSurroundingBiomes()) != null) {
+            boolean result = surroundingBiomes.stream().filter(this.biomeNameTest).findAny().isPresent();
+            if (!result || surroundingBiomes.size() == 1) {
+                callback.setReturnValue(() -> result);
+            }
+        }
     }
 }

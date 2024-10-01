@@ -17,18 +17,18 @@ import raccoonman.reterraforged.data.packs.RTFBuiltinPackSource;
 
 @Mixin(ServerPacksSource.class)
 class MixinServerPacksSource {
-    
-	@Redirect(
-		method = "createPackRepository",
-		at = @At(
-			value = "NEW",
-			target = "Lnet/minecraft/server/packs/repository/PackRepository;"
-		),
-		require = 1
-	)
+
+    @Redirect(
+            method = "createPackRepository",
+            at = @At(
+                    value = "NEW",
+                    target = "Lnet/minecraft/server/packs/repository/PackRepository;"
+            ),
+            require = 1
+    )
     private static PackRepository createPackRepository(RepositorySource[] repositorySources, Path path, DirectoryValidator directoryValidator) {
-		List<RepositorySource> sourceList = Lists.newArrayList(repositorySources);
-		sourceList.add(new RTFBuiltinPackSource(directoryValidator));
-    	return new PackRepository(sourceList.toArray(RepositorySource[]::new));
+        List<RepositorySource> sourceList = Lists.newArrayList(repositorySources);
+        sourceList.add(new RTFBuiltinPackSource(directoryValidator));
+        return new PackRepository(sourceList.toArray(RepositorySource[]::new));
     }
 }

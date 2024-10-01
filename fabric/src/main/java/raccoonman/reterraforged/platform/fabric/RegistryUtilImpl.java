@@ -9,17 +9,17 @@ import net.minecraft.core.WritableRegistry;
 import net.minecraft.resources.ResourceKey;
 
 public class RegistryUtilImpl {
-	
-	public static <T> WritableRegistry<T> getWritable(Registry<T> registry) {
-		return (WritableRegistry<T>) registry;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static <T> Registry<T> createRegistry(ResourceKey<? extends Registry<T>> key) {
-		return FabricRegistryBuilder.createSimple((ResourceKey<Registry<T>>) key).buildAndRegister();
-	}
 
-	public static <T> void createDataRegistry(ResourceKey<? extends Registry<T>> key, Codec<T> codec) {
-		DynamicRegistries.register(key, codec);
-	}
+    public static <T> WritableRegistry<T> getWritable(Registry<T> registry) {
+        return (WritableRegistry<T>) registry;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Registry<T> createRegistry(ResourceKey<? extends Registry<T>> key) {
+        return FabricRegistryBuilder.createSimple((ResourceKey<Registry<T>>) key).buildAndRegister();
+    }
+
+    public static <T> void createDataRegistry(ResourceKey<? extends Registry<T>> key, Codec<T> codec) {
+        DynamicRegistries.register(key, codec);
+    }
 }

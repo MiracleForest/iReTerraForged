@@ -13,18 +13,18 @@ public class FastPoisson {
     public static final ThreadLocal<FastPoisson> LOCAL_POISSON = ThreadLocal.withInitial(FastPoisson::new);
     private LongList chunk;
     private LongIterSet region;
-    
+
     public FastPoisson() {
         this.chunk = new LongArrayList();
         this.region = new LongIterSet();
     }
-    
+
     public <Ctx> void visit(int seed, int chunkX, int chunkZ, Random random, FastPoissonContext context, Ctx ctx, Visitor<Ctx> visitor) {
         this.chunk.clear();
         this.region.clear();
         visit(seed, chunkX, chunkZ, random, context, this.region, this.chunk, ctx, visitor);
     }
-    
+
     public static <Ctx> void visit(int seed, int chunkX, int chunkZ, Random random, FastPoissonContext context, LongIterSet region, LongList chunk, Ctx ctx, Visitor<Ctx> visitor) {
         int startX = chunkX << 4;
         int startZ = chunkZ << 4;
@@ -33,7 +33,7 @@ public class FastPoisson {
         LongLists.shuffle(chunk, random);
         visitPoints(startX, startZ, region, chunk, context, ctx, visitor);
     }
-    
+
     private static void collectPoints(int seed, int startX, int startZ, FastPoissonContext context, LongIterSet region, LongList chunk) {
         int halfRadius = context.radius() / 2;
         int quarterRadius = context.radius() / 4;
@@ -58,7 +58,7 @@ public class FastPoisson {
             }
         }
     }
-    
+
     private static <Ctx> void visitPoints(int startX, int startZ, LongIterSet region, LongList chunk, FastPoissonContext context, Ctx ctx, Visitor<Ctx> visitor) {
         int radius2 = context.radiusSq();
         int halfRadius = context.radius() / 2;
@@ -75,7 +75,7 @@ public class FastPoisson {
             }
         }
     }
-    
+
     private static boolean checkNeighbours(int startX, int startZ, long point, int x, int z, int halfRadius, float radius2, LongIterSet region) {
         region.reset();
         int boundHigh = 16 + halfRadius;
@@ -99,7 +99,7 @@ public class FastPoisson {
         }
         return true;
     }
-    
+
     private static long getPoint(int seed, float x, float z, FastPoissonContext context) {
         x *= context.frequency();
         z *= context.frequency();
@@ -110,25 +110,25 @@ public class FastPoisson {
         int pz = NoiseUtil.floor((cellZ + context.pad() + vec.y() * context.jitter()) * context.scale());
         return PosUtil.pack(px, pz);
     }
-    
+
     private static boolean inChunkBoundsLow(int px, int pz, int startX, int startZ, int min) {
         int dx = px - startX;
         int dz = pz - startZ;
         return dx > min && dx < 16 && dz > min && dz < 16;
     }
-    
+
     private static boolean inChunkBoundsHigh(int px, int pz, int startX, int startZ, int max) {
         int dx = px - startX;
         int dz = pz - startZ;
         return dx > -1 && dx < max && dz > -1 && dz < max;
     }
-    
+
     private static int dist2(int ax, int az, int bx, int bz) {
         int dx = ax - bx;
         int dz = az - bz;
         return dx * dx + dz * dz;
     }
-    
+
     public interface Visitor<Ctx> {
         void visit(int x, int z, Ctx ctx);
     }

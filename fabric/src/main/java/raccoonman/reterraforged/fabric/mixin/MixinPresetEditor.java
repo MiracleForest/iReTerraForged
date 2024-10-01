@@ -12,24 +12,24 @@ import net.minecraft.client.gui.screens.worldselection.PresetEditor;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import raccoonman.reterraforged.client.gui.screen.presetconfig.PresetConfigScreen;
 
-@Deprecated 
+@Deprecated
 @Mixin(PresetEditor.class)
 interface MixinPresetEditor {
-	
-	// there has to be a better way to do this right?
-	@Redirect(
-		method = "<clinit>",
-		at = @At(
-			value = "INVOKE",
-			target = "Ljava/util/Map;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/Map;"
-		),
-		remap = false
-	)
-	private static Map<Object, Object> of(Object k1, Object v1, Object k2, Object v2) {
-		Map<Object, Object> map = new HashMap<>();
-		map.put(k1, v1);
-		map.put(k2, v2);
-		map.put(Optional.of(WorldPresets.NORMAL), (PresetEditor) (screen, ctx) -> new PresetConfigScreen(screen));
-		return map;
+
+    // there has to be a better way to do this right?
+    @Redirect(
+            method = "<clinit>",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/Map;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/Map;"
+            ),
+            remap = false
+    )
+    private static Map<Object, Object> of(Object k1, Object v1, Object k2, Object v2) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put(k1, v1);
+        map.put(k2, v2);
+        map.put(Optional.of(WorldPresets.NORMAL), (PresetEditor) (screen, ctx) -> new PresetConfigScreen(screen));
+        return map;
     }
 }

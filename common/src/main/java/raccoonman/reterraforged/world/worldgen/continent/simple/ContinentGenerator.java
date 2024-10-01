@@ -32,7 +32,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
     protected Domain warp;
     protected Noise continentalness;
     protected RiverCache cache;
-    
+
     public ContinentGenerator(Seed seed, GeneratorContext context) {
         WorldSettings settings = context.preset.world();
         int tectonicScale = settings.continent.continentScale * 4;
@@ -45,11 +45,11 @@ public abstract class ContinentGenerator implements SimpleContinent {
         this.clampMax = 1.0F;
         this.clampRange = this.clampMax - this.clampMin;
         this.offsetAlpha = context.preset.world().continent.continentJitter;
-        
+
         Domain warp = Domains.domainPerlin(seed.next(), 20, 2, 20.0F);
         warp = Domains.compound(warp, Domains.domainSimplex(seed.next(), this.continentScale, 3, this.continentScale));
         this.warp = warp;
-        
+
         Noise shape = Noises.simplex(seed.next(), settings.continent.continentScale * 2, 1);
         shape = Noises.add(shape, 0.65F);
         shape = Noises.clamp(shape, 0.0F, 1.0F);
@@ -57,12 +57,12 @@ public abstract class ContinentGenerator implements SimpleContinent {
 
         this.cache = new LegacyRiverCache(new SimpleRiverGenerator(this, context));
     }
-    
+
     @Override
     public Rivermap getRivermap(int x, int y) {
         return this.cache.getRivers(x, y);
     }
-    
+
     @Override
     public void apply(Cell cell, float x, float y) {
         float ox = this.warp.getOffsetX(x, y, 0);
@@ -94,8 +94,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
                     centerY = cyf;
                     cellX = cx;
                     cellY = cy;
-                }
-                else if (distance < edgeDistance2) {
+                } else if (distance < edgeDistance2) {
                     edgeDistance2 = distance;
                 }
             }
@@ -107,7 +106,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
         continentalness *= this.getContinentalness(x, y, continentalness);
         cell.continentEdge = continentalness;
     }
-    
+
     @Override
     public float getEdgeValue(float x, float y) {
         float ox = this.warp.getOffsetX(x, y, 0);
@@ -131,8 +130,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
                 if (distance < edgeDistance) {
                     edgeDistance2 = edgeDistance;
                     edgeDistance = distance;
-                }
-                else if (distance < edgeDistance2) {
+                } else if (distance < edgeDistance2) {
                     edgeDistance2 = distance;
                 }
             }
@@ -141,7 +139,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
         float shapeNoise = this.getContinentalness(x, y, edgeValue);
         return edgeValue * shapeNoise;
     }
-    
+
     @Override
     public long getNearestCenter(float x, float z) {
         float ox = this.warp.getOffsetX(x, z, 0);
@@ -170,11 +168,11 @@ public abstract class ContinentGenerator implements SimpleContinent {
                 }
             }
         }
-        int conX = (int)(centerX / this.frequency);
-        int conZ = (int)(centerY / this.frequency);
+        int conX = (int) (centerX / this.frequency);
+        int conZ = (int) (centerY / this.frequency);
         return PosUtil.pack(conX, conZ);
     }
-    
+
     @Override
     public float getDistanceToOcean(int cx, int cz, float dx, float dz) {
         float high = this.getDistanceToEdge(cx, cz, dx, dz);
@@ -186,8 +184,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
             float edge = this.getEdgeValue(x, z);
             if (edge > this.controlPoints.shallowOcean) {
                 low = mid;
-            }
-            else {
+            } else {
                 high = mid;
             }
             if (high - low < 10.0f) {
@@ -196,10 +193,10 @@ public abstract class ContinentGenerator implements SimpleContinent {
         }
         return high;
     }
-    
+
     @Override
     public float getDistanceToEdge(int cx, int cz, float dx, float dz) {
-        float distance = (float)(this.continentScale * 4);
+        float distance = (float) (this.continentScale * 4);
         for (int i = 0; i < 10; ++i) {
             float x = cx + dx * distance;
             float z = cz + dz * distance;
@@ -219,8 +216,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
                     conZ = PosUtil.unpackRight(centerPos);
                     if (conX == cx && conZ == cz) {
                         low = mid;
-                    }
-                    else {
+                    } else {
                         high = mid;
                     }
                     if (high - low < 50.0F) {
@@ -232,14 +228,14 @@ public abstract class ContinentGenerator implements SimpleContinent {
         }
         return distance;
     }
-    
+
     protected float cellIdentity(int seed, int cellX, int cellY) {
         float value = NoiseUtil.valCoord2D(seed, cellX, cellY);
         return NoiseUtil.map(value, -1.0F, 1.0F, 2.0F);
     }
-    
+
     protected float cellEdgeValue(float distance, float distance2) {
-    	EdgeFunction edge = EdgeFunction.DISTANCE_2_DIV;
+        EdgeFunction edge = EdgeFunction.DISTANCE_2_DIV;
         float value = edge.apply(distance, distance2);
         value = 1.0F - NoiseUtil.map(value, edge.min(), edge.max(), edge.range());
         if (value <= this.clampMin) {
@@ -250,7 +246,7 @@ public abstract class ContinentGenerator implements SimpleContinent {
         }
         return (value - this.clampMin) / this.clampRange;
     }
-    
+
     protected float getContinentalness(float x, float z, float edgeValue) {
         if (edgeValue >= this.controlPoints.nearInland) {
             return 1.0F;

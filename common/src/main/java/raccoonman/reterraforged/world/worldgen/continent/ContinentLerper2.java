@@ -7,17 +7,17 @@ import raccoonman.reterraforged.world.worldgen.noise.function.Interpolation;
 import raccoonman.reterraforged.world.worldgen.noise.module.Noise;
 
 public class ContinentLerper2 implements CellPopulator {
-	private CellPopulator lower;
+    private CellPopulator lower;
     private CellPopulator upper;
     private Interpolation interpolation;
     private float blendLower;
     private float blendUpper;
     private float blendRange;
-    
+
     public ContinentLerper2(CellPopulator lower, CellPopulator upper, float min, float max) {
         this(lower, upper, min, max, Interpolation.LINEAR);
     }
-    
+
     public ContinentLerper2(CellPopulator lower, CellPopulator upper, float min, float max, Interpolation interpolation) {
         this.lower = lower;
         this.upper = upper;
@@ -26,7 +26,7 @@ public class ContinentLerper2 implements CellPopulator {
         this.blendUpper = max;
         this.blendRange = this.blendUpper - this.blendLower;
     }
-    
+
     @Override
     public void apply(Cell cell, float x, float y) {
         if (cell.continentEdge < this.blendLower) {
@@ -47,6 +47,6 @@ public class ContinentLerper2 implements CellPopulator {
 
     @Override
     public CellPopulator mapNoise(Noise.Visitor visitor) {
-    	return new ContinentLerper2(this.lower.mapNoise(visitor), this.upper.mapNoise(visitor), this.blendLower, this.blendUpper);
+        return new ContinentLerper2(this.lower.mapNoise(visitor), this.upper.mapNoise(visitor), this.blendLower, this.blendUpper);
     }
 }

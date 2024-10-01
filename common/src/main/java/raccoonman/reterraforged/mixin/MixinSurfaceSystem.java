@@ -29,38 +29,38 @@ import terrablender.worldgen.surface.NamespacedSurfaceRuleSource;
 @Mixin(SurfaceSystem.class)
 @Implements(@Interface(iface = RTFSurfaceSystem.class, prefix = RTFCommon.MOD_ID + "$RTFSurfaceSystem$"))
 class MixinSurfaceSystem {
-	private static final ResourceLocation STRATA_RANDOM = RTFCommon.location("strata");
-	private RandomSource strataRandom;
-	private Map<ResourceLocation, List<Strata>> strata;
-	
-	@Inject(
-		at = @At("TAIL"),
-		method = "<init>"
-	)
+    private static final ResourceLocation STRATA_RANDOM = RTFCommon.location("strata");
+    private RandomSource strataRandom;
+    private Map<ResourceLocation, List<Strata>> strata;
+
+    @Inject(
+            at = @At("TAIL"),
+            method = "<init>"
+    )
     public void SurfaceSystem(RandomState randomState, BlockState blockState, int i, PositionalRandomFactory positionalRandomFactory, CallbackInfo callback) {
-    	this.strataRandom = randomState.random.fromHashOf(STRATA_RANDOM);
-    	this.strata = new ConcurrentHashMap<>();
-	}
-	
-	@ModifyVariable(
-		at = @At("HEAD"),
-		method = "buildSurface",
-		name = "ruleSource",
-		ordinal = 0,
-		index = 7,
-		argsOnly = true
-	)
-	public SurfaceRules.RuleSource buildSurface(SurfaceRules.RuleSource source) {
-		// let our own surface api handle this instead
+        this.strataRandom = randomState.random.fromHashOf(STRATA_RANDOM);
+        this.strata = new ConcurrentHashMap<>();
+    }
+
+    @ModifyVariable(
+            at = @At("HEAD"),
+            method = "buildSurface",
+            name = "ruleSource",
+            ordinal = 0,
+            index = 7,
+            argsOnly = true
+    )
+    public SurfaceRules.RuleSource buildSurface(SurfaceRules.RuleSource source) {
+        // let our own surface api handle this instead
 //		if(TBIntegration.isEnabled() && source instanceof NamespacedSurfaceRuleSource namespacedRule) {
 //			return namespacedRule.base();
 //		}	
-		return source;
-	}
+        return source;
+    }
 
-	public List<Strata> reterraforged$RTFSurfaceSystem$getOrCreateStrata(ResourceLocation cacheId, Function<RandomSource, List<Strata>> factory) {
-		return this.strata.computeIfAbsent(cacheId, (k) -> {
-			return factory.apply(this.strataRandom.fork());
-		});
-	}
+    public List<Strata> reterraforged$RTFSurfaceSystem$getOrCreateStrata(ResourceLocation cacheId, Function<RandomSource, List<Strata>> factory) {
+        return this.strata.computeIfAbsent(cacheId, (k) -> {
+            return factory.apply(this.strataRandom.fork());
+        });
+    }
 }

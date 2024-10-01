@@ -12,12 +12,12 @@ public class PasteBuffer implements BufferIterator {
     }
 
     public void clear() {
-    	this.index = -1;
-    	this.placed.clear();
+        this.index = -1;
+        this.placed.clear();
     }
 
     public void setRecording(boolean recording) {
-    	this.recordPlaced = recording;
+        this.recordPlaced = recording;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class PasteBuffer implements BufferIterator {
 
     @Override
     public boolean next() {
-    	this.index = this.placed.nextSetBit(this.index + 1);
+        this.index = this.placed.nextSetBit(this.index + 1);
         return this.index != -1;
     }
 
@@ -44,7 +44,7 @@ public class PasteBuffer implements BufferIterator {
 
     public void exclude(int i) {
         if (this.recordPlaced) {
-        	this.placed.set(i, false);
+            this.placed.set(i, false);
         }
     }
 }

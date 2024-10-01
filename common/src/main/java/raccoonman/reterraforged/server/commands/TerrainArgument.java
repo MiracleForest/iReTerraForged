@@ -27,22 +27,22 @@ import raccoonman.reterraforged.world.worldgen.terrain.TerrainType;
 public class TerrainArgument implements ArgumentType<Terrain> {
     public static final DynamicCommandExceptionType ERROR_INVALID_VALUE = new DynamicCommandExceptionType(input -> Component.translatable(RTFTranslationKeys.TERRAIN_ARGUMENT_INVALID, input));
 
-    private TerrainArgument() {    	
+    private TerrainArgument() {
     }
-    
+
     public static TerrainArgument terrain() {
-    	return new TerrainArgument();
+        return new TerrainArgument();
     }
-    
-	@Override
-	public Terrain parse(StringReader reader) throws CommandSyntaxException {
+
+    @Override
+    public Terrain parse(StringReader reader) throws CommandSyntaxException {
         String terrainName = reader.readUnquotedString();
         Terrain terrain = TerrainType.get(terrainName);
         if (terrain == null) {
             throw ERROR_INVALID_VALUE.create(terrainName);
         }
         return terrain;
-	}
+    }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
@@ -53,36 +53,36 @@ public class TerrainArgument implements ArgumentType<Terrain> {
     public Collection<String> getExamples() {
         return getTerrainTypeNames().toList();
     }
-    
+
     private static final List<Terrain> BLACKLIST = ImmutableList.of(TerrainType.NONE, TerrainType.VOLCANO_PIPE);
-    
+
     private static Stream<String> getTerrainTypeNames() {
-    	return TerrainType.REGISTRY.stream().filter((type) -> !BLACKLIST.contains(type)).map(Terrain::getName);
+        return TerrainType.REGISTRY.stream().filter((type) -> !BLACKLIST.contains(type)).map(Terrain::getName);
     }
-    
+
     public static class Info implements ArgumentTypeInfo<TerrainArgument, Info.Template> {
 
-		@Override
-		public void serializeToNetwork(Template template, FriendlyByteBuf byteBuf) {
-		}
+        @Override
+        public void serializeToNetwork(Template template, FriendlyByteBuf byteBuf) {
+        }
 
-		@Override
-		public Template deserializeFromNetwork(FriendlyByteBuf byteBuf) {
-			return new Template();
-		}
+        @Override
+        public Template deserializeFromNetwork(FriendlyByteBuf byteBuf) {
+            return new Template();
+        }
 
-		@Override
-		public void serializeToJson(Template template, JsonObject json) {
-		}
+        @Override
+        public void serializeToJson(Template template, JsonObject json) {
+        }
 
-		@Override
-		public Template unpack(TerrainArgument argument) {
-			return new Template();
-		}
+        @Override
+        public Template unpack(TerrainArgument argument) {
+            return new Template();
+        }
 
         public class Template implements ArgumentTypeInfo.Template<TerrainArgument> {
 
-        	@Override
+            @Override
             public TerrainArgument instantiate(CommandBuildContext commandBuildContext) {
                 return TerrainArgument.terrain();
             }

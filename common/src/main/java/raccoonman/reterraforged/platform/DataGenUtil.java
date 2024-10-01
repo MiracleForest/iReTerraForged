@@ -9,8 +9,8 @@ import net.minecraft.data.PackOutput;
 
 public final class DataGenUtil {
 
-	@ExpectPlatform
-	public static DataProvider createRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerLookup) {
-		throw new IllegalStateException();
-	}
+    @ExpectPlatform
+    public static DataProvider createRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerLookup) {
+        throw new IllegalStateException();
+    }
 }

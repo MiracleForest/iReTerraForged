@@ -6,10 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
 public interface TBClimateSampler {
-	void setSpawnSearchCenter(BlockPos center);
-	
-	void setUniqueness(DensityFunction function);
-	
-	@Nullable
-	DensityFunction getUniqueness();
+    void setSpawnSearchCenter(BlockPos center);
+
+    void setUniqueness(DensityFunction function);
+
+    @Nullable
+    DensityFunction getUniqueness();
 }

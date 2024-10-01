@@ -10,13 +10,13 @@ import raccoonman.reterraforged.compat.terrablender.TBTargetPoint;
 @Mixin(Climate.TargetPoint.class)
 @Implements(@Interface(iface = TBTargetPoint.class, prefix = "reterraforged$TBTargetPoint$"))
 class MixinTargetPoint {
-	private double uniqueness = Double.NaN;
+    private double uniqueness = Double.NaN;
 
-	public double reterraforged$TBTargetPoint$getUniqueness() {
-		return this.uniqueness;
-	}
-	
-	public void reterraforged$TBTargetPoint$setUniqueness(double uniqueness) {
-		this.uniqueness = uniqueness;
-	}
+    public double reterraforged$TBTargetPoint$getUniqueness() {
+        return this.uniqueness;
+    }
+
+    public void reterraforged$TBTargetPoint$setUniqueness(double uniqueness) {
+        this.uniqueness = uniqueness;
+    }
 }

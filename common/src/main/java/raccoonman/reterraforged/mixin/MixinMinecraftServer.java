@@ -19,25 +19,25 @@ import raccoonman.reterraforged.world.worldgen.biome.RTFClimateSampler;
 @Mixin(MinecraftServer.class)
 class MixinMinecraftServer {
 
-	@Inject(
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/world/level/biome/Climate$Sampler;findSpawnPosition()Lnet/minecraft/core/BlockPos;"
-		),
-		method = "setInitialSpawn"
-	)
+    @Inject(
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/biome/Climate$Sampler;findSpawnPosition()Lnet/minecraft/core/BlockPos;"
+            ),
+            method = "setInitialSpawn"
+    )
     private static void findSpawnPosition(ServerLevel serverLevel, ServerLevelData serverLevelData, boolean bl, boolean bl2, CallbackInfo callback) {
-		RandomState randomState = serverLevel.getChunkSource().randomState();
-		Climate.Sampler sampler = randomState.sampler();
-		serverLevel.registryAccess().lookup(RTFRegistries.PRESET).flatMap((registry) -> {
-			return registry.get(PresetData.PRESET);
-		}).ifPresent((preset) -> {
-			if((Object) randomState instanceof RTFRandomState rtfRandomState && (Object) sampler instanceof RTFClimateSampler rtfClimateSampler) {
-				BlockPos searchCenter = preset.value().world().properties.spawnType.getSearchCenter(rtfRandomState.generatorContext());
-				rtfClimateSampler.setSpawnSearchCenter(searchCenter);
-			} else {
-				throw new IllegalStateException();
-			}
-		});
+        RandomState randomState = serverLevel.getChunkSource().randomState();
+        Climate.Sampler sampler = randomState.sampler();
+        serverLevel.registryAccess().lookup(RTFRegistries.PRESET).flatMap((registry) -> {
+            return registry.get(PresetData.PRESET);
+        }).ifPresent((preset) -> {
+            if ((Object) randomState instanceof RTFRandomState rtfRandomState && (Object) sampler instanceof RTFClimateSampler rtfClimateSampler) {
+                BlockPos searchCenter = preset.value().world().properties.spawnType.getSearchCenter(rtfRandomState.generatorContext());
+                rtfClimateSampler.setSpawnSearchCenter(searchCenter);
+            } else {
+                throw new IllegalStateException();
+            }
+        });
     }
 }

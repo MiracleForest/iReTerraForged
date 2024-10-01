@@ -22,7 +22,7 @@ public class Erosion implements Filter {
     private int seed;
     private int mapSize;
     private Modifier modifier;
-    
+
     public Erosion(int seed, int mapSize, FilterSettings.Erosion settings, Modifier modifier) {
         this.seed = seed;
         this.mapSize = mapSize;
@@ -36,11 +36,11 @@ public class Erosion implements Filter {
         this.erosionBrushWeights = new float[mapSize * mapSize][];
         this.initBrushes(mapSize, 4);
     }
-    
+
     public int getSize() {
         return this.mapSize;
     }
-    
+
     @Override
     public void apply(Tile tile, int regionX, int regionZ, int iterationsPerChunk) {
         int chunkX = tile.getBlockX() >> 4;
@@ -73,7 +73,7 @@ public class Erosion implements Filter {
             }
         }
     }
-    
+
     private void applyDrop(float posX, float posY, Cell[] cells, int mapSize, TerrainPos gradient1, TerrainPos gradient2) {
         float dirX = 0.0f;
         float dirY = 0.0f;
@@ -133,7 +133,7 @@ public class Erosion implements Filter {
             }
         }
     }
-    
+
     private void initBrushes(int size, int radius) {
         int[] xOffsets = new int[radius * radius * 4];
         int[] yOffsets = new int[radius * radius * 4];
@@ -148,7 +148,7 @@ public class Erosion implements Filter {
                 addIndex = 0;
                 for (int y = -radius; y <= radius; ++y) {
                     for (int x = -radius; x <= radius; ++x) {
-                        float sqrDst = (float)(x * x + y * y);
+                        float sqrDst = (float) (x * x + y * y);
                         if (sqrDst < radius * radius) {
                             int coordX = centreX + x;
                             int coordY = centreY + y;
@@ -173,16 +173,16 @@ public class Erosion implements Filter {
             }
         }
     }
-    
+
     private void deposit(Cell cell, float amount) {
         if (!cell.erosionMask) {
-        	float change = this.modifier.modify(cell, amount);
+            float change = this.modifier.modify(cell, amount);
             cell.height += change;
             cell.sediment += change;
             cell.sediment2 += 0.1F;
         }
     }
-    
+
     private void erode(Cell cell, float amount) {
         if (!cell.erosionMask) {
             float change = this.modifier.modify(cell, amount);
@@ -191,19 +191,19 @@ public class Erosion implements Filter {
             cell.localErosion2 += 0.005F;
         }
     }
-    
+
     public static IntFunction<Erosion> factory(GeneratorContext context) {
         return new Factory(context.seed.root(), context.preset.filters(), context.levels);
     }
-    
+
     private static class TerrainPos {
         private float height;
         private float gradientX;
         private float gradientY;
-        
+
         private TerrainPos at(Cell[] nodes, int mapSize, float posX, float posY) {
-            int coordX = (int)posX;
-            int coordY = (int)posY;
+            int coordX = (int) posX;
+            int coordY = (int) posY;
             float x = posX - coordX;
             float y = posY - coordY;
             int nodeIndexNW = coordY * mapSize + coordX;
@@ -216,26 +216,26 @@ public class Erosion implements Filter {
             this.height = heightNW * (1.0f - x) * (1.0f - y) + heightNE * x * (1.0f - y) + heightSW * (1.0f - x) * y + heightSE * x * y;
             return this;
         }
-        
+
         private void reset() {
             this.height = 0.0f;
             this.gradientX = 0.0f;
             this.gradientY = 0.0f;
         }
     }
-    
+
     private static class Factory implements IntFunction<Erosion> {
         private static final int SEED_OFFSET = 12768;
         private final int seed;
         private final Modifier modifier;
         private final FilterSettings.Erosion settings;
-        
+
         private Factory(int seed, FilterSettings filters, Levels levels) {
             this.seed = seed + SEED_OFFSET;
             this.settings = filters.erosion.copy();
             this.modifier = Modifier.range(levels.ground, levels.ground(15));
         }
-        
+
         @Override
         public Erosion apply(int size) {
             return new Erosion(this.seed, size, this.settings, this.modifier);

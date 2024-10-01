@@ -10,7 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 
 public class RTFCommandsImpl {
 
-	public static void register(BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext> register) {
-	    CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> register.accept(dispatcher, buildContext));
-	}
+    public static void register(BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext> register) {
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, environment) -> register.accept(dispatcher, buildContext));
+    }
 }

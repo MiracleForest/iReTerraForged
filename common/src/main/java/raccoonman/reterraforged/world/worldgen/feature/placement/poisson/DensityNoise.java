@@ -29,23 +29,23 @@ public class DensityNoise implements Noise {
         return value2;
     }
 
-	@Override
-	public float minValue() {
-		return 0.0F;
-	}
+    @Override
+    public float minValue() {
+        return 0.0F;
+    }
 
-	@Override
-	public float maxValue() {
-		return 1.0F;
-	}
+    @Override
+    public float maxValue() {
+        return 1.0F;
+    }
 
-	@Override
-	public Noise mapAll(Visitor visitor) {
-		return visitor.apply(this);
-	}
+    @Override
+    public Noise mapAll(Visitor visitor) {
+        return visitor.apply(this);
+    }
 
-	@Override
-	public Codec<DensityNoise> codec() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public Codec<DensityNoise> codec() {
+        throw new UnsupportedOperationException();
+    }
 }

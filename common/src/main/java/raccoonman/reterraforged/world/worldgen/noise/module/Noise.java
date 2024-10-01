@@ -15,18 +15,18 @@ public interface Noise {
         }
         return new Holder.Direct<>(noise);
     });
-    
-	float compute(float x, float z, int seed);
-	
-	float minValue();
-	
-	float maxValue();
-	
-	Noise mapAll(Visitor visitor);
-	
-	Codec<? extends Noise> codec();
-	
-	public interface Visitor {
-		Noise apply(Noise input);
-	}
+
+    float compute(float x, float z, int seed);
+
+    float minValue();
+
+    float maxValue();
+
+    Noise mapAll(Visitor visitor);
+
+    Codec<? extends Noise> codec();
+
+    public interface Visitor {
+        Noise apply(Noise input);
+    }
 }

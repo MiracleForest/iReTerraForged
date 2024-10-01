@@ -9,8 +9,8 @@ import raccoonman.reterraforged.world.worldgen.feature.template.decorator.TreeCo
 import raccoonman.reterraforged.world.worldgen.feature.template.template.Dimensions;
 
 record TreePlacement() implements TemplatePlacement<TreeContext> {
-	public static final Codec<TreePlacement> CODEC = Codec.unit(TreePlacement::new);
-	
+    public static final Codec<TreePlacement> CODEC = Codec.unit(TreePlacement::new);
+
     @Override
     public boolean canPlaceAt(LevelAccessor world, BlockPos pos, Dimensions dimensions) {
         return BlockUtils.isSoil(world, pos.below()) && BlockUtils.isClearOverhead(world, pos, dimensions.getSizeY(), BlockUtils::canTreeReplace);
@@ -21,13 +21,13 @@ record TreePlacement() implements TemplatePlacement<TreeContext> {
         return BlockUtils.canTreeReplace(world, pos);
     }
 
-	@Override
-	public TreeContext createContext() {
-		return new TreeContext();
-	}
+    @Override
+    public TreeContext createContext() {
+        return new TreeContext();
+    }
 
-	@Override
-	public Codec<TreePlacement> codec() {
-		return CODEC;
-	}
+    @Override
+    public Codec<TreePlacement> codec() {
+        return CODEC;
+    }
 }

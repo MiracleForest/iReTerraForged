@@ -8,6 +8,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
 public interface RTFSurfaceContext {
-	@Nullable
-	Set<ResourceKey<Biome>> getSurroundingBiomes();
+    @Nullable
+    Set<ResourceKey<Biome>> getSurroundingBiomes();
 }

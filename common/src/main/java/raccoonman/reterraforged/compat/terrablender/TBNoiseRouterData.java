@@ -10,9 +10,9 @@ import raccoonman.reterraforged.world.worldgen.densityfunction.RTFDensityFunctio
 import terrablender.core.TerraBlender;
 
 public class TBNoiseRouterData {
-	public static final ResourceKey<DensityFunction> UNIQUENESS = ResourceKey.create(Registries.DENSITY_FUNCTION, new ResourceLocation(TerraBlender.MOD_ID, "uniqueness"));
-	
-	public static void bootstrap(BootstapContext<DensityFunction> ctx) {
-		ctx.register(UNIQUENESS, RTFDensityFunctions.cell(CellField.BIOME_REGION));
-	}
+    public static final ResourceKey<DensityFunction> UNIQUENESS = ResourceKey.create(Registries.DENSITY_FUNCTION, new ResourceLocation(TerraBlender.MOD_ID, "uniqueness"));
+
+    public static void bootstrap(BootstapContext<DensityFunction> ctx) {
+        ctx.register(UNIQUENESS, RTFDensityFunctions.cell(CellField.BIOME_REGION));
+    }
 }

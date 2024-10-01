@@ -15,9 +15,9 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 @Deprecated
 @Mixin(BiomeGenerationSettings.class)
 public interface MixinBiomeGenerationSettings {
-	@Accessor
-	List<HolderSet<PlacedFeature>> getFeatures();
-	
-	@Accessor
-	void setFlowerFeatures(Supplier<List<ConfiguredFeature<?, ?>>> flowerFeatures);
+    @Accessor
+    List<HolderSet<PlacedFeature>> getFeatures();
+
+    @Accessor
+    void setFlowerFeatures(Supplier<List<ConfiguredFeature<?, ?>>> flowerFeatures);
 }

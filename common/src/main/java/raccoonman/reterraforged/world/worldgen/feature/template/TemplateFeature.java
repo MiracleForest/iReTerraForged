@@ -31,19 +31,19 @@ import raccoonman.reterraforged.world.worldgen.feature.template.template.Templat
 
 public class TemplateFeature extends Feature<Config<?>> {
 
-	public TemplateFeature(Codec<Config<?>> codec) {
-		super(codec);
-	}
+    public TemplateFeature(Codec<Config<?>> codec) {
+        super(codec);
+    }
 
-	@Override
-	public boolean place(FeaturePlaceContext<Config<?>> ctx) {
-		RandomSource random = ctx.random();
-		Config<?> config = ctx.config();
-		
-		Mirror mirror = nextMirror(random);
-		Rotation rotation = nextRotation(random);
+    @Override
+    public boolean place(FeaturePlaceContext<Config<?>> ctx) {
+        RandomSource random = ctx.random();
+        Config<?> config = ctx.config();
+
+        Mirror mirror = nextMirror(random);
+        Rotation rotation = nextRotation(random);
         return paste(ctx.level(), random, ctx.origin(), mirror, rotation, config, FeatureTemplate.WORLD_GEN);
-	}
+    }
 
     public static <T extends TemplateContext> boolean paste(WorldGenLevel world, RandomSource rand, BlockPos pos, Mirror mirror, Rotation rotation, Config<T> config, PasteType pasteType) {
         return paste(world, rand, pos, mirror, rotation, config, pasteType, false);
@@ -54,36 +54,36 @@ public class TemplateFeature extends Feature<Config<?>> {
             RTFCommon.LOGGER.warn("Empty template list for config");
             return false;
         }
-        
-        if(world.getServer() instanceof RTFMinecraftServer rtfMinecraftServer) {
-	        DecoratorConfig<T> decoratorConfig = config.decorator();
-	        
-	        ResourceLocation templateName = nextTemplate(config.templates, rand);
-	        FeatureTemplate template = rtfMinecraftServer.getFeatureTemplateManager().load(templateName);
-	        
-	        Dimensions dimensions = template.getDimensions(mirror, rotation);
-	        TemplatePlacement<T> placement = config.placement();
-	        if (!placement.canPlaceAt(world, pos, dimensions)) {
-	            return false;
-	        }
-	
-	        Paste paste = pasteType.get(template);
-	        T buffer = placement.createContext();
-	        if (paste.apply(world, buffer, pos, mirror, rotation, placement, config.paste())) {
-	            ResourceKey<Biome> biome = world.getBiome(pos).unwrapKey().orElse(null);
-	            for (TemplateDecorator<T> decorator : decoratorConfig.getDecorators(biome)) {
-	                decorator.apply(world, buffer, rand, modified);
-	            }
-	            return true;
-	        }
-	
-	        return false;
+
+        if (world.getServer() instanceof RTFMinecraftServer rtfMinecraftServer) {
+            DecoratorConfig<T> decoratorConfig = config.decorator();
+
+            ResourceLocation templateName = nextTemplate(config.templates, rand);
+            FeatureTemplate template = rtfMinecraftServer.getFeatureTemplateManager().load(templateName);
+
+            Dimensions dimensions = template.getDimensions(mirror, rotation);
+            TemplatePlacement<T> placement = config.placement();
+            if (!placement.canPlaceAt(world, pos, dimensions)) {
+                return false;
+            }
+
+            Paste paste = pasteType.get(template);
+            T buffer = placement.createContext();
+            if (paste.apply(world, buffer, pos, mirror, rotation, placement, config.paste())) {
+                ResourceKey<Biome> biome = world.getBiome(pos).unwrapKey().orElse(null);
+                for (TemplateDecorator<T> decorator : decoratorConfig.getDecorators(biome)) {
+                    decorator.apply(world, buffer, rand, modified);
+                }
+                return true;
+            }
+
+            return false;
         } else {
-        	throw new IllegalStateException();
+            throw new IllegalStateException();
         }
     }
 
-	private static ResourceLocation nextTemplate(List<ResourceLocation> templates, RandomSource random) {
+    private static ResourceLocation nextTemplate(List<ResourceLocation> templates, RandomSource random) {
         return templates.get(random.nextInt(templates.size()));
     }
 
@@ -94,14 +94,16 @@ public class TemplateFeature extends Feature<Config<?>> {
     private static Rotation nextRotation(RandomSource random) {
         return Rotation.values()[random.nextInt(Rotation.values().length)];
     }
-    
-	public record Config<T extends TemplateContext>(List<ResourceLocation> templates, TemplatePlacement<T> placement, PasteConfig paste, DecoratorConfig<T> decorator) implements FeatureConfiguration {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		public static final Codec<Config<?>> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			ResourceLocation.CODEC.listOf().fieldOf("templates").forGetter(Config::templates),
-			TemplatePlacement.CODEC.fieldOf("placement").forGetter(Config::placement),
-			PasteConfig.CODEC.fieldOf("paste").forGetter(Config::paste),
-			DecoratorConfig.CODEC.fieldOf("decorator").forGetter(Config::decorator)
-		).apply(instance, (templates, placement, paste, decorator) -> new Config(templates, placement, paste, decorator)));
-	}
+
+    public record Config<T extends TemplateContext>(List<ResourceLocation> templates, TemplatePlacement<T> placement,
+                                                    PasteConfig paste,
+                                                    DecoratorConfig<T> decorator) implements FeatureConfiguration {
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        public static final Codec<Config<?>> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                ResourceLocation.CODEC.listOf().fieldOf("templates").forGetter(Config::templates),
+                TemplatePlacement.CODEC.fieldOf("placement").forGetter(Config::placement),
+                PasteConfig.CODEC.fieldOf("paste").forGetter(Config::paste),
+                DecoratorConfig.CODEC.fieldOf("decorator").forGetter(Config::decorator)
+        ).apply(instance, (templates, placement, paste, decorator) -> new Config(templates, placement, paste, decorator)));
+    }
 }

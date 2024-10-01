@@ -26,37 +26,37 @@ import raccoonman.reterraforged.world.worldgen.surface.SurfaceRegion;
 @Implements(@Interface(iface = RTFSurfaceContext.class, prefix = "reterraforged$RTFSurfaceContext$"))
 @Mixin(Context.class)
 abstract class MixinContext {
-	@Shadow
-	@Final
+    @Shadow
+    @Final
     public ChunkAccess chunk;
 
-	@Nullable
-	private Set<ResourceKey<Biome>> surroundingBiomes;
-	
-	@Inject(at = @At("TAIL"), method = "<init>")
-	private void Context(CallbackInfo callback) {
-		WorldGenRegion region = SurfaceRegion.get();
-		
-		if(region != null) {
-			ChunkPos centerPos = this.chunk.getPos();
-			
-	    	this.surroundingBiomes = new HashSet<>();
-	    	
-	    	for(int x = -1; x <= 1; x++) {
-	    		for(int z = -1; z <= 1; z++) {
-	    			ChunkAccess chunk = region.getChunk(centerPos.x + x, centerPos.z + z);
-	    			
-	    			for(LevelChunkSection section : chunk.getSections()) {
-	    				section.getBiomes().getAll((biome) -> {
-	    					biome.unwrapKey().ifPresent(this.surroundingBiomes::add);
-	    				});
-	    			}
-	        	}
-	    	}
-		}
-	}
+    @Nullable
+    private Set<ResourceKey<Biome>> surroundingBiomes;
 
-	public Set<ResourceKey<Biome>> reterraforged$RTFSurfaceContext$getSurroundingBiomes() {
-		return this.surroundingBiomes;
-	}
+    @Inject(at = @At("TAIL"), method = "<init>")
+    private void Context(CallbackInfo callback) {
+        WorldGenRegion region = SurfaceRegion.get();
+
+        if (region != null) {
+            ChunkPos centerPos = this.chunk.getPos();
+
+            this.surroundingBiomes = new HashSet<>();
+
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++) {
+                    ChunkAccess chunk = region.getChunk(centerPos.x + x, centerPos.z + z);
+
+                    for (LevelChunkSection section : chunk.getSections()) {
+                        section.getBiomes().getAll((biome) -> {
+                            biome.unwrapKey().ifPresent(this.surroundingBiomes::add);
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    public Set<ResourceKey<Biome>> reterraforged$RTFSurfaceContext$getSurroundingBiomes() {
+        return this.surroundingBiomes;
+    }
 }

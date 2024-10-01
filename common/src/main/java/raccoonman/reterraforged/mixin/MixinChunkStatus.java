@@ -30,59 +30,59 @@ import raccoonman.reterraforged.world.worldgen.WorldGenFlags;
 @Mixin(ChunkStatus.class)
 public class MixinChunkStatus {
 
-	//structure starts
-	@Inject(
-		at = @At("HEAD"),
-		method = "method_39464",
-		remap = false
-	)
-	private static void method_39464$HEAD(ChunkStatus status, Executor executor, ServerLevel level, ChunkGenerator generator, StructureTemplateManager templateManager, ThreadedLevelLightEngine lightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> chunkLookup, List<ChunkAccess> regionChunks, ChunkAccess centerChunk, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> callback) {
-		RandomState randomState = level.getChunkSource().randomState();
-		if((Object) randomState instanceof RTFRandomState rtfRandomState) {
-			ChunkPos chunkPos = centerChunk.getPos();
-			@Nullable
-			GeneratorContext context = rtfRandomState.generatorContext();
-			
-			if(context != null) {
-				context.cache.queueAtChunk(chunkPos.x, chunkPos.z);
+    //structure starts
+    @Inject(
+            at = @At("HEAD"),
+            method = "method_39464",
+            remap = false
+    )
+    private static void method_39464$HEAD(ChunkStatus status, Executor executor, ServerLevel level, ChunkGenerator generator, StructureTemplateManager templateManager, ThreadedLevelLightEngine lightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> chunkLookup, List<ChunkAccess> regionChunks, ChunkAccess centerChunk, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> callback) {
+        RandomState randomState = level.getChunkSource().randomState();
+        if ((Object) randomState instanceof RTFRandomState rtfRandomState) {
+            ChunkPos chunkPos = centerChunk.getPos();
+            @Nullable
+            GeneratorContext context = rtfRandomState.generatorContext();
 
-				WorldGenFlags.setFastCellLookups(false);
-			}
-		}
-	}
-	
-	@Inject(
-		at = @At("TAIL"),
-		method = "method_39464",
-		remap = false
-	)
-	private static void method_39464$TAIL(ChunkStatus status, Executor executor, ServerLevel level, ChunkGenerator generator, StructureTemplateManager templateManager, ThreadedLevelLightEngine lightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> chunkLookup, List<ChunkAccess> regionChunks, ChunkAccess centerChunk, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> callback) {
-		RandomState randomState = level.getChunkSource().randomState();
-		if((Object) randomState instanceof RTFRandomState rtfRandomState) {
-			@Nullable
-			GeneratorContext context = rtfRandomState.generatorContext();
-			if(context != null) {
-				WorldGenFlags.setFastCellLookups(true);
-			}
-		}
-	}
-	
-	//features
-	@Inject(
-		at = @At("TAIL"),
-		method = "method_51375",
-		remap = false
-	)
-	private static void method_51375(ChunkStatus status, ServerLevel level, ChunkGenerator generator, List<ChunkAccess> chunks, ChunkAccess centerChunk, CallbackInfo callback) {
-		RandomState randomState = level.getChunkSource().randomState();
-		if((Object) randomState instanceof RTFRandomState rtfRandomState) {
-			ChunkPos chunkPos = centerChunk.getPos();
-			@Nullable
-			GeneratorContext context = rtfRandomState.generatorContext();
-			
-			if(context != null) {
-				context.cache.dropAtChunk(chunkPos.x, chunkPos.z);
-			}
-		}
-	}
+            if (context != null) {
+                context.cache.queueAtChunk(chunkPos.x, chunkPos.z);
+
+                WorldGenFlags.setFastCellLookups(false);
+            }
+        }
+    }
+
+    @Inject(
+            at = @At("TAIL"),
+            method = "method_39464",
+            remap = false
+    )
+    private static void method_39464$TAIL(ChunkStatus status, Executor executor, ServerLevel level, ChunkGenerator generator, StructureTemplateManager templateManager, ThreadedLevelLightEngine lightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> chunkLookup, List<ChunkAccess> regionChunks, ChunkAccess centerChunk, CallbackInfoReturnable<CompletableFuture<ChunkAccess>> callback) {
+        RandomState randomState = level.getChunkSource().randomState();
+        if ((Object) randomState instanceof RTFRandomState rtfRandomState) {
+            @Nullable
+            GeneratorContext context = rtfRandomState.generatorContext();
+            if (context != null) {
+                WorldGenFlags.setFastCellLookups(true);
+            }
+        }
+    }
+
+    //features
+    @Inject(
+            at = @At("TAIL"),
+            method = "method_51375",
+            remap = false
+    )
+    private static void method_51375(ChunkStatus status, ServerLevel level, ChunkGenerator generator, List<ChunkAccess> chunks, ChunkAccess centerChunk, CallbackInfo callback) {
+        RandomState randomState = level.getChunkSource().randomState();
+        if ((Object) randomState instanceof RTFRandomState rtfRandomState) {
+            ChunkPos chunkPos = centerChunk.getPos();
+            @Nullable
+            GeneratorContext context = rtfRandomState.generatorContext();
+
+            if (context != null) {
+                context.cache.dropAtChunk(chunkPos.x, chunkPos.z);
+            }
+        }
+    }
 }

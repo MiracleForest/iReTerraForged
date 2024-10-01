@@ -13,47 +13,42 @@ import raccoonman.reterraforged.world.worldgen.util.Seed;
 
 public enum ContinentType implements StringRepresentable {
     MULTI {
-        
-    	@Override
+        @Override
         public MultiContinentGenerator create(Seed seed, GeneratorContext context) {
             return new MultiContinentGenerator(seed, context);
         }
-    }, 
+    },
     SINGLE {
-        
-    	@Override
+        @Override
         public SingleContinentGenerator create(Seed seed, GeneratorContext context) {
             return new SingleContinentGenerator(seed, context);
         }
-    }, 
+    },
     MULTI_IMPROVED {
-        
-    	@Override
+        @Override
         public AdvancedContinentGenerator create(Seed seed, GeneratorContext context) {
             return new AdvancedContinentGenerator(seed, context);
         }
-    }, 
+    },
     EXPERIMENTAL {
-        
-    	@Override
+        @Override
         public FancyContinentGenerator create(Seed seed, GeneratorContext context) {
             return new FancyContinentGenerator(seed, context);
         }
     },
     INFINITE {
-        
-    	@Override
+        @Override
         public InfiniteContinentGenerator create(Seed seed, GeneratorContext context) {
             return new InfiniteContinentGenerator(context);
         }
     };
-	
-	public static final Codec<ContinentType> CODEC = StringRepresentable.fromEnum(ContinentType::values);
-    
+
+    public static final Codec<ContinentType> CODEC = StringRepresentable.fromEnum(ContinentType::values);
+
     public abstract Continent create(Seed seed, GeneratorContext context);
 
     @Override
-	public String getSerializedName() {
-		return this.name();
-	}
+    public String getSerializedName() {
+        return this.name();
+    }
 }

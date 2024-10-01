@@ -12,30 +12,30 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import raccoonman.reterraforged.client.gui.screen.presetconfig.PresetEditorPage;
 
 public class WidgetList<T extends AbstractWidget> extends ContainerObjectSelectionList<WidgetList.Entry<T>> {
-	private boolean renderSelected;
-	
+    private boolean renderSelected;
+
     public WidgetList(Minecraft minecraft, int i, int j, int k, int l, int slotHeight) {
         super(minecraft, i, j, k, l, slotHeight);
     }
-    
+
     public void select(T widget) {
-    	for(Entry<T> entry : this.children()) {
-    		if(entry.widget.equals(widget)) {
-    			this.setSelected(entry);
-    			return;
-    		}
-    	}
+        for (Entry<T> entry : this.children()) {
+            if (entry.widget.equals(widget)) {
+                this.setSelected(entry);
+                return;
+            }
+        }
     }
-    
+
     public <W extends T> W addWidget(W widget) {
         super.addEntry(new Entry<>(widget));
         return widget;
     }
 
     public void setRenderSelected(boolean renderSelected) {
-    	this.renderSelected = renderSelected;
+        this.renderSelected = renderSelected;
     }
-    
+
     @Override
     protected boolean isSelectedItem(int i) {
         return this.renderSelected && Objects.equals(this.getSelected(), this.children().get(i));
@@ -59,7 +59,7 @@ public class WidgetList<T extends AbstractWidget> extends ContainerObjectSelecti
         }
 
         public T getWidget() {
-        	return this.widget;
+            return this.widget;
         }
 
         @Override
@@ -75,16 +75,16 @@ public class WidgetList<T extends AbstractWidget> extends ContainerObjectSelecti
             widget.setY(top);
             widget.visible = true;
             widget.setWidth(optionWidth);
-            widget.setHeight(height - 1);	
-            if(widget instanceof PresetEditorPage.Preview preview) {
-            	widget.setHeight(widget.getWidth());
+            widget.setHeight(height - 1);
+            if (widget instanceof PresetEditorPage.Preview preview) {
+                widget.setHeight(widget.getWidth());
             }
             widget.render(guiGraphics, mouseX, mouseY, partialTicks);
         }
 
-		@Override
-		public List<T> narratables() {
-			return Collections.singletonList(this.widget);
-		}
+        @Override
+        public List<T> narratables() {
+            return Collections.singletonList(this.widget);
+        }
     }
 }

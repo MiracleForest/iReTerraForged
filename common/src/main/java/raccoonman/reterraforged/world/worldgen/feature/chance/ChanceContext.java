@@ -8,15 +8,15 @@ public class ChanceContext {
     private float[] buffer;
 
     public ChanceContext(int length, float total, float[] buffer) {
-    	this.length = length;
-    	this.total = total;
-    	this.buffer = buffer;
+        this.length = length;
+        this.total = total;
+        this.buffer = buffer;
     }
-    
+
     void record(int index, float chance) {
-    	this.buffer[index] = chance;
-    	this.total += chance;
-    	this.length++;
+        this.buffer[index] = chance;
+        this.total += chance;
+        this.length++;
     }
 
     int nextIndex(RandomSource random) {
@@ -33,11 +33,11 @@ public class ChanceContext {
         }
         return -1;
     }
-    
+
     public static ChanceContext make(int size) {
-    	float total = 0.0F;
-    	int length = 0;
-    	float[] buffer = new float[size];
+        float total = 0.0F;
+        int length = 0;
+        float[] buffer = new float[size];
         return new ChanceContext(length, total, buffer);
     }
 }

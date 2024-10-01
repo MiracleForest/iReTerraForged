@@ -11,7 +11,7 @@ public class Cell {
     private static final Cell DEFAULTS = new Cell();
     private static final Cell EMPTY = new Cell() {
 
-    	@Override
+        @Override
         public boolean isAbsent() {
             return true;
         }
@@ -55,7 +55,7 @@ public class Cell {
     public float weirdness;
     public float temperature;
     public float moisture;
-    
+
     public Cell() {
         this.regionMoisture = 0.5F;
         this.regionTemperature = 0.5F;
@@ -66,7 +66,7 @@ public class Cell {
         this.terrainMask = 1.0F;
         this.biomeType = BiomeType.GRASSLAND;
     }
-    
+
     public void copyFrom(Cell other) {
         this.height = other.height;
         this.localErosion = other.localErosion;
@@ -122,7 +122,7 @@ public class Cell {
         }
         return resource;
     }
-    
+
     public interface Visitor {
         void visit(Cell cell, int x, int z);
     }

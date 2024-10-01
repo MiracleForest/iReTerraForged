@@ -17,25 +17,25 @@ import raccoonman.reterraforged.world.worldgen.surface.rule.StrataRule.Layer;
 
 public class RTFSurfaceRules {
 
-	public static void bootstrap() {
-		register("layered", LayeredSurfaceRule.CODEC);
-		register("strata", StrataRule.CODEC);
-		register("noise", NoiseRule.CODEC);
-	}
-	
-	public static LayeredSurfaceRule layered(TagKey<LayeredSurfaceRule.Layer> layers) {
-		return new LayeredSurfaceRule(layers);
-	}
-	
-	public static StrataRule strata(ResourceLocation cacheId, int buffer, int iterations, Holder<Noise> selector, List<Layer> layers) {
-		return new StrataRule(cacheId, buffer, iterations, selector, layers);
-	}
-	
-	public static NoiseRule noise(Holder<Noise> noise, List<Pair<Float, SurfaceRules.RuleSource>> rules) {
-		return new NoiseRule(noise, rules);
-	}
-	
-	public static void register(String name, Codec<? extends SurfaceRules.RuleSource> value) {
-		RegistryUtil.register(BuiltInRegistries.MATERIAL_RULE, name, value);
-	}
+    public static void bootstrap() {
+        register("layered", LayeredSurfaceRule.CODEC);
+        register("strata", StrataRule.CODEC);
+        register("noise", NoiseRule.CODEC);
+    }
+
+    public static LayeredSurfaceRule layered(TagKey<LayeredSurfaceRule.Layer> layers) {
+        return new LayeredSurfaceRule(layers);
+    }
+
+    public static StrataRule strata(ResourceLocation cacheId, int buffer, int iterations, Holder<Noise> selector, List<Layer> layers) {
+        return new StrataRule(cacheId, buffer, iterations, selector, layers);
+    }
+
+    public static NoiseRule noise(Holder<Noise> noise, List<Pair<Float, SurfaceRules.RuleSource>> rules) {
+        return new NoiseRule(noise, rules);
+    }
+
+    public static void register(String name, Codec<? extends SurfaceRules.RuleSource> value) {
+        RegistryUtil.register(BuiltInRegistries.MATERIAL_RULE, name, value);
+    }
 }

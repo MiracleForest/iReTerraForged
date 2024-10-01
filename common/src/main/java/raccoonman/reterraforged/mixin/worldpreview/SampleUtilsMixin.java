@@ -29,50 +29,50 @@ import raccoonman.reterraforged.world.worldgen.WorldGenFlags;
 @Pseudo
 @Mixin(targets = "caeruleusTait.world.preview.backend.worker.SampleUtils", remap = false)
 public class SampleUtilsMixin {
-	@Shadow 
-	@Final
+    @Shadow
+    @Final
     private RandomState randomState;
-	@Shadow
-	@Final
-	private RegistryAccess registryAccess;
-	
-	@Inject(
-		at = @At("TAIL"),
-		require = 1,
-		target = @Desc(
-			value = "<init>",
-			args = { 
-				MinecraftServer.class, BiomeSource.class, ChunkGenerator.class, WorldOptions.class, LevelStem.class, LevelHeightAccessor.class
-			}
-		)
-	)
-	private void SampleUtils$1(CallbackInfo callback) {
-		this.initRTF();
-	}
+    @Shadow
+    @Final
+    private RegistryAccess registryAccess;
 
-	@Inject(
-		at = @At("TAIL"), 
-		require = 1,
-		target = @Desc(
-			value = "<init>",
-			args = { 
-				BiomeSource.class, ChunkGenerator.class, LayeredRegistryAccess.class, WorldOptions.class, LevelStem.class, LevelHeightAccessor.class, WorldDataConfiguration.class, Proxy.class, Path.class 
-			}
-		)
-	) 
-	private void SampleUtils$2(CallbackInfo callback) {
-		this.initRTF();
-	}
-	
-	private void initRTF() {
-		if((Object) this.randomState instanceof RTFRandomState rtfRandomState) {
-			WorldGenFlags.setCullNoiseSections(false);
-			
-			rtfRandomState.initialize(this.registryAccess);
-			
-			RTFCommon.LOGGER.info("initialized rtf data");
-		} else {
-			throw new IllegalStateException();
-		}
-	}
+    @Inject(
+            at = @At("TAIL"),
+            require = 1,
+            target = @Desc(
+                    value = "<init>",
+                    args = {
+                            MinecraftServer.class, BiomeSource.class, ChunkGenerator.class, WorldOptions.class, LevelStem.class, LevelHeightAccessor.class
+                    }
+            )
+    )
+    private void SampleUtils$1(CallbackInfo callback) {
+        this.initRTF();
+    }
+
+    @Inject(
+            at = @At("TAIL"),
+            require = 1,
+            target = @Desc(
+                    value = "<init>",
+                    args = {
+                            BiomeSource.class, ChunkGenerator.class, LayeredRegistryAccess.class, WorldOptions.class, LevelStem.class, LevelHeightAccessor.class, WorldDataConfiguration.class, Proxy.class, Path.class
+                    }
+            )
+    )
+    private void SampleUtils$2(CallbackInfo callback) {
+        this.initRTF();
+    }
+
+    private void initRTF() {
+        if ((Object) this.randomState instanceof RTFRandomState rtfRandomState) {
+            WorldGenFlags.setCullNoiseSections(false);
+
+            rtfRandomState.initialize(this.registryAccess);
+
+            RTFCommon.LOGGER.info("initialized rtf data");
+        } else {
+            throw new IllegalStateException();
+        }
+    }
 }

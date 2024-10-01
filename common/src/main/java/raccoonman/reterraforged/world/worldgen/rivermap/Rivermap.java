@@ -14,7 +14,7 @@ public class Rivermap implements ExpiringEntry {
     private Domain riverWarp;
     private Network[] networks;
     private long timestamp;
-    
+
     public Rivermap(int x, int z, Network[] networks, GenWarp warp) {
         this.timestamp = System.currentTimeMillis();
         this.x = x;
@@ -23,7 +23,7 @@ public class Rivermap implements ExpiringEntry {
         this.lakeWarp = warp.lake();
         this.riverWarp = warp.river();
     }
-    
+
     public void apply(Cell cell, float x, float z) {
         float rx = this.riverWarp.getX(x, z, 0);
         float rz = this.riverWarp.getZ(x, z, 0);
@@ -35,24 +35,24 @@ public class Rivermap implements ExpiringEntry {
             }
         }
     }
-    
+
     @Override
     public long getTimestamp() {
         return this.timestamp;
     }
-    
+
     public int getX() {
         return this.x;
     }
-    
+
     public int getZ() {
         return this.z;
     }
-    
+
     public static Rivermap get(Cell cell, Rivermap instance, Heightmap heightmap) {
         return get(cell.continentX, cell.continentZ, instance, heightmap);
     }
-    
+
     public static Rivermap get(int x, int z, Rivermap instance, Heightmap heightmap) {
         if (instance != null && x == instance.getX() && z == instance.getZ()) {
             return instance;

@@ -24,7 +24,7 @@ public class LakePopulator2 {
     private Noise fjord;
     private Noise ridge;
     private Noise variance;
-    
+
     public LakePopulator2(Vec2f center, float radius, float multiplier, LakeConfig config) {
         float lake = radius * multiplier;
         float valley = 275.0F * multiplier;
@@ -38,25 +38,25 @@ public class LakePopulator2 {
         this.bankAlphaMax = Math.min(1.0F, this.bankAlphaMin + 0.275F);
         this.bankAlphaRange = this.bankAlphaMax - this.bankAlphaMin;
         this.lakeDistance2 = lake * lake;
-        
+
         this.variance = Noises.perlin(0, 50, 4);
         this.variance = Noises.warpPerlin(this.variance, 1, 40, 5, 2.3F);
         this.variance = Noises.mul(this.variance, 0.7F);
     }
-    
+
     public void apply(Cell cell, float x, float z) {
         float distance2 = this.getDistance2(x, z);
         if (distance2 > this.valley2) {
             return;
         }
-        
+
         float lakeDistance2 = this.lakeDistance2;// - this.variance.compute(x, z, 0);
         float bankHeight = this.getBankHeight(cell);
         if (distance2 <= lakeDistance2) {
             cell.height = Math.min(bankHeight, cell.height);
             if (distance2 < lakeDistance2) {
                 float depthAlpha = 1.0F - distance2 / lakeDistance2;
-                
+
                 if (depthAlpha < 0.0F) {
                     depthAlpha = 0.0F;
                 } else if (depthAlpha > 1.0F) {
@@ -82,23 +82,23 @@ public class LakePopulator2 {
         cell.riverDistance *= 1.0F - valleyAlpha;
         cell.riverDistance = Math.min(cell.riverDistance, 1.0F - valleyAlpha);
     }
-    
+
     public void recordBounds(Boundsf.Builder builder) {
         builder.record(this.center.x() - this.valley * 1.2F, this.center.y() - this.valley * 1.2F);
         builder.record(this.center.x() + this.valley * 1.2F, this.center.y() + this.valley * 1.2F);
     }
-    
+
     public boolean overlaps(float x, float z, float radius2) {
         float dist2 = this.getDistance2(x, z);
         return dist2 < this.lakeDistance2 + radius2;
     }
-    
+
     protected float getDistance2(float x, float z) {
         float dx = this.center.x() - x;
         float dz = this.center.y() - z;
         return dx * dx + dz * dz;
     }
-    
+
     protected float getBankHeight(Cell cell) {
         float bankHeightAlpha = NoiseUtil.map(cell.height, this.bankAlphaMin, this.bankAlphaMax, this.bankAlphaRange);
         return NoiseUtil.lerp(this.bankMin, this.bankMax, bankHeightAlpha);

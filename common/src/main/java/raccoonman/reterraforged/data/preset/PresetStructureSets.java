@@ -13,7 +13,7 @@ import raccoonman.reterraforged.data.preset.settings.StructureSettings;
 
 public class PresetStructureSets {
 
-	public static void bootstrap(Preset preset, BootstapContext<StructureSet> ctx) {
+    public static void bootstrap(Preset preset, BootstapContext<StructureSet> ctx) {
 //		StructureSettings structureSettings = preset.structures();
 //
 //		HolderGetter<Structure> structures = ctx.lookup(Registries.STRUCTURE);
@@ -29,8 +29,8 @@ public class PresetStructureSets {
 //				return makeEntry(structures, entry);
 //			}).toList(), settings.makePlacement()));
 //		});
-	}
-	
+    }
+
 //	private static StructureSelectionEntry makeEntry(HolderGetter<Structure> structures, StructureSettings.StructureEntry entry) {
 //		return new StructureSelectionEntry(entry.structure().map(structures::getOrThrow, Holder::direct), entry.weight());
 //	}

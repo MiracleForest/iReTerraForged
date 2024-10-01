@@ -19,57 +19,57 @@ import raccoonman.reterraforged.world.worldgen.noise.module.Noise;
 import raccoonman.reterraforged.world.worldgen.noise.module.Noises;
 
 public class SwampSurfaceFeature extends Feature<Config> {
-	private static final Noise MATERIAL_NOISE = makeMaterialNoise();
-	
-	public SwampSurfaceFeature(Codec<Config> codec) {
-		super(codec);
-	}
+    private static final Noise MATERIAL_NOISE = makeMaterialNoise();
 
-	@Override
-	public boolean place(FeaturePlaceContext<Config> ctx) {
-		Config config = ctx.config();
-		BlockPos origin = ctx.origin();
-		WorldGenLevel level = ctx.level();
-		ChunkGenerator generator = ctx.chunkGenerator();
-		ChunkAccess chunk = level.getChunk(origin);
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int waterY = generator.getSeaLevel() - 1;
+    public SwampSurfaceFeature(Codec<Config> codec) {
+        super(codec);
+    }
 
-		for(int localX = 0; localX < 16; localX++) {
-			for(int localZ = 0; localZ < 16; localZ++) {
-				int x = origin.getX() + localX;
-				int z = origin.getZ() + localZ;
-				int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
-				
-				double biomeInfoNoise = Biome.BIOME_INFO_NOISE.getValue(x * 0.25D, z * 0.25D, false);
-				BlockState filler = getMaterial(x, waterY, z, waterY, config);
+    @Override
+    public boolean place(FeaturePlaceContext<Config> ctx) {
+        Config config = ctx.config();
+        BlockPos origin = ctx.origin();
+        WorldGenLevel level = ctx.level();
+        ChunkGenerator generator = ctx.chunkGenerator();
+        ChunkAccess chunk = level.getChunk(origin);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int waterY = generator.getSeaLevel() - 1;
 
-				pos.set(x, surfaceY, z);
-				
-				if(level.getBiome(pos).is(Biomes.SWAMP)) {
-			        if (biomeInfoNoise > 0.0D) {
-			            for (int y = surfaceY; y >= surfaceY - 10; --y) {
-			                pos.setY(y);
-			                if (level.getBlockState(pos).isAir()) {
-			                    continue;
-			                }
+        for (int localX = 0; localX < 16; localX++) {
+            for (int localZ = 0; localZ < 16; localZ++) {
+                int x = origin.getX() + localX;
+                int z = origin.getZ() + localZ;
+                int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
 
-			                if (y == waterY && !level.getFluidState(pos).isEmpty()) {
-			                    level.setBlock(pos, filler, 2);
-			                }
-			                break;
-			            }
-			        }
+                double biomeInfoNoise = Biome.BIOME_INFO_NOISE.getValue(x * 0.25D, z * 0.25D, false);
+                BlockState filler = getMaterial(x, waterY, z, waterY, config);
 
-			        int oceanFloor = chunk.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, localX, localZ);
-			        if (oceanFloor <= waterY) {
-			        	level.setBlock(pos.setY(oceanFloor), getMaterial(x, oceanFloor, z, waterY, config), 2);
-			        }					
-				}
-			}	
-		}
-		return true;
-	}
+                pos.set(x, surfaceY, z);
+
+                if (level.getBiome(pos).is(Biomes.SWAMP)) {
+                    if (biomeInfoNoise > 0.0D) {
+                        for (int y = surfaceY; y >= surfaceY - 10; --y) {
+                            pos.setY(y);
+                            if (level.getBlockState(pos).isAir()) {
+                                continue;
+                            }
+
+                            if (y == waterY && !level.getFluidState(pos).isEmpty()) {
+                                level.setBlock(pos, filler, 2);
+                            }
+                            break;
+                        }
+                    }
+
+                    int oceanFloor = chunk.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, localX, localZ);
+                    if (oceanFloor <= waterY) {
+                        level.setBlock(pos.setY(oceanFloor), getMaterial(x, oceanFloor, z, waterY, config), 2);
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     private static BlockState getMaterial(int x, int y, int z, int waterY, Config config) {
         float value = MATERIAL_NOISE.compute(x, z, 0);
@@ -81,17 +81,18 @@ public class SwampSurfaceFeature extends Feature<Config> {
         }
         return config.dirtMaterial();
     }
-    
+
     private static Noise makeMaterialNoise() {
-    	Noise base = Noises.simplex(23, 40, 2);
-    	return Noises.warpWhite(base, 213, 2, 4);    	
+        Noise base = Noises.simplex(23, 40, 2);
+        return Noises.warpWhite(base, 213, 2, 4);
     }
-    
-    public record Config(BlockState clayMaterial, BlockState gravelMaterial, BlockState dirtMaterial) implements FeatureConfiguration {
-    	public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-    		BlockState.CODEC.fieldOf("clay_material").forGetter(Config::clayMaterial),
-    		BlockState.CODEC.fieldOf("gravel_material").forGetter(Config::gravelMaterial),
-    		BlockState.CODEC.fieldOf("dirt_material").forGetter(Config::dirtMaterial)
-    	).apply(instance, Config::new));
+
+    public record Config(BlockState clayMaterial, BlockState gravelMaterial,
+                         BlockState dirtMaterial) implements FeatureConfiguration {
+        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                BlockState.CODEC.fieldOf("clay_material").forGetter(Config::clayMaterial),
+                BlockState.CODEC.fieldOf("gravel_material").forGetter(Config::gravelMaterial),
+                BlockState.CODEC.fieldOf("dirt_material").forGetter(Config::dirtMaterial)
+        ).apply(instance, Config::new));
     }
 }

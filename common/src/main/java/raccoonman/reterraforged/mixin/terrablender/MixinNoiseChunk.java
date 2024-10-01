@@ -23,32 +23,32 @@ import raccoonman.reterraforged.compat.terrablender.TBClimateSampler;
 
 @Mixin(NoiseChunk.class)
 public class MixinNoiseChunk {
-	private RandomState randomState;
+    private RandomState randomState;
 
-	@Inject(
-		at = @At("TAIL"),
-		method = "<init>"
-	)
-	private void NoiseChunk(int cellCount, RandomState randomState, int x, int z, NoiseSettings noiseSettings, DensityFunctions.BeardifierOrMarker beardifierOrMarker, NoiseGeneratorSettings noiseGeneratorSettings, Aquifer.FluidPicker fluidPicker, Blender blender, CallbackInfo callback) {
-		this.randomState = randomState;
-	}
-	
-	@Inject(
-		at = @At("RETURN"),
-		method = "cachedClimateSampler"
-	)
-	private void cachedClimateSampler(NoiseRouter noiseRouter, List<Climate.ParameterPoint> list, CallbackInfoReturnable<Climate.Sampler> callback) {
-    	if((Object) callback.getReturnValue() instanceof TBClimateSampler cachedSampler && (Object) this.randomState.sampler() instanceof TBClimateSampler globalSampler) {
-    		DensityFunction uniqueness = globalSampler.getUniqueness();
-
-    		if(uniqueness != null) {
-    			cachedSampler.setUniqueness(this.wrap(uniqueness));
-    		}
-    	}
+    @Inject(
+            at = @At("TAIL"),
+            method = "<init>"
+    )
+    private void NoiseChunk(int cellCount, RandomState randomState, int x, int z, NoiseSettings noiseSettings, DensityFunctions.BeardifierOrMarker beardifierOrMarker, NoiseGeneratorSettings noiseGeneratorSettings, Aquifer.FluidPicker fluidPicker, Blender blender, CallbackInfo callback) {
+        this.randomState = randomState;
     }
 
-	@Shadow
+    @Inject(
+            at = @At("RETURN"),
+            method = "cachedClimateSampler"
+    )
+    private void cachedClimateSampler(NoiseRouter noiseRouter, List<Climate.ParameterPoint> list, CallbackInfoReturnable<Climate.Sampler> callback) {
+        if ((Object) callback.getReturnValue() instanceof TBClimateSampler cachedSampler && (Object) this.randomState.sampler() instanceof TBClimateSampler globalSampler) {
+            DensityFunction uniqueness = globalSampler.getUniqueness();
+
+            if (uniqueness != null) {
+                cachedSampler.setUniqueness(this.wrap(uniqueness));
+            }
+        }
+    }
+
+    @Shadow
     private DensityFunction wrap(DensityFunction densityFunction) {
-		throw new IllegalStateException();
+        throw new IllegalStateException();
     }
 }

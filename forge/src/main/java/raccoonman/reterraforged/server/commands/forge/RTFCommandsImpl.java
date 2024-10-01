@@ -14,14 +14,14 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber
 public class RTFCommandsImpl {
-	private static final List<BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext>> COMMANDS = new ArrayList<>();
-	
-	public static void register(BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext> register) {
-		COMMANDS.add(register);
-	}
-	
-	@SubscribeEvent
-	private static void onRegisterCommands(RegisterCommandsEvent event) {
-		COMMANDS.forEach((consumer) -> consumer.accept(event.getDispatcher(), event.getBuildContext()));
-	}
+    private static final List<BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext>> COMMANDS = new ArrayList<>();
+
+    public static void register(BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext> register) {
+        COMMANDS.add(register);
+    }
+
+    @SubscribeEvent
+    private static void onRegisterCommands(RegisterCommandsEvent event) {
+        COMMANDS.forEach((consumer) -> consumer.accept(event.getDispatcher(), event.getBuildContext()));
+    }
 }

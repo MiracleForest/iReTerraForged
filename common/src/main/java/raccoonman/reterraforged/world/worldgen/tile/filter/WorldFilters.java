@@ -16,7 +16,7 @@ public class WorldFilters {
     private WorldErosion<Erosion> erosion;
     private int erosionIterations;
     private int smoothingIterations;
-    
+
     public WorldFilters(GeneratorContext context, Heightmap heightmap) {
         IntFunction<Erosion> factory = Erosion.factory(context);
         this.settings = context.preset.filters();
@@ -28,33 +28,33 @@ public class WorldFilters {
         this.erosionIterations = context.preset.filters().erosion.dropletsPerChunk;
         this.smoothingIterations = context.preset.filters().smoothing.iterations;
     }
-    
+
     public FilterSettings getSettings() {
         return this.settings;
     }
-    
+
     public void apply(Tile tile, boolean optionalFilters) {
         int regionX = tile.getX();
         int regionZ = tile.getZ();
-        
+
         if (optionalFilters) {
             this.applyOptionalFilters(tile, regionX, regionZ);
         }
         this.applyRequiredFilters(tile, regionX, regionZ);
         this.applyPostProcessing(tile, regionX, regionZ);
     }
-    
+
     private void applyRequiredFilters(Tile tile, int seedX, int seedZ) {
         this.steepness.apply(tile, seedX, seedZ, 1);
         this.beach.apply(tile, seedX, seedZ, 1);
     }
-    
+
     private void applyOptionalFilters(Tile tile, int seedX, int seedZ) {
         Erosion erosion = this.erosion.get(tile.getBlockSize().total());
         erosion.apply(tile, seedX, seedZ, this.erosionIterations);
         this.smoothing.apply(tile, seedX, seedZ, this.smoothingIterations);
     }
-    
+
     public void applyPostProcessing(Tile map, int seedX, int seedZ) {
         this.processing.apply(map, seedX, seedZ, 1);
     }

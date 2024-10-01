@@ -21,44 +21,44 @@ import raccoonman.reterraforged.data.preset.tags.PresetSurfaceLayerProvider;
 import raccoonman.reterraforged.platform.DataGenUtil;
 
 public class RTFDataGen {
-	public static final String DATAPACK_PATH = "data/reterraforged/datapacks";
-	
-	public static void generateResourcePacks(ResourcePackFactory resourcePackFactory) {
-		DataGenerator.PackGenerator pack = resourcePackFactory.createPack();
+    public static final String DATAPACK_PATH = "data/reterraforged/datapacks";
 
-		pack.addProvider(RTFLanguageProvider.EnglishUS::new);
-		pack.addProvider((PackOutput output) -> PackMetadataGenerator.forFeaturePack(output, Component.translatable(RTFTranslationKeys.METADATA_DESCRIPTION)));
-	}
-	
-	@Deprecated
-	public static DataGenerator makePreset(Preset preset, RegistryAccess registryAccess, Path dataGenPath, Path dataGenOutputPath) {
-		DataGenerator dataGenerator = new DataGenerator(dataGenPath, SharedConstants.getCurrentVersion(), true);
-		PackGenerator packGenerator = dataGenerator.new PackGenerator(true, "preset", new PackOutput(dataGenOutputPath));
-		CompletableFuture<HolderLookup.Provider> lookup = CompletableFuture.supplyAsync(() -> preset.buildPatch(registryAccess));
-		
-		packGenerator.addProvider((output) -> {
-			return DataGenUtil.createRegistryProvider(output, lookup);
-		});
-		packGenerator.addProvider((output) -> {
-			return new PresetBlockTagsProvider(output, lookup);
-		});
-		packGenerator.addProvider((output) -> {
-			return new PresetSurfaceLayerProvider(preset, output, lookup);
-		});
-		packGenerator.addProvider((output) -> {
-			return new PresetBiomeTagsProvider(preset, output, CompletableFuture.completedFuture(registryAccess));
-		});
-		packGenerator.addProvider((output) -> {
-			return PackMetadataGenerator.forFeaturePack(output, Component.translatable(RTFTranslationKeys.PRESET_METADATA_DESCRIPTION));
-		});
-		return dataGenerator;
-	}
-	
-	public interface ResourcePackFactory {
-		DataGenerator.PackGenerator createPack();
-	}
-	
-	public interface DataPackFactory {
-		DataGenerator.PackGenerator createPack(ResourceLocation id);
-	}
+    public static void generateResourcePacks(ResourcePackFactory resourcePackFactory) {
+        DataGenerator.PackGenerator pack = resourcePackFactory.createPack();
+
+        pack.addProvider(RTFLanguageProvider.EnglishUS::new);
+        pack.addProvider((PackOutput output) -> PackMetadataGenerator.forFeaturePack(output, Component.translatable(RTFTranslationKeys.METADATA_DESCRIPTION)));
+    }
+
+    @Deprecated
+    public static DataGenerator makePreset(Preset preset, RegistryAccess registryAccess, Path dataGenPath, Path dataGenOutputPath) {
+        DataGenerator dataGenerator = new DataGenerator(dataGenPath, SharedConstants.getCurrentVersion(), true);
+        PackGenerator packGenerator = dataGenerator.new PackGenerator(true, "preset", new PackOutput(dataGenOutputPath));
+        CompletableFuture<HolderLookup.Provider> lookup = CompletableFuture.supplyAsync(() -> preset.buildPatch(registryAccess));
+
+        packGenerator.addProvider((output) -> {
+            return DataGenUtil.createRegistryProvider(output, lookup);
+        });
+        packGenerator.addProvider((output) -> {
+            return new PresetBlockTagsProvider(output, lookup);
+        });
+        packGenerator.addProvider((output) -> {
+            return new PresetSurfaceLayerProvider(preset, output, lookup);
+        });
+        packGenerator.addProvider((output) -> {
+            return new PresetBiomeTagsProvider(preset, output, CompletableFuture.completedFuture(registryAccess));
+        });
+        packGenerator.addProvider((output) -> {
+            return PackMetadataGenerator.forFeaturePack(output, Component.translatable(RTFTranslationKeys.PRESET_METADATA_DESCRIPTION));
+        });
+        return dataGenerator;
+    }
+
+    public interface ResourcePackFactory {
+        DataGenerator.PackGenerator createPack();
+    }
+
+    public interface DataPackFactory {
+        DataGenerator.PackGenerator createPack(ResourceLocation id);
+    }
 }

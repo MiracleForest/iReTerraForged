@@ -9,7 +9,7 @@ import net.minecraft.data.registries.RegistriesDatapackGenerator;
 
 public final class DataGenUtilImpl {
 
-	public static DataProvider createRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerLookup) {
-		return new RegistriesDatapackGenerator(output, providerLookup);
-	}
+    public static DataProvider createRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> providerLookup) {
+        return new RegistriesDatapackGenerator(output, providerLookup);
+    }
 }

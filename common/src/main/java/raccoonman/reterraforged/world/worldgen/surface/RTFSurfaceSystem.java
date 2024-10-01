@@ -8,5 +8,5 @@ import net.minecraft.util.RandomSource;
 import raccoonman.reterraforged.world.worldgen.surface.rule.StrataRule.Strata;
 
 public interface RTFSurfaceSystem {
-	List<Strata> getOrCreateStrata(ResourceLocation name, Function<RandomSource, List<Strata>> factory);
+    List<Strata> getOrCreateStrata(ResourceLocation name, Function<RandomSource, List<Strata>> factory);
 }

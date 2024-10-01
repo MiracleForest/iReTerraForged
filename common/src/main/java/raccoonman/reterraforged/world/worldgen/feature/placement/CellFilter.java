@@ -13,21 +13,21 @@ import raccoonman.reterraforged.world.worldgen.RTFRandomState;
 import raccoonman.reterraforged.world.worldgen.cell.Cell;
 
 abstract class CellFilter extends PlacementFilter {
-	
-	@Override
-	protected boolean shouldPlace(PlacementContext ctx, RandomSource rand, BlockPos pos) {
-		WorldGenLevel level = ctx.getLevel();
-		RandomState randomState = level.getLevel().getChunkSource().randomState();
-		
-		@Nullable
-		GeneratorContext generatorContext;
-		if((Object) randomState instanceof RTFRandomState rtfRandomState && (generatorContext = rtfRandomState.generatorContext()) != null) {
-			Cell cell = new Cell();
-			generatorContext.lookup.apply(cell, pos.getX(), pos.getZ());
-			return this.shouldPlace(cell, ctx, rand, pos);
-		}
-		return false;
-	}
-	
-	protected abstract boolean shouldPlace(Cell cell, PlacementContext ctx, RandomSource rand, BlockPos pos);
+
+    @Override
+    protected boolean shouldPlace(PlacementContext ctx, RandomSource rand, BlockPos pos) {
+        WorldGenLevel level = ctx.getLevel();
+        RandomState randomState = level.getLevel().getChunkSource().randomState();
+
+        @Nullable
+        GeneratorContext generatorContext;
+        if ((Object) randomState instanceof RTFRandomState rtfRandomState && (generatorContext = rtfRandomState.generatorContext()) != null) {
+            Cell cell = new Cell();
+            generatorContext.lookup.apply(cell, pos.getX(), pos.getZ());
+            return this.shouldPlace(cell, ctx, rand, pos);
+        }
+        return false;
+    }
+
+    protected abstract boolean shouldPlace(Cell cell, PlacementContext ctx, RandomSource rand, BlockPos pos);
 }

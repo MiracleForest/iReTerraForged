@@ -15,7 +15,7 @@ public class RiverWarp {
     private float upperRange;
     private float frequency;
     private float scale;
-    
+
     public RiverWarp(int seed, float lower, float upper, float frequency, float scale) {
         this.seed = seed;
         this.frequency = frequency;
@@ -25,15 +25,15 @@ public class RiverWarp {
         this.lowerRange = 1.0F / lower;
         this.upperRange = 1.0F / (1.0F - upper);
     }
-    
+
     public RiverWarp createChild(float lower, float upper, float factor, Random random) {
         return new RiverWarp(random.nextInt(), lower, upper, this.frequency * factor, this.scale * factor);
     }
-    
+
     public boolean test(float t) {
         return this != RiverWarp.NONE && t >= 0.0F && t <= 1.0F;
     }
-    
+
     public long getOffset(float x, float z, float t, River river) {
         float alpha1 = this.getWarpAlpha(t);
         float px = x * this.frequency;
@@ -51,7 +51,7 @@ public class RiverWarp {
         dz += NoiseUtil.sin(rads) * river.normZ * wiggleDist;
         return PosUtil.packf(dx, dz);
     }
-    
+
     private float getWarpAlpha(float t) {
         if (t < 0.0F || t > 1.0F) {
             return 0.0F;
@@ -64,15 +64,15 @@ public class RiverWarp {
         }
         return 1.0F;
     }
-    
+
     private float getWiggleAlpha(float t) {
         return NoiseUtil.map(t, 0.0F, 0.075F, 0.075F);
     }
-    
+
     public static RiverWarp create(float fade, Random random) {
         return create(fade, 1.0F - fade, random);
     }
-    
+
     public static RiverWarp create(float lower, float upper, Random random) {
         float scale = 125.0F + random.nextInt(50);
         float frequency = 5.0E-4F + random.nextFloat() * 5.0E-4F;

@@ -31,47 +31,47 @@ public class LocateTerrainCommand {
     private static final DynamicCommandExceptionType ERROR_TERRAIN_NOT_FOUND = new DynamicCommandExceptionType(terrain -> Component.translatable(RTFTranslationKeys.TERRAIN_NOT_FOUND, terrain));
 
     public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher, CommandBuildContext commandBuildContext) {
-    	commandDispatcher.register(
-    		Commands.literal("rtf").requires((stack) -> stack.hasPermission(2)).then(
-    			Commands.literal("locate").then(
-    				Commands.argument("terrain", TerrainArgument.terrain()).executes((ctx) -> {
-	    				CommandSourceStack stack = ctx.getSource();
-	    				Terrain terrain = ctx.getArgument("terrain", Terrain.class);
-	    				String terrainName = terrain.getName();
-	    				BlockPos origin = BlockPos.containing(stack.getPosition());
-	    				@Nullable
-	    				BlockPos result = locate(stack, terrain, 256, 256, 24000, 30L);
-	    				if(result != null) {
-	    			        int distance = Mth.floor(dist(origin.getX(), origin.getZ(), result.getX(), result.getZ()));
-		    			    stack.sendSuccess(() -> Component.translatable(RTFTranslationKeys.TERRAIN_FOUND, terrainName, createTeleportMessage(result), distance), false);
-		    			    return Command.SINGLE_SUCCESS;
-	    				}
-	    	            throw ERROR_TERRAIN_NOT_FOUND.create(terrainName);
-    				})
-    			)
-	    	)
-    	);
+        commandDispatcher.register(
+                Commands.literal("rtf").requires((stack) -> stack.hasPermission(2)).then(
+                        Commands.literal("locate").then(
+                                Commands.argument("terrain", TerrainArgument.terrain()).executes((ctx) -> {
+                                    CommandSourceStack stack = ctx.getSource();
+                                    Terrain terrain = ctx.getArgument("terrain", Terrain.class);
+                                    String terrainName = terrain.getName();
+                                    BlockPos origin = BlockPos.containing(stack.getPosition());
+                                    @Nullable
+                                    BlockPos result = locate(stack, terrain, 256, 256, 24000, 30L);
+                                    if (result != null) {
+                                        int distance = Mth.floor(dist(origin.getX(), origin.getZ(), result.getX(), result.getZ()));
+                                        stack.sendSuccess(() -> Component.translatable(RTFTranslationKeys.TERRAIN_FOUND, terrainName, createTeleportMessage(result), distance), false);
+                                        return Command.SINGLE_SUCCESS;
+                                    }
+                                    throw ERROR_TERRAIN_NOT_FOUND.create(terrainName);
+                                })
+                        )
+                )
+        );
     }
-    
+
     private static Component createTeleportMessage(BlockPos pos) {
         return ComponentUtils.wrapInSquareBrackets(Component.translatable("chat.coordinates", pos.getX(), pos.getY(), pos.getZ())).withStyle(s -> s
-        	.withColor(ChatFormatting.GREEN)
-        	.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + pos.getX() + " " + pos.getY() + " " + pos.getZ()))
-        	.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.coordinates.tooltip")))
+                .withColor(ChatFormatting.GREEN)
+                .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + pos.getX() + " " + pos.getY() + " " + pos.getZ()))
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.coordinates.tooltip")))
         );
     }
 
     @Nullable
     private static BlockPos locate(CommandSourceStack commandSourceStack, Terrain target, int step, int minRadius, int maxRadius, long timeout) {
-    	ServerLevel level = commandSourceStack.getLevel();
+        ServerLevel level = commandSourceStack.getLevel();
 
-    	@Nullable
-    	GeneratorContext generatorContext;
-    	if((Object) level.getChunkSource().randomState() instanceof RTFRandomState rtfRandomState && (generatorContext = rtfRandomState.generatorContext()) != null) {
-    		return search(commandSourceStack, generatorContext.lookup, target, step, minRadius, maxRadius, timeout);
-    	}
-    	
-    	return null;
+        @Nullable
+        GeneratorContext generatorContext;
+        if ((Object) level.getChunkSource().randomState() instanceof RTFRandomState rtfRandomState && (generatorContext = rtfRandomState.generatorContext()) != null) {
+            return search(commandSourceStack, generatorContext.lookup, target, step, minRadius, maxRadius, timeout);
+        }
+
+        return null;
     }
 
     @Nullable
@@ -89,7 +89,7 @@ public class LocateTerrainCommand {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
         Cell cell = new Cell();
-        
+
         for (long i = 0; i < max; i++) {
             if (System.currentTimeMillis() > timeOut) {
                 break;
@@ -98,9 +98,9 @@ public class LocateTerrainCommand {
             if ((-radius <= x) && (x <= radius) && (-radius <= z) && (z <= radius)) {
                 pos.set(origin.x() + (x * step), origin.y(), origin.z() + (z * step));
                 if (minRadiusSq == 0 || origin.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) >= minRadiusSq) {
-                	if(test(lookup, cell, pos, target)) {
-                		return pos;
-                	}
+                    if (test(lookup, cell, pos, target)) {
+                        return pos;
+                    }
                 }
             }
 
@@ -116,7 +116,7 @@ public class LocateTerrainCommand {
 
         return null;
     }
-    
+
     @Nullable
     private static boolean test(WorldLookup lookup, Cell cell, BlockPos pos, Terrain target) {
         lookup.apply(cell, pos.getX(), pos.getZ());

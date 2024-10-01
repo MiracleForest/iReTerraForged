@@ -16,11 +16,11 @@ public class ContinentLerper3 implements CellPopulator {
     private float blendUpper;
     private float lowerRange;
     private float upperRange;
-    
+
     public ContinentLerper3(CellPopulator lower, CellPopulator middle, CellPopulator upper, float min, float mid, float max) {
         this(lower, middle, upper, min, mid, max, Interpolation.CURVE3);
     }
-    
+
     public ContinentLerper3(CellPopulator lower, CellPopulator middle, CellPopulator upper, float min, float mid, float max, Interpolation interpolation) {
         this.lower = lower;
         this.upper = upper;
@@ -32,7 +32,7 @@ public class ContinentLerper3 implements CellPopulator {
         this.lowerRange = this.midpoint - this.blendLower;
         this.upperRange = this.blendUpper - this.midpoint;
     }
-    
+
     @Override
     public void apply(Cell cell, float x, float y) {
         float select = cell.continentEdge;
@@ -62,6 +62,6 @@ public class ContinentLerper3 implements CellPopulator {
 
     @Override
     public CellPopulator mapNoise(Noise.Visitor visitor) {
-    	return new ContinentLerper3(this.lower.mapNoise(visitor), this.middle.mapNoise(visitor), this.upper.mapNoise(visitor), this.blendLower, this.midpoint, this.blendUpper, this.interpolation);
+        return new ContinentLerper3(this.lower.mapNoise(visitor), this.middle.mapNoise(visitor), this.upper.mapNoise(visitor), this.blendLower, this.midpoint, this.blendUpper, this.interpolation);
     }
 }

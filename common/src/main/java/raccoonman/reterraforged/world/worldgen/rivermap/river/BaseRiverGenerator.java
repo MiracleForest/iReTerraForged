@@ -31,7 +31,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
     protected WetlandConfig wetland;
     protected T continent;
     protected Levels levels;
-    
+
     public BaseRiverGenerator(T continent, GeneratorContext context) {
         this.continent = continent;
         this.levels = context.levels;
@@ -44,7 +44,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         this.wetland = new WetlandConfig(context.preset.rivers().wetlands);
         this.lake = LakeConfig.of(context.preset.rivers().lakes, context.levels);
     }
-    
+
     @Override
     public Rivermap generateRivers(int x, int z, long id) {
         Random random = new Random(id + this.seed);
@@ -60,11 +60,11 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         Network[] networks = rivers.stream().map(Network.Builder::build).toArray(Network[]::new);
         return new Rivermap(x, z, networks, warp);
     }
-    
+
     public List<Network.Builder> generateRoots(int x, int z, Random random, GenWarp warp) {
         return Collections.emptyList();
     }
-    
+
     public void generateForks(Network.Builder parent, Variance spacing, RiverConfig config, Random random, GenWarp warp, List<Network.Builder> rivers, int depth) {
         if (depth > 2) {
             return;
@@ -109,7 +109,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         }
         this.addLake(parent, random, warp);
     }
-    
+
     public void generateAdditionalLakes(int x, int z, Random random, List<Network.Builder> roots, List<RiverPopulator> rivers, List<LakePopulator> lakes) {
         float size = 150.0f;
         Variance sizeVariance = Variance.of(1.0F, 0.25F);
@@ -129,7 +129,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
             }
         }
     }
-    
+
     public void generateWetlands(Network.Builder builder, Random random) {
         int skip = random.nextInt(this.wetland.skipSize);
         if (skip == 0) {
@@ -150,7 +150,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
             this.generateWetlands(child, random);
         }
     }
-    
+
     public void addLake(Network.Builder branch, Random random, GenWarp warp) {
         if (random.nextFloat() <= this.lake.chance) {
             float lakeSize = this.lake.sizeMin + random.nextFloat() * this.lake.sizeRange;
@@ -162,7 +162,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
             branch.lakes.add(new LakePopulator(new Vec2f(cx, cz), lakeSize, 1.0f, this.lake));
         }
     }
-    
+
     public boolean riverOverlaps(River river, Network.Builder parent, List<Network.Builder> rivers) {
         for (Network.Builder other : rivers) {
             if (other.overlaps(river, parent, 250.0f)) {
@@ -171,7 +171,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         }
         return false;
     }
-    
+
     public boolean lakeOverlaps(Vec2f lake, float size, List<RiverPopulator> rivers) {
         for (RiverPopulator other : rivers) {
             if (!other.main && other.river.overlaps(lake, size)) {
@@ -180,7 +180,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         }
         return false;
     }
-    
+
     public boolean lakeOverlapsOther(float x, float z, float size, List<LakePopulator> lakes) {
         float dist2 = size * size;
         for (LakePopulator other : lakes) {
@@ -190,7 +190,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         }
         return false;
     }
-    
+
     public static RiverPopulator create(float x1, float z1, float x2, float z2, RiverConfig config, Levels levels, Random random) {
         River river = new River(x1, z1, x2, z2);
         RiverWarp warp = RiverWarp.create(0.35f, random);
@@ -201,7 +201,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         settings.valleySize = valleyWidth;
         return new RiverPopulator(river, warp, config, settings, levels);
     }
-    
+
     public static RiverPopulator createFork(float x1, float z1, float x2, float z2, float valleyWidth, RiverConfig config, Levels levels, Random random) {
         River river = new River(x1, z1, x2, z2);
         RiverWarp warp = RiverWarp.create(0.4f, random);
@@ -211,7 +211,7 @@ public abstract class BaseRiverGenerator<T extends Continent> implements RiverGe
         settings.valleySize = valleyWidth;
         return new RiverPopulator(river, warp, config, settings, levels);
     }
-    
+
     public static RiverPopulator.Settings creatSettings(Random random) {
         RiverPopulator.Settings settings = new RiverPopulator.Settings();
         settings.valleyCurve = RiverPopulator.getValleyType(random);

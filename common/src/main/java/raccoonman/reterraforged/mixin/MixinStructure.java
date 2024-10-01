@@ -17,19 +17,19 @@ import raccoonman.reterraforged.world.worldgen.structure.rule.StructureRule;
 @Mixin(Structure.class)
 public class MixinStructure {
 
-	@Inject(
-		at = @At("HEAD"), 
-		method = "isValidBiome",
-		cancellable = true
-	)
+    @Inject(
+            at = @At("HEAD"),
+            method = "isValidBiome",
+            cancellable = true
+    )
     private static void isValidBiome(GenerationStub generationStub, GenerationContext generationContext, CallbackInfoReturnable<Boolean> callback) {
-		RegistryAccess registry = generationContext.registryAccess();
-		RegistryLookup<StructureRule> structureRules = registry.lookupOrThrow(RTFRegistries.STRUCTURE_RULE);
-		
-		for(StructureRule structureRule : structureRules.listElements().map(Holder::value).toList()) {
-			if(!structureRule.test(generationContext.randomState(), generationStub.position())) {
-				callback.setReturnValue(false);
-			}
-		}
+        RegistryAccess registry = generationContext.registryAccess();
+        RegistryLookup<StructureRule> structureRules = registry.lookupOrThrow(RTFRegistries.STRUCTURE_RULE);
+
+        for (StructureRule structureRule : structureRules.listElements().map(Holder::value).toList()) {
+            if (!structureRule.test(generationContext.randomState(), generationStub.position())) {
+                callback.setReturnValue(false);
+            }
+        }
     }
 }

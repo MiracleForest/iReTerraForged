@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public record NoopTemplateContext() implements TemplateContext {
 
-	@Override
-	public void recordState(BlockPos pos, BlockState state) {
-	}
+    @Override
+    public void recordState(BlockPos pos, BlockState state) {
+    }
 }

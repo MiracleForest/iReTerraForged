@@ -15,14 +15,14 @@ import raccoonman.reterraforged.concurrent.cache.Cache;
 @Mixin(Util.class)
 public class MixinUtil {
 
-	@Inject(method = "shutdownExecutors()V", at = @At("TAIL"))
-	private static void shutdownExecutors(CallbackInfo callback) {
-		shutdownExecutor(ThreadPools.WORLD_GEN);
-		shutdownExecutor(Cache.SCHEDULER);
-	}
+    @Inject(method = "shutdownExecutors()V", at = @At("TAIL"))
+    private static void shutdownExecutors(CallbackInfo callback) {
+        shutdownExecutor(ThreadPools.WORLD_GEN);
+        shutdownExecutor(Cache.SCHEDULER);
+    }
 
-	@Shadow
+    @Shadow
     private static void shutdownExecutor(ExecutorService executorService) {
-    	throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 }

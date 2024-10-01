@@ -11,30 +11,30 @@ import raccoonman.reterraforged.world.worldgen.cell.Cell;
 import raccoonman.reterraforged.world.worldgen.noise.module.Noise;
 
 class RiverBankCondition extends ThresholdCondition {
-	
-	public RiverBankCondition(Context context, Noise threshold, Noise variance) {
-		super(context, threshold, variance);
-	}
 
-	@Override
-	protected float sample(Cell cell) {
-		return 1.0F - cell.riverDistance;
-	}
-	
-	public record Source(Holder<Noise> threshold, Holder<Noise> variance) implements SurfaceRules.ConditionSource {
-		public static final Codec<Source> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Noise.CODEC.fieldOf("threshold").forGetter(Source::threshold),
-			Noise.CODEC.fieldOf("variance").forGetter(Source::variance)
-		).apply(instance, Source::new));
+    public RiverBankCondition(Context context, Noise threshold, Noise variance) {
+        super(context, threshold, variance);
+    }
 
-		@Override
-		public RiverBankCondition apply(Context ctx) {
-			return new RiverBankCondition(ctx, this.threshold.value(), this.variance.value());
-		}
+    @Override
+    protected float sample(Cell cell) {
+        return 1.0F - cell.riverDistance;
+    }
 
-		@Override
-		public KeyDispatchDataCodec<Source> codec() {
-			return new KeyDispatchDataCodec<>(CODEC);
-		}
-	}
+    public record Source(Holder<Noise> threshold, Holder<Noise> variance) implements SurfaceRules.ConditionSource {
+        public static final Codec<Source> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Noise.CODEC.fieldOf("threshold").forGetter(Source::threshold),
+                Noise.CODEC.fieldOf("variance").forGetter(Source::variance)
+        ).apply(instance, Source::new));
+
+        @Override
+        public RiverBankCondition apply(Context ctx) {
+            return new RiverBankCondition(ctx, this.threshold.value(), this.variance.value());
+        }
+
+        @Override
+        public KeyDispatchDataCodec<Source> codec() {
+            return new KeyDispatchDataCodec<>(CODEC);
+        }
+    }
 }

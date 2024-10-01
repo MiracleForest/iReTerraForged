@@ -5,22 +5,23 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import raccoonman.reterraforged.world.worldgen.noise.NoiseUtil;
 
-public record Terrace(Noise input, Noise ramp, Noise cliff, Noise rampHeight, float blendRange, Step[] steps) implements Noise {
-	public static final Codec<Terrace> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		Noise.HOLDER_HELPER_CODEC.fieldOf("input").forGetter(Terrace::input),
-		Noise.HOLDER_HELPER_CODEC.fieldOf("ramp").forGetter(Terrace::ramp),
-		Noise.HOLDER_HELPER_CODEC.fieldOf("cliff").forGetter(Terrace::cliff),
-		Noise.HOLDER_HELPER_CODEC.fieldOf("ramp_height").forGetter(Terrace::rampHeight),
-		Codec.FLOAT.fieldOf("blend_range").forGetter(Terrace::blendRange),
-		Codec.INT.fieldOf("steps").forGetter((terrace) -> terrace.steps().length)
-	).apply(instance, Terrace::new));
-	
-	public Terrace(Noise input, Noise ramp, Noise cliff, Noise rampHeight, float blendRange, int steps) {
-		this(input, ramp, cliff, rampHeight, blendRange, createSteps(input, blendRange, steps));
-	}
-	
-	@Override
-	public float compute(float x, float z, int seed) {
+public record Terrace(Noise input, Noise ramp, Noise cliff, Noise rampHeight, float blendRange,
+                      Step[] steps) implements Noise {
+    public static final Codec<Terrace> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Noise.HOLDER_HELPER_CODEC.fieldOf("input").forGetter(Terrace::input),
+            Noise.HOLDER_HELPER_CODEC.fieldOf("ramp").forGetter(Terrace::ramp),
+            Noise.HOLDER_HELPER_CODEC.fieldOf("cliff").forGetter(Terrace::cliff),
+            Noise.HOLDER_HELPER_CODEC.fieldOf("ramp_height").forGetter(Terrace::rampHeight),
+            Codec.FLOAT.fieldOf("blend_range").forGetter(Terrace::blendRange),
+            Codec.INT.fieldOf("steps").forGetter((terrace) -> terrace.steps().length)
+    ).apply(instance, Terrace::new));
+
+    public Terrace(Noise input, Noise ramp, Noise cliff, Noise rampHeight, float blendRange, int steps) {
+        this(input, ramp, cliff, rampHeight, blendRange, createSteps(input, blendRange, steps));
+    }
+
+    @Override
+    public float compute(float x, float z, int seed) {
         float input = NoiseUtil.clamp(this.input.compute(x, z, seed), 0.0F, 0.999999F);
         int index = NoiseUtil.floor(input * this.steps.length);
         Step step = this.steps[index];
@@ -51,29 +52,29 @@ public record Terrace(Noise input, Noise ramp, Noise cliff, Noise rampHeight, fl
             value = NoiseUtil.lerp(value, next2.value, cliffAlpha);
         }
         return value;
-	}
+    }
 
-	@Override
-	public float minValue() {
-		return this.input.minValue();
-	}
+    @Override
+    public float minValue() {
+        return this.input.minValue();
+    }
 
-	@Override
-	public float maxValue() {
-		return this.input.maxValue();
-	}
+    @Override
+    public float maxValue() {
+        return this.input.maxValue();
+    }
 
-	@Override
-	public Noise mapAll(Visitor visitor) {
-		return visitor.apply(new Terrace(this.input.mapAll(visitor), this.ramp.mapAll(visitor), this.cliff.mapAll(visitor), this.rampHeight.mapAll(visitor), this.blendRange, this.steps.length));
-	}
+    @Override
+    public Noise mapAll(Visitor visitor) {
+        return visitor.apply(new Terrace(this.input.mapAll(visitor), this.ramp.mapAll(visitor), this.cliff.mapAll(visitor), this.rampHeight.mapAll(visitor), this.blendRange, this.steps.length));
+    }
 
-	@Override
-	public Codec<Terrace> codec() {
-		return CODEC;
-	}
-	
-	private static Step[] createSteps(Noise input, float blendRange, int steps) {
+    @Override
+    public Codec<Terrace> codec() {
+        return CODEC;
+    }
+
+    private static Step[] createSteps(Noise input, float blendRange, int steps) {
         float min = input.minValue();
         float max = input.maxValue();
         float range = max - min;
@@ -84,14 +85,14 @@ public record Terrace(Noise input, Noise ramp, Noise cliff, Noise rampHeight, fl
             array[i] = Step.create(value, spacing, blendRange);
         }
         return array;
-	}
-	
-	private record Step(float value, float lowerBound, float upperBound) {
-	
-		public static Step create(float value, float distance, float blendRange) {
-			float blend = distance * blendRange;
-			float bound = (distance - blend) / 2.0F;
+    }
+
+    private record Step(float value, float lowerBound, float upperBound) {
+
+        public static Step create(float value, float distance, float blendRange) {
+            float blend = distance * blendRange;
+            float bound = (distance - blend) / 2.0F;
             return new Step(value, value - bound, value + bound);
-		}
-	}
+        }
+    }
 }

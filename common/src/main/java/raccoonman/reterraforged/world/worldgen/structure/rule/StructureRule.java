@@ -11,7 +11,7 @@ import raccoonman.reterraforged.registries.RTFBuiltInRegistries;
 public interface StructureRule {
     public static final Codec<StructureRule> CODEC = RTFBuiltInRegistries.STRUCTURE_RULE_TYPE.byNameCodec().dispatch(StructureRule::codec, Function.identity());
 
-	boolean test(RandomState randomState, BlockPos pos);
-	
-	Codec<? extends StructureRule> codec();
+    boolean test(RandomState randomState, BlockPos pos);
+
+    Codec<? extends StructureRule> codec();
 }

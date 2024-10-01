@@ -5,11 +5,11 @@ import terrablender.core.TerraBlender;
 
 public class TBCompat {
 
-	public static void bootstrap() {
-		TBSurfaceRules.bootstrap();
-	}
-	
-	public static boolean isEnabled() {
-		return ModLoaderUtil.isLoaded(TerraBlender.MOD_ID);
-	}
+    public static void bootstrap() {
+        TBSurfaceRules.bootstrap();
+    }
+
+    public static boolean isEnabled() {
+        return ModLoaderUtil.isLoaded(TerraBlender.MOD_ID);
+    }
 }

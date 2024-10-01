@@ -24,7 +24,7 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
     protected Domain warp;
     protected Noise cliffNoise;
     protected Noise bayNoise;
-    
+
     public AdvancedContinentGenerator(Seed seed, GeneratorContext context) {
         super(seed, context);
         WorldSettings settings = context.preset.world();
@@ -33,9 +33,9 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
         this.varianceSeed = seed.next();
         this.variance = settings.continent.continentSizeVariance;
         this.warp = this.createWarp(seed, tectonicScale, settings.continent);
-        
+
         float frequency = 1.0F / this.frequency;
-        
+
         Noise cliffNoise = Noises.simplex2(seed.next(), this.continentScale / 2, 2);
         cliffNoise = Noises.clamp(cliffNoise, 0.1F, 0.25F);
         cliffNoise = Noises.map(cliffNoise, 0.0F, 1.0F);
@@ -48,7 +48,7 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
         bayNoise = Noises.frequency(bayNoise, frequency);
         this.bayNoise = bayNoise;
     }
-    
+
     @Override
     public void apply(Cell cell, float x, float y) {
         float wx = this.warp.getX(x, y, 0);
@@ -95,20 +95,20 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
                 }
             }
         }
-        
+
         cell.continentX = this.getCorrectedContinentCenter(cellPointX, sumX / 8.0F);
         cell.continentZ = this.getCorrectedContinentCenter(cellPointY, sumY / 8.0F);
         if (this.shouldSkip(cellX, cellY)) {
             return;
         }
         cell.continentId = AbstractContinent.getCellValue(this.seed, cellX, cellY);
-        
+
         float cliffNoise = this.cliffNoise.compute(x, y, 0);
         float bayNoise = this.bayNoise.compute(x, y, 0);
         cell.continentEdge = this.getDistanceValue(x, y, cellX, cellY, nearest, true, cliffNoise, bayNoise);
         cell.continentNoise = this.getDistanceValue(x, y, cellX, cellY, nearest, false, cliffNoise, bayNoise);
     }
-    
+
     @Override
     public float getEdgeValue(float x, float z) {
         try (Resource<Cell> resource = Cell.getResource()) {
@@ -117,7 +117,7 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
             return cell.continentEdge;
         }
     }
-    
+
     @Override
     public long getNearestCenter(float x, float z) {
         try (Resource<Cell> resource = Cell.getResource()) {
@@ -126,19 +126,19 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
             return PosUtil.pack(cell.continentX, cell.continentZ);
         }
     }
-    
+
     @Override
     public Rivermap getRivermap(int x, int z) {
         return this.riverCache.getRivers(x, z);
     }
-    
+
     protected Domain createWarp(Seed seed, int tectonicScale, WorldSettings.Continent continent) {
         int warpScale = NoiseUtil.round(tectonicScale * 0.225F);
         float strength = NoiseUtil.round(tectonicScale * 0.33F);
         return Domains.domain(
-        	Noises.perlin2(seed.next(), warpScale, continent.continentNoiseOctaves, continent.continentNoiseLacunarity, continent.continentNoiseGain), 
-        	Noises.perlin2(seed.next(), warpScale, continent.continentNoiseOctaves, continent.continentNoiseLacunarity, continent.continentNoiseGain), 
-        	Noises.constant(strength)
+                Noises.perlin2(seed.next(), warpScale, continent.continentNoiseOctaves, continent.continentNoiseLacunarity, continent.continentNoiseGain),
+                Noises.perlin2(seed.next(), warpScale, continent.continentNoiseOctaves, continent.continentNoiseLacunarity, continent.continentNoiseGain),
+                Noises.constant(strength)
         );
     }
 
@@ -152,7 +152,7 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
         }
         return distance;
     }
-    
+
     protected float getVariedDistanceValue(int cellX, int cellY, float distance) {
         if (this.variance > 0.0F && !this.isDefaultContinent(cellX, cellY)) {
             float sizeValue = AbstractContinent.getCellValue(this.varianceSeed, cellX, cellY);
@@ -161,7 +161,7 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
         }
         return distance;
     }
-    
+
     protected float getCoastalDistanceValue(float x, float y, float distance, float cliffNoise, float bayNoise) {
         if (distance > this.controlPoints.shallowOcean && distance < this.controlPoints.nearInland) {
             float alpha = distance / this.controlPoints.nearInland;
@@ -172,16 +172,16 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
         }
         return distance;
     }
-    
+
     protected int getCorrectedContinentCenter(float point, float average) {
         point = NoiseUtil.lerp(point, average, 0.35F) / this.frequency;
         return (int) point;
     }
-    
+
     protected static float midPoint(float a, float b) {
         return (a + b) * 0.5F;
     }
-    
+
     protected static float getDistance(float x, float y, float ax, float ay, float bx, float by) {
         float mx = midPoint(ax, bx);
         float my = midPoint(ay, by);
@@ -191,7 +191,7 @@ public class AdvancedContinentGenerator extends AbstractContinent implements Sim
         float ny = dx;
         return getDistance2Line(x, y, mx, my, mx + nx, my + ny);
     }
-    
+
     protected static float getDistance2Line(float x, float y, float ax, float ay, float bx, float by) {
         float dx = bx - ax;
         float dy = by - ay;

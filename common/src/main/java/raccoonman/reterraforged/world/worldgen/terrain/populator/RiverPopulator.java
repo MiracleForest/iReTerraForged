@@ -29,7 +29,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
     public RiverWarp warp;
     public RiverConfig config;
     public CurveFunction valleyCurve;
-    
+
     public RiverPopulator(River river, RiverWarp warp, RiverConfig config, Settings settings, Levels levels) {
         this.fade = settings.fadeIn;
         this.fadeInv = 1.0F / settings.fadeIn;
@@ -51,7 +51,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
     public int compareTo(RiverPopulator o) {
         return Integer.compare(this.config.order, o.config.order);
     }
-    
+
     public void apply(Cell cell, float px, float pz, float pt, float x, float z, float t) {
         float d2 = this.getDistance2(x, z, t);
         float pd2 = this.getDistance2(px, pz, pt);
@@ -61,14 +61,14 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
         }
         float bankHeight = this.getScaledSize(t, this.banksDepth);
         valleyAlpha = this.valleyCurve.apply(valleyAlpha);
-        
+
         float mouthModifier = getMouthModifier(cell);
         float bedHeight = this.getScaledSize(t, this.bedDepth);
-        
+
         float riverDistance = Math.min(cell.riverDistance, 1.0F - valleyAlpha);
         cell.riverDistance = riverDistance;
 //        cell.terrainMask *= riverDistance;
-        
+
 //        cell.height = Math.min(NoiseUtil.lerp(cell.height, bankHeight, valleyAlpha), cell.height);
 
         float banks = d2 * mouthModifier;
@@ -80,7 +80,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
             cell.height = Math.min(NoiseUtil.lerp(cell.height, bedHeight, banksAlpha), cell.height);
             this.tag(cell, bedHeight);
         }
-        
+
         float bedAlpha = this.getDistanceAlpha(t, d2, this.bedWidth);
 
         if (bedAlpha != 0.0F && cell.height > bedHeight) {
@@ -97,7 +97,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
         bankWidth = Math.max(bedWidth + 1, bankWidth);
         return this.config.createFork(bedHeight, bedWidth, bankWidth, levels);
     }
-    
+
     private float getDistance2(float x, float y, float t) {
         if (t <= 0.0F) {
             return Line.distSq(x, y, this.river.x1, this.river.z1);
@@ -109,7 +109,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
         float py = this.river.z1 + t * this.river.dz;
         return Line.distSq(x, y, px, py);
     }
-    
+
     private float getDistanceAlpha(float t, float dist2, Range range) {
         float size2 = this.getScaledSize(t, range);
         if (dist2 >= size2) {
@@ -117,7 +117,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
         }
         return 1.0F - dist2 / size2;
     }
-    
+
     private float getScaledSize(float t, Range range) {
         if (t < 0.0F) {
             return range.min();
@@ -133,7 +133,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
         }
         return NoiseUtil.lerp(range.min(), range.max(), t * this.fadeInv);
     }
-    
+
     private void tag(Cell cell, float bedHeight) {
         if (cell.terrain.overridesRiver() && (cell.height < bedHeight || cell.height > this.waterLine)) {
             return;
@@ -143,13 +143,13 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
             cell.terrain = TerrainType.RIVER;
         }
     }
-    
+
     private static float getMouthModifier(Cell cell) {
         float modifier = NoiseUtil.map(cell.continentEdge, 0.0F, 0.5F, 0.5F);
         modifier *= modifier;
         return modifier;
     }
-    
+
     public static CurveFunction getValleyType(Random random) {
         int value = random.nextInt(100);
         if (value < 5) {
@@ -163,7 +163,7 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
         }
         return CurveFunctions.scurve(2.0F, -0.5F);
     }
-    
+
     public static RiverPopulator create(float x1, float z1, float x2, float z2, RiverConfig config, Levels levels, Random random) {
         River river = new River(x1, z1, x2, z2);
         RiverWarp warp = RiverWarp.create(0.35F, random);
@@ -174,19 +174,19 @@ public class RiverPopulator implements Comparable<RiverPopulator> {
         settings.valleySize = valleyWidth;
         return new RiverPopulator(river, warp, config, settings, levels);
     }
-    
+
     private static Settings creatSettings(Random random) {
         Settings settings = new Settings();
         settings.valleyCurve = getValleyType(random);
         return settings;
     }
-    
+
     public static class Settings {
         public float valleySize;
         public float fadeIn;
         public boolean connecting;
         public CurveFunction valleyCurve;
-        
+
         public Settings() {
             this.valleySize = 275.0F;
             this.fadeIn = 0.7F;

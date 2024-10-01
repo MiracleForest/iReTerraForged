@@ -9,8 +9,10 @@ import raccoonman.reterraforged.world.worldgen.noise.module.Noise;
 import raccoonman.reterraforged.world.worldgen.terrain.TerrainType;
 import raccoonman.reterraforged.world.worldgen.terrain.region.RegionSelector;
 
-public record VolcanoPopulator(float weight, Noise ground, Noise cone, Noise height, Noise lowlands, float inversionPoint, float blendLower, float blendUpper, float blendRange, Levels levels) implements CellPopulator, RegionSelector.Weighted {
-    
+public record VolcanoPopulator(float weight, Noise ground, Noise cone, Noise height, Noise lowlands,
+                               float inversionPoint, float blendLower, float blendUpper, float blendRange,
+                               Levels levels) implements CellPopulator, RegionSelector.Weighted {
+
     @Override
     public void apply(Cell cell, float x, float z) {
         float value = this.cone.compute(x, z, 0);
@@ -39,12 +41,12 @@ public record VolcanoPopulator(float weight, Noise ground, Noise cone, Noise hei
         cell.weirdness = Weirdness.LOW_SLICE_VARIANT_ASCENDING.midpoint();
         cell.erosion = Erosion.LEVEL_4.midpoint();
     }
-    
+
     @Override
     public CellPopulator mapNoise(Noise.Visitor visitor) {
-    	return new VolcanoPopulator(this.weight, this.ground.mapAll(visitor), this.cone.mapAll(visitor), this.height.mapAll(visitor), this.lowlands.mapAll(visitor), this.inversionPoint, this.blendLower, this.blendUpper, this.blendRange, this.levels);
+        return new VolcanoPopulator(this.weight, this.ground.mapAll(visitor), this.cone.mapAll(visitor), this.height.mapAll(visitor), this.lowlands.mapAll(visitor), this.inversionPoint, this.blendLower, this.blendUpper, this.blendRange, this.levels);
     }
-    
+
     public static void modifyVolcanoType(Cell cell, Levels levels) {
         if (cell.terrain == TerrainType.VOLCANO_PIPE && (cell.height < levels.water || cell.riverDistance < 0.85F)) {
             cell.terrain = TerrainType.VOLCANO;

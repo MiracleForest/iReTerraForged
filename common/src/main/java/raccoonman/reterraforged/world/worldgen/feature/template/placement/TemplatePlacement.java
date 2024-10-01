@@ -12,12 +12,12 @@ import raccoonman.reterraforged.world.worldgen.feature.template.template.Templat
 
 public interface TemplatePlacement<T extends TemplateContext> {
     public static final Codec<TemplatePlacement<?>> CODEC = RTFBuiltInRegistries.TEMPLATE_PLACEMENT_TYPE.byNameCodec().dispatch(TemplatePlacement::codec, Function.identity());
-    
+
     boolean canPlaceAt(LevelAccessor world, BlockPos pos, Dimensions dimensions);
 
     boolean canReplaceAt(LevelAccessor world, BlockPos pos);
-    
+
     T createContext();
-    
+
     Codec<? extends TemplatePlacement<T>> codec();
 }

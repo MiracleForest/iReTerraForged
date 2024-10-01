@@ -24,7 +24,7 @@ public class WetlandPopulator {
     private Noise moundShape;
     private Noise moundHeight;
     private Noise terrainEdge;
-    
+
     public WetlandPopulator(int seed, Vec2f a, Vec2f b, float radius, Levels levels) {
         this.a = a;
         this.b = b;
@@ -35,23 +35,23 @@ public class WetlandPopulator {
         this.moundMin = levels.water(1);
         this.moundMax = levels.water(2);
         this.moundVariance = this.moundMax - this.moundMin;
-        
+
         Noise moundShape = Noises.perlin(++seed, 10, 1);
         moundShape = Noises.clamp(moundShape, 0.3F, 0.6F);
         moundShape = Noises.map(moundShape, 0.0F, 1.0F);
         this.moundShape = moundShape;
-        
+
         Noise moundHeight = Noises.simplex(++seed, 20, 1);
         moundHeight = Noises.clamp(moundHeight, 0.0F, 0.3F);
         moundHeight = Noises.map(moundHeight, 0.0F, 1.0F);
         this.moundHeight = moundHeight;
-        
+
         Noise terrainEdge = Noises.perlin(++seed, 8, 1);
         terrainEdge = Noises.clamp(terrainEdge, 0.2F, 0.8F);
         terrainEdge = Noises.map(terrainEdge, 0.0F, 0.9F);
         this.terrainEdge = terrainEdge;
     }
-    
+
     public void apply(Cell cell, float rx, float rz, float x, float z) {
         if (cell.height < this.bed) {
             return;
@@ -87,12 +87,12 @@ public class WetlandPopulator {
         }
         cell.riverDistance = Math.min(cell.riverDistance, 1.0F - valleyAlpha);
     }
-    
+
     public void recordBounds(Boundsf.Builder builder) {
         builder.record(Math.min(this.a.x(), this.b.x()) - this.radius, Math.min(this.a.y(), this.b.y()) - this.radius);
         builder.record(Math.max(this.a.x(), this.b.x()) + this.radius, Math.max(this.a.y(), this.b.y()) + this.radius);
     }
-    
+
     private static float getDistanceSq(float x, float y, float ax, float ay, float bx, float by, float t) {
         if (t <= 0.0f) {
             return Line.distSq(x, y, ax, ay);

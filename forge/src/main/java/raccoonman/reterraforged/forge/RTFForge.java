@@ -19,24 +19,24 @@ import raccoonman.reterraforged.platform.forge.RegistryUtilImpl;
 public class RTFForge {
 
     public RTFForge() {
-    	RTFCommon.bootstrap();
+        RTFCommon.bootstrap();
 
-    	IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-    	if (FMLEnvironment.dist == Dist.CLIENT) {
-    		modBus.addListener(RTFForgeClient::registerPresetEditors);
-    	}
-    	modBus.addListener(RTFForge::gatherData);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modBus.addListener(RTFForgeClient::registerPresetEditors);
+        }
+        modBus.addListener(RTFForge::gatherData);
 
-    	RegistryUtilImpl.register(modBus);
+        RegistryUtilImpl.register(modBus);
     }
-    
-    private static void gatherData(GatherDataEvent event) {
-    	boolean includeClient = event.includeClient();
-    	DataGenerator generator = event.getGenerator();
-    	PackOutput output = generator.getPackOutput();
 
-    	generator.addProvider(includeClient, new RTFLanguageProvider.EnglishUS(output));
-    	generator.addProvider(includeClient, PackMetadataGenerator.forFeaturePack(output, Component.translatable(RTFTranslationKeys.METADATA_DESCRIPTION)));
+    private static void gatherData(GatherDataEvent event) {
+        boolean includeClient = event.includeClient();
+        DataGenerator generator = event.getGenerator();
+        PackOutput output = generator.getPackOutput();
+
+        generator.addProvider(includeClient, new RTFLanguageProvider.EnglishUS(output));
+        generator.addProvider(includeClient, PackMetadataGenerator.forFeaturePack(output, Component.translatable(RTFTranslationKeys.METADATA_DESCRIPTION)));
     }
 }

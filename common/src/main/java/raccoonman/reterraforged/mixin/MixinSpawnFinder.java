@@ -19,9 +19,9 @@ import raccoonman.reterraforged.world.worldgen.biome.spawn.SpawnFinderFix;
 @Mixin(Climate.class)
 class MixinSpawnFinder {
 
-	@Inject(at = @At("HEAD"), method = "findSpawnPosition", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "findSpawnPosition", cancellable = true)
     private static void findSpawnPosition(List<ParameterPoint> list, Sampler sampler, CallbackInfoReturnable<BlockPos> callback) {
-    	callback.setReturnValue(new SpawnFinderFix(list, sampler).result.location());
+        callback.setReturnValue(new SpawnFinderFix(list, sampler).result.location());
     }
 //	@ModifyArg(
 //		at = @At(

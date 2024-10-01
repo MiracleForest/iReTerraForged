@@ -54,12 +54,12 @@ public class ErodeSnowFeature extends Feature<Config> {
         WorldGenLevel level = placeContext.level();
         // 获取随机状态
         RandomState randomState = level.getLevel().getChunkSource().randomState();
-        
+
         // 声明GeneratorContext变量
         @Nullable
         GeneratorContext generatorContext;
         // 检查随机状态是否为RTFRandomState类型,并获取生成器上下文
-        if((Object) randomState instanceof RTFRandomState rtfRandomState && (generatorContext = rtfRandomState.generatorContext()) != null) {
+        if ((Object) randomState instanceof RTFRandomState rtfRandomState && (generatorContext = rtfRandomState.generatorContext()) != null) {
             // 获取区块生成器
             ChunkGenerator generator = placeContext.chunkGenerator();
             // 获取区块位置
@@ -80,26 +80,26 @@ public class ErodeSnowFeature extends Feature<Config> {
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
             // 获取配置
             Config config = placeContext.config();
-            
+
             // 遍历区块中的所有方块
-            for(int x = 0; x < 16; x++) {
-                for(int z = 0; z < 16; z++) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
                     // 获取当前位置的单元格信息
                     Cell cell = tileChunk.getCell(x, z);
-                    
+
                     // 计算缩放后的Y坐标
                     int scaledY = levels.scale(cell.height);
                     // 获取表面Y坐标
                     int surfaceY = chunk.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
                     // 检查是否为表面方块且高于海平面
-                    if(scaledY == surfaceY && scaledY >= generator.getSeaLevel() - 1) {
+                    if (scaledY == surfaceY && scaledY >= generator.getSeaLevel() - 1) {
                         // 计算世界坐标
                         int worldX = chunkPos.getBlockX(x);
                         int worldZ = chunkPos.getBlockZ(z);
                         pos.set(worldX, surfaceY, worldZ);
-                        
+
                         // 如果配置允许侵蚀
-                        if(config.erode) {
+                        if (config.erode) {
                             // 计算各种噪声值和修饰符
                             float var = -ColumnDecorator.sampleNoise(worldX, worldZ, 16, 0);
                             float hNoise = rand.compute(worldX, worldZ, 4) * config.heightModifier();
@@ -107,7 +107,7 @@ public class ErodeSnowFeature extends Feature<Config> {
                             float vModifier = cell.terrain == TerrainType.VOLCANO ? 0.15F : 0F;
                             float height = cell.height;// + var + hNoise + vModifier;
                             float steepness = cell.gradient;// + var + sNoise + vModifier;
-                            
+
                             // 检查是否应该进行雪的侵蚀
                             if (snowErosion(config, worldX, worldZ, steepness, height)) {
                                 Predicate<BlockState> predicate = Heightmap.Types.MOTION_BLOCKING.isOpaque();
@@ -122,9 +122,9 @@ public class ErodeSnowFeature extends Feature<Config> {
                                 }
                             }
                         }
-                        
+
                         // 如果配置允许平滑
-                        if(config.smooth) {
+                        if (config.smooth) {
                             pos.setY(surfaceY + 1);
 
                             BlockState state = chunk.getBlockState(pos);
@@ -138,7 +138,7 @@ public class ErodeSnowFeature extends Feature<Config> {
                             }
 
                             // 如果是雪方块,则进行平滑处理
-                            if(state.is(Blocks.SNOW)) {
+                            if (state.is(Blocks.SNOW)) {
                                 smoothSnow(chunk, pos, cell, levels, 0.0F);
                             }
                         }
@@ -171,7 +171,7 @@ public class ErodeSnowFeature extends Feature<Config> {
             }
         }
     }
-    
+
     // 平滑雪的方法
     private static void smoothSnow(ChunkAccess chunk, BlockPos.MutableBlockPos pos, Cell cell, Levels levels, float min) {
         // 计算高度和深度
@@ -187,8 +187,8 @@ public class ErodeSnowFeature extends Feature<Config> {
             // 设置雪层
             chunk.setBlockState(pos, layer, false);
 
-           // 修复基础方块
-           fixBaseBlock(chunk, pos, layer, level);
+            // 修复基础方块
+            fixBaseBlock(chunk, pos, layer, level);
         }
     }
 
@@ -199,9 +199,9 @@ public class ErodeSnowFeature extends Feature<Config> {
             BlockState belowState = chunk.getBlockState(pos);
 
             // 根据雪层级别修改下方方块
-            if(level > 1 && belowState.getBlock() instanceof SpreadingSnowyDirtBlock) {
+            if (level > 1 && belowState.getBlock() instanceof SpreadingSnowyDirtBlock) {
                 chunk.setBlockState(pos, Blocks.DIRT.defaultBlockState(), false);
-            } else if(level > 0) {
+            } else if (level > 0) {
                 chunk.setBlockState(pos, Blocks.SNOW_BLOCK.defaultBlockState(), false);
             }
         }
@@ -217,7 +217,7 @@ public class ErodeSnowFeature extends Feature<Config> {
         }
         return Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, level);
     }
-    
+
     // 获取雪层级别
     private static int getLevel(float depth) {
         if (depth > 1) {
@@ -244,15 +244,16 @@ public class ErodeSnowFeature extends Feature<Config> {
     }
 
     // 定义Config记录类
-    public record Config(float steepness, float height, boolean erode, boolean smooth, float slopeModifier, float heightModifier) implements FeatureConfiguration {
+    public record Config(float steepness, float height, boolean erode, boolean smooth, float slopeModifier,
+                         float heightModifier) implements FeatureConfiguration {
         // 定义Config的Codec
         public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.FLOAT.fieldOf("steepness").forGetter(Config::steepness),
-            Codec.FLOAT.fieldOf("height").forGetter(Config::height),
-            Codec.BOOL.fieldOf("erode").forGetter(Config::erode),
-            Codec.BOOL.fieldOf("smooth").forGetter(Config::smooth),
-            Codec.FLOAT.fieldOf("slope_modifier").forGetter(Config::slopeModifier),
-            Codec.FLOAT.fieldOf("height_modifier").forGetter(Config::heightModifier)
+                Codec.FLOAT.fieldOf("steepness").forGetter(Config::steepness),
+                Codec.FLOAT.fieldOf("height").forGetter(Config::height),
+                Codec.BOOL.fieldOf("erode").forGetter(Config::erode),
+                Codec.BOOL.fieldOf("smooth").forGetter(Config::smooth),
+                Codec.FLOAT.fieldOf("slope_modifier").forGetter(Config::slopeModifier),
+                Codec.FLOAT.fieldOf("height_modifier").forGetter(Config::heightModifier)
         ).apply(instance, Config::new));
     }
 }

@@ -44,7 +44,7 @@ public class RTFCommon {
     public static void bootstrap() {
         // 初始化内置注册表,可能包含模组自定义的方块、物品等
         RTFBuiltInRegistries.bootstrap();
-        
+
         // 初始化与世界生成相关的各种组件
         TemplatePlacements.bootstrap();  // 初始化模板放置
         TemplateDecorators.bootstrap();  // 初始化模板装饰器
@@ -66,12 +66,12 @@ public class RTFCommon {
         RTFCommands.bootstrap();
         // 注册模组自定义的命令参数类型
         RTFArgumentTypeInfos.bootstrap();
-        
+
         // 检查是否启用了TerraBlender兼容性,如果启用则初始化
-        if(TBCompat.isEnabled()) {
+        if (TBCompat.isEnabled()) {
             TBCompat.bootstrap();
         }
-        
+
         // 创建各种数据注册表,用于存储和管理模组的自定义数据
         RegistryUtil.createDataRegistry(RTFRegistries.NOISE, Noise.DIRECT_CODEC);  // 噪声注册表
         RegistryUtil.createDataRegistry(RTFRegistries.BIOME_MODIFIER, BiomeModifier.CODEC);  // 生物群系修改器注册表
@@ -79,7 +79,7 @@ public class RTFCommon {
         RegistryUtil.createDataRegistry(RTFRegistries.SURFACE_LAYERS, LayeredSurfaceRule.Layer.CODEC);  // 表面层注册表
         RegistryUtil.createDataRegistry(RTFRegistries.PRESET, Preset.CODEC);  // 预设注册表
     }
-    
+
     // 创建ResourceLocation的辅助方法
     // ResourceLocation在Minecraft中用于唯一标识资源（如方块、物品、音效等）
     public static ResourceLocation location(String name) {

@@ -32,11 +32,11 @@ public class River {
     public float maxX;
     public float maxZ;
     public boolean weird;
-    
+
     public River(float x1, float z1, float x2, float z2) {
         this(x1, z1, x2, z2, 275.0F);
     }
-    
+
     public River(float x1, float z1, float x2, float z2, float radius) {
         radius *= 2.0F;
         this.x1 = x1;
@@ -57,19 +57,19 @@ public class River {
         this.maxZ = Math.max(z1, z2) + radius;
         this.weird = PosUtil.pack(x1, z1) % 2 == 0;
     }
-    
+
     public float length() {
         return this.length;
     }
-    
+
     public float getAngle() {
         return (float) Math.atan2(this.dx, this.dz);
     }
-    
+
     public long pos(float distance) {
         return PosUtil.packf(this.x1 + this.dx * distance, this.z1 + this.dz * distance);
     }
-    
+
     public long pos(float distance, RiverWarp warp) {
         float x = this.x1 + this.dx * distance;
         float z = this.z1 + this.dz * distance;
@@ -80,11 +80,11 @@ public class River {
         }
         return PosUtil.packf(x, z);
     }
-    
+
     public boolean intersects(River other) {
         return Line.intersect(other.x1, other.z1, other.x2, other.z2, this.x1, this.z1, this.x2, this.z2);
     }
-    
+
     public boolean intersects(River other, float extend) {
         float extendA = NoiseUtil.clamp(extend / this.length, 0.0F, 1.0F);
         float extendB = NoiseUtil.clamp(extend / other.length, 0.0F, 1.0F);
@@ -102,19 +102,19 @@ public class River {
         float by2 = other.z2 + deltaBY * extendB;
         return Line.intersect(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2);
     }
-    
+
     public boolean contains(float x, float z) {
         return x >= this.minX && x <= this.maxX && z >= this.minZ && z <= this.maxZ;
     }
-    
+
     public boolean overlaps(River other) {
         return this.overlaps(other.minX, other.minZ, other.maxX, other.maxZ);
     }
-    
+
     public boolean overlaps(float minX, float minY, float maxX, float maxY) {
         return this.minX < maxX && this.maxX > minX && this.minZ < maxY && this.maxZ > minY;
     }
-    
+
     public boolean overlaps(Vec2f center, float radius) {
         float minX = center.x() - radius;
         float maxX = center.x() + radius;
@@ -122,7 +122,7 @@ public class River {
         float maxY = center.y() + radius;
         return this.overlaps(minX, minY, maxX, maxY);
     }
-    
+
     public River shorten(int distance) {
         float factor = distance / this.length();
         float dx = this.x2 - this.x1;
@@ -131,12 +131,12 @@ public class River {
         float y = NoiseUtil.round(this.z1 + dy * factor);
         return new River(x, y, this.x2, this.z2);
     }
-    
+
     @Override
     public String toString() {
         return "RiverBounds{x1=" + this.x1 + ", y1=" + this.z1 + ", x2=" + this.x2 + ", y2=" + this.z2 + ", length=" + this.length + ", length2=" + this.length2 + '}';
     }
-    
+
     public static River fromNodes(Vec2i p1, Vec2i p2) {
         return new River(p1.x(), p1.y(), p2.x(), p2.y(), 300.0F);
     }

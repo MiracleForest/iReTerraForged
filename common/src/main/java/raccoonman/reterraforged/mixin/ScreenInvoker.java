@@ -13,6 +13,6 @@ import net.minecraft.client.gui.screens.Screen;
 @Mixin(Screen.class)
 public interface ScreenInvoker {
 
-	@Invoker("addRenderableWidget")
+    @Invoker("addRenderableWidget")
     <T extends GuiEventListener & Renderable> T invokeAddRenderableWidget(T guiEventListener);
 }

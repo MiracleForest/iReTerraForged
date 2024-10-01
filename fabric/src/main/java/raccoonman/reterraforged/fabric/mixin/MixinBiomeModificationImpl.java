@@ -27,55 +27,56 @@ import raccoonman.reterraforged.world.worldgen.biome.modifier.fabric.FabricBiome
 
 @Mixin(BiomeModificationImpl.class)
 public class MixinBiomeModificationImpl {
-	@Shadow(remap = false)
-	@Final
-	private static Comparator<Object> MODIFIER_ORDER_COMPARATOR;
-	
-	private static final Constructor<?> CTOR;
-	
-	@Redirect(
-		method = "finalizeWorldGen",
-		at = @At(
-			value = "INVOKE",
-			target = "getSortedModifiers"
-		),
-		remap = false
-	)
-	public List<Object> getSortedModifiers(BiomeModificationImpl self, RegistryAccess registries) {
-		List<Object> modifiers = new ArrayList<>(this.getSortedModifiers());
-		for(Holder.Reference<BiomeModifier> holder : registries.lookupOrThrow(RTFRegistries.BIOME_MODIFIER).listElements().toList()) {
-			if(holder.value() instanceof FabricBiomeModifier modifier) {
-				modifiers.add(this.makeModifierRecord(holder.key().location(), ModificationPhase.POST_PROCESSING, (ctx) -> {
-					return true;
-				}, modifier::apply));
-			}
-		}
-		modifiers.sort(MODIFIER_ORDER_COMPARATOR);
-		return modifiers;
+    @Shadow(remap = false)
+    @Final
+    private static Comparator<Object> MODIFIER_ORDER_COMPARATOR;
+
+    private static final Constructor<?> CTOR;
+
+    @Redirect(
+            method = "finalizeWorldGen",
+            at = @At(
+                    value = "INVOKE",
+                    target = "getSortedModifiers"
+            ),
+            remap = false
+    )
+    public List<Object> getSortedModifiers(BiomeModificationImpl self, RegistryAccess registries) {
+        List<Object> modifiers = new ArrayList<>(this.getSortedModifiers());
+        for (Holder.Reference<BiomeModifier> holder : registries.lookupOrThrow(RTFRegistries.BIOME_MODIFIER).listElements().toList()) {
+            if (holder.value() instanceof FabricBiomeModifier modifier) {
+                modifiers.add(this.makeModifierRecord(holder.key().location(), ModificationPhase.POST_PROCESSING, (ctx) -> {
+                    return true;
+                }, modifier::apply));
+            }
+        }
+        modifiers.sort(MODIFIER_ORDER_COMPARATOR);
+        return modifiers;
     }
-	
-	@Shadow(remap = false)
-	private List<Object> getSortedModifiers() {
-		throw new UnsupportedOperationException();
-	}
-	
-	private Object makeModifierRecord(ResourceLocation id, ModificationPhase phase, Predicate<BiomeSelectionContext> selector, BiConsumer<BiomeSelectionContext, BiomeModificationContext> modifier) {
-		try {
-			return CTOR.newInstance(phase, id, selector, modifier);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	static {
-		Constructor<?> ctor;
-		try {
-			ctor = Class.forName("net.fabricmc.fabric.impl.biome.modification.BiomeModificationImpl$ModifierRecord").getDeclaredConstructor(ModificationPhase.class, ResourceLocation.class, Predicate.class, BiConsumer.class);
-		} catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-			e.printStackTrace();
-			ctor = null;
-		}
-		CTOR = ctor;
-	}
+
+    @Shadow(remap = false)
+    private List<Object> getSortedModifiers() {
+        throw new UnsupportedOperationException();
+    }
+
+    private Object makeModifierRecord(ResourceLocation id, ModificationPhase phase, Predicate<BiomeSelectionContext> selector, BiConsumer<BiomeSelectionContext, BiomeModificationContext> modifier) {
+        try {
+            return CTOR.newInstance(phase, id, selector, modifier);
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static {
+        Constructor<?> ctor;
+        try {
+            ctor = Class.forName("net.fabricmc.fabric.impl.biome.modification.BiomeModificationImpl$ModifierRecord").getDeclaredConstructor(ModificationPhase.class, ResourceLocation.class, Predicate.class, BiConsumer.class);
+        } catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+            e.printStackTrace();
+            ctor = null;
+        }
+        CTOR = ctor;
+    }
 }

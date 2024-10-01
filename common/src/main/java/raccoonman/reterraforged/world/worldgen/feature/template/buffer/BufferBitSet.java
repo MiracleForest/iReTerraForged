@@ -22,15 +22,15 @@ public class BufferBitSet {
         this.sizeXZ = this.sizeX * this.sizeZ;
         int size = this.sizeX * this.sizeY * this.sizeZ;
         if (this.bitSet == null || this.bitSet.length() < size) {
-        	this.bitSet = new BitSet(size);
+            this.bitSet = new BitSet(size);
         } else {
-        	this.bitSet.clear();
+            this.bitSet.clear();
         }
     }
 
     public void clear() {
         if (this.bitSet != null) {
-        	this.bitSet.clear();
+            this.bitSet.clear();
         }
     }
 

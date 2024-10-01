@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
 public record BlockInfo(BlockPos pos, BlockState state) {
-	
+
     public BlockInfo transform(Mirror mirror, Rotation rotation) {
         BlockPos pos = FeatureTemplate.transform(this.pos, mirror, rotation);
         BlockState state = this.state.mirror(mirror).rotate(rotation);

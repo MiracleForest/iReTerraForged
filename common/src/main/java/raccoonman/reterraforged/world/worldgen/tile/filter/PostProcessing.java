@@ -6,12 +6,12 @@ import raccoonman.reterraforged.world.worldgen.tile.Size;
 import raccoonman.reterraforged.world.worldgen.tile.Tile;
 
 public record PostProcessing(Heightmap heightmap, Levels levels) implements Filter {
-     
-	@Override
+
+    @Override
     public void apply(Tile tile, int seedX, int seedZ, int iterations) {
         Size size = tile.getBlockSize();
         int total = size.total();
-        
+
 //        int quartTotal = QuartPos.fromBlock(total);
 //        for(int quartX = 0; quartX < quartTotal; quartX++) {
 //        	for(int quartZ = 0; quartZ < quartTotal; quartZ++) {
@@ -45,15 +45,15 @@ public record PostProcessing(Heightmap heightmap, Levels levels) implements Filt
 //     	
         Size chunkSize = tile.getChunkSize();
         int chunkTotal = chunkSize.total();
-        for(int chunkX = 0; chunkX < chunkTotal; chunkX++) {
-            for(int chunkZ = 0; chunkZ < chunkTotal; chunkZ++) {
-            	Tile.Chunk chunk = tile.getChunkReader(chunkX, chunkZ);
-            	
-	        	for (int dz = 0; dz < 16; dz++) {
-	        		for (int dx = 0; dx < 16; dx++) {
-	        			chunk.updateHighestPoint(chunk.getCell(dx, dz));
-	        		}
-	        	}
+        for (int chunkX = 0; chunkX < chunkTotal; chunkX++) {
+            for (int chunkZ = 0; chunkZ < chunkTotal; chunkZ++) {
+                Tile.Chunk chunk = tile.getChunkReader(chunkX, chunkZ);
+
+                for (int dz = 0; dz < 16; dz++) {
+                    for (int dx = 0; dx < 16; dx++) {
+                        chunk.updateHighestPoint(chunk.getCell(dx, dz));
+                    }
+                }
             }
         }
     }

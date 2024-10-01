@@ -4,9 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface TemplateContext {
-	void recordState(BlockPos pos, BlockState state);
-	
+    void recordState(BlockPos pos, BlockState state);
+
     public interface Factory<T extends TemplateContext> {
-    	T createContext();
+        T createContext();
     }
 }

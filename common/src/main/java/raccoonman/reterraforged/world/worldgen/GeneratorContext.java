@@ -15,14 +15,14 @@ public class GeneratorContext {
     public Seed seed;
     public Levels levels;
     public Preset preset;
-    
+
     @Deprecated
     public ThreadLocal<Heightmap> localHeightmap;
     public TileGenerator generator;
     @Nullable
     public TileCache cache;
     public WorldLookup lookup;
-    
+
     public GeneratorContext(Preset preset, int seed, int tileSize, int tileBorder, int batchCount, @Nullable TileCache cache) {
         this.preset = preset;
         this.seed = new Seed(seed);
@@ -36,13 +36,13 @@ public class GeneratorContext {
     }
 
     public static GeneratorContext makeCached(Preset preset, int seed, int tileSize, int batchCount, boolean queue) {
-    	GeneratorContext ctx = makeUncached(preset, seed, tileSize, Math.min(2, Math.max(1, preset.filters().erosion.dropletLifetime / 16)), batchCount);
-    	ctx.cache = new TileCache(tileSize, queue, ctx.generator);
-    	ctx.lookup = new WorldLookup(ctx);
-    	return ctx;
+        GeneratorContext ctx = makeUncached(preset, seed, tileSize, Math.min(2, Math.max(1, preset.filters().erosion.dropletLifetime / 16)), batchCount);
+        ctx.cache = new TileCache(tileSize, queue, ctx.generator);
+        ctx.lookup = new WorldLookup(ctx);
+        return ctx;
     }
-    
+
     public static GeneratorContext makeUncached(Preset preset, int seed, int tileSize, int tileBorder, int batchCount) {
-    	return new GeneratorContext(preset, seed, tileSize, tileBorder, batchCount, null);
+        return new GeneratorContext(preset, seed, tileSize, tileBorder, batchCount, null);
     }
 }

@@ -9,11 +9,11 @@ import net.minecraft.world.level.block.state.BlockState;
 //TODO
 public class VolatileAirBlock extends AirBlock {
 
-	protected VolatileAirBlock(Properties properties) {
-		super(properties);
-	}
+    protected VolatileAirBlock(Properties properties) {
+        super(properties);
+    }
 
-	@Override
+    @Override
     public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
         return blockState;
     }

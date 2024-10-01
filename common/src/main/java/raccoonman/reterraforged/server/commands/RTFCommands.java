@@ -10,13 +10,13 @@ import net.minecraft.commands.CommandSourceStack;
 
 public class RTFCommands {
 
-	public static void bootstrap() {
-		register(LocateTerrainCommand::register);
-		register(ExportHeightmapCommand::register);
-	}
-	
-	@ExpectPlatform
-	public static void register(BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext> register) {
-		throw new UnsupportedOperationException();
-	}
+    public static void bootstrap() {
+        register(LocateTerrainCommand::register);
+        register(ExportHeightmapCommand::register);
+    }
+
+    @ExpectPlatform
+    public static void register(BiConsumer<CommandDispatcher<CommandSourceStack>, CommandBuildContext> register) {
+        throw new UnsupportedOperationException();
+    }
 }

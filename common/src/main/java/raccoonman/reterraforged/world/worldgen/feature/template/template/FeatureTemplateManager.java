@@ -14,33 +14,33 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 public class FeatureTemplateManager {
-	private MinecraftServer server;
-	private ResourceManager resourceManager;
-	private Map<ResourceLocation, FeatureTemplate> cache;
-	
-	public FeatureTemplateManager(MinecraftServer server, ResourceManager resourceManager) {
-		this.server = server;
-		this.resourceManager = resourceManager;
-		this.cache = new ConcurrentHashMap<>();
-	}
-	
-	public void onReload(ResourceManager resourceManager) {
-		this.resourceManager = resourceManager;
-		this.cache.clear();
-	}
-	
-	public FeatureTemplate load(ResourceLocation location) {
-		return this.cache.computeIfAbsent(location, this::read);
-	}
-	
-	private FeatureTemplate read(ResourceLocation location) {
-		return this.resourceManager.getResource(location).flatMap((resource) -> {
-			try(InputStream stream = resource.open()) {
-				return FeatureTemplate.load(this.server.registryAccess().lookupOrThrow(Registries.BLOCK).filterFeatures(this.server.getWorldData().enabledFeatures()), stream);
-			} catch (IOException e) {
-				e.printStackTrace();
-				return Optional.empty();
-			}
-		}).orElse(new FeatureTemplate(ImmutableList.of()));
-	}
+    private MinecraftServer server;
+    private ResourceManager resourceManager;
+    private Map<ResourceLocation, FeatureTemplate> cache;
+
+    public FeatureTemplateManager(MinecraftServer server, ResourceManager resourceManager) {
+        this.server = server;
+        this.resourceManager = resourceManager;
+        this.cache = new ConcurrentHashMap<>();
+    }
+
+    public void onReload(ResourceManager resourceManager) {
+        this.resourceManager = resourceManager;
+        this.cache.clear();
+    }
+
+    public FeatureTemplate load(ResourceLocation location) {
+        return this.cache.computeIfAbsent(location, this::read);
+    }
+
+    private FeatureTemplate read(ResourceLocation location) {
+        return this.resourceManager.getResource(location).flatMap((resource) -> {
+            try (InputStream stream = resource.open()) {
+                return FeatureTemplate.load(this.server.registryAccess().lookupOrThrow(Registries.BLOCK).filterFeatures(this.server.getWorldData().enabledFeatures()), stream);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return Optional.empty();
+            }
+        }).orElse(new FeatureTemplate(ImmutableList.of()));
+    }
 }

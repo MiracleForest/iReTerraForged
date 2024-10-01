@@ -8,7 +8,6 @@ import raccoonman.reterraforged.world.worldgen.noise.NoiseUtil;
 
 public enum RenderMode {
     BIOME_TYPE {
-    	
         @Override
         public boolean handlesWater() {
             return true;
@@ -34,13 +33,12 @@ public enum RenderMode {
             }
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.biomeRegionEdge;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.biomeRegionEdge;
+        }
     },
     TRANSITION_POINTS {
-    	
         @Override
         public boolean handlesWater() {
             return true;
@@ -65,13 +63,12 @@ public enum RenderMode {
             }
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.continentEdge;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.continentEdge;
+        }
     },
     TEMPERATURE {
-    	
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
             float saturation = 0.7F;
@@ -79,13 +76,12 @@ public enum RenderMode {
             return rgba(step(1 - cell.regionTemperature, 8) * 0.65F, saturation, brightness);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.regionTemperature;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.regionTemperature;
+        }
     },
     MOISTURE {
-    	
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
             float saturation = 0.7F;
@@ -93,13 +89,12 @@ public enum RenderMode {
             return rgba(step(cell.regionMoisture, 8) * 0.65F, saturation, brightness);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.regionMoisture;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.regionMoisture;
+        }
     },
     BIOME {
-    	
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
             float saturation = 0.7F;
@@ -107,13 +102,12 @@ public enum RenderMode {
             return rgba(cell.biomeRegionId, saturation, brightness);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.biomeRegionId;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.biomeRegionId;
+        }
     },
     MACRO_NOISE {
-    	
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
             float saturation = 0.7F;
@@ -121,13 +115,12 @@ public enum RenderMode {
             return rgba(cell.macroBiomeId, saturation, brightness);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.macroBiomeId;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.macroBiomeId;
+        }
     },
     TERRAIN_REGION {
-    	
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
             float saturation = 0.7F;
@@ -135,49 +128,46 @@ public enum RenderMode {
             return rgba(NoiseUtil.valCoord2D(cell.terrain.getName().hashCode(), 0, 0), saturation, brightness);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.terrainRegionId;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.terrainRegionId;
+        }
     },
-	CONTINENT_EDGE {
-    	
+    CONTINENT_EDGE {
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
-        	float continentEdge = NoiseUtil.clamp(this.getNoiseValue(cell), 0.0F, 1.0F);
-        	return rgba(continentEdge, continentEdge, continentEdge);
+            float continentEdge = NoiseUtil.clamp(this.getNoiseValue(cell), 0.0F, 1.0F);
+            return rgba(continentEdge, continentEdge, continentEdge);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.continentEdge;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.continentEdge;
+        }
     },
-	CONTINENT_NOISE {
-    	
+    CONTINENT_NOISE {
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
-        	float continentNoise = NoiseUtil.clamp(this.getNoiseValue(cell), 0.0F, 1.0F);
-        	return rgba(continentNoise, continentNoise, continentNoise);
+            float continentNoise = NoiseUtil.clamp(this.getNoiseValue(cell), 0.0F, 1.0F);
+            return rgba(continentNoise, continentNoise, continentNoise);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.continentNoise;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.continentNoise;
+        }
     },
-	CONTINENTALNESS {
-    	
+    CONTINENTALNESS {
         @Override
         public int getColor(Cell cell, Levels levels, float scale, float bias) {
-        	float continentalness = NoiseUtil.clamp(this.getNoiseValue(cell), 0.0F, 1.0F);
-        	return rgba(continentalness, continentalness, continentalness);
+            float continentalness = NoiseUtil.clamp(this.getNoiseValue(cell), 0.0F, 1.0F);
+            return rgba(continentalness, continentalness, continentalness);
         }
 
-		@Override
-		public float getNoiseValue(Cell cell) {
-			return cell.continentalness;
-		}
+        @Override
+        public float getNoiseValue(Cell cell) {
+            return cell.continentalness;
+        }
     };
 
     public int getColor(Cell cell, Levels levels) {
@@ -196,7 +186,7 @@ public enum RenderMode {
     public abstract int getColor(Cell cell, Levels levels, float scale, float bias);
 
     public abstract float getNoiseValue(Cell cell);
-    
+
     public boolean handlesWater() {
         return false;
     }
@@ -213,7 +203,7 @@ public enum RenderMode {
         int argb = Color.HSBtoRGB(h, s, b);
         int red = (argb >> 16) & 0xFF;
         int green = (argb >> 8) & 0xFF;
-        int blue =  argb & 0xFF;
+        int blue = argb & 0xFF;
         return rgba(red, green, blue);
     }
 

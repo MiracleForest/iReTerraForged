@@ -42,15 +42,15 @@ public class TerrainType {
     public static final Terrain ARCHIPELAGO = register("archipelago", TerrainCategory.ISLAND);
     public static final Terrain MUSHROOM_ARCHIPELAGO = register("mushroom_archipelago", TerrainCategory.ISLAND);
     public static final Terrain MUSHROOM_FIELDS = register("mushroom_fields", TerrainCategory.ISLAND);
-    
+
     public static void forEach(Consumer<Terrain> action) {
         TerrainType.REGISTRY.forEach(action);
     }
-    
+
     public static Optional<Terrain> find(Predicate<Terrain> filter) {
         return TerrainType.REGISTRY.stream().filter(filter).findFirst();
     }
-    
+
     public static Terrain getOrCreate(String name, Terrain parent) {
         if (parent == null || parent == TerrainType.NONE) {
             return TerrainType.NONE;
@@ -61,7 +61,7 @@ public class TerrainType {
         }
         return register(new Terrain(0, name, parent));
     }
-    
+
     public static Terrain get(String name) {
         for (Terrain terrain : TerrainType.REGISTRY) {
             if (terrain.getName().equalsIgnoreCase(name)) {
@@ -70,7 +70,7 @@ public class TerrainType {
         }
         return null;
     }
-    
+
     public static Terrain get(int id) {
         synchronized (TerrainType.LOCK) {
             if (id >= 0 && id < TerrainType.REGISTRY.size()) {
@@ -79,7 +79,7 @@ public class TerrainType {
             return TerrainType.NONE;
         }
     }
-    
+
     public static Terrain register(Terrain instance) {
         synchronized (TerrainType.LOCK) {
             Terrain current = get(instance.getName());
@@ -91,7 +91,7 @@ public class TerrainType {
             return terrain;
         }
     }
-    
+
     public static Terrain registerComposite(Terrain a, Terrain b) {
         if (a == b) {
             return a;
@@ -108,7 +108,7 @@ public class TerrainType {
             return mix;
         }
     }
-    
+
     private static Terrain register(String name, TerrainCategory type) {
         synchronized (TerrainType.LOCK) {
             Terrain terrain = new Terrain(TerrainType.REGISTRY.size(), name, type);
@@ -116,7 +116,7 @@ public class TerrainType {
             return terrain;
         }
     }
-    
+
     private static Terrain registerWetlands(String name, TerrainCategory type) {
         synchronized (TerrainType.LOCK) {
             Terrain terrain = new ConfiguredTerrain(TerrainType.REGISTRY.size(), name, type, true);
@@ -124,7 +124,7 @@ public class TerrainType {
             return terrain;
         }
     }
-    
+
     private static Terrain registerBadlands(String name, TerrainCategory type) {
         synchronized (TerrainType.LOCK) {
             Terrain terrain = new ConfiguredTerrain(TerrainType.REGISTRY.size(), name, type, 0.3f);
@@ -132,7 +132,7 @@ public class TerrainType {
             return terrain;
         }
     }
-    
+
     private static Terrain registerMountain(String name, TerrainCategory type) {
         synchronized (TerrainType.LOCK) {
             Terrain terrain = new ConfiguredTerrain(TerrainType.REGISTRY.size(), name, type, true, true);
@@ -140,7 +140,7 @@ public class TerrainType {
             return terrain;
         }
     }
-    
+
     private static Terrain registerVolcano(String name, TerrainCategory type) {
         synchronized (TerrainType.LOCK) {
             Terrain terrain = new ConfiguredTerrain(TerrainType.REGISTRY.size(), name, type, true, true) {
@@ -148,7 +148,7 @@ public class TerrainType {
                 public boolean isVolcano() {
                     return true;
                 }
-                
+
                 @Override
                 public boolean overridesCoast() {
                     return true;

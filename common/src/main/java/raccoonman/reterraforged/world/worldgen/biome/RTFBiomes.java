@@ -15,18 +15,18 @@ public class RTFBiomes {
     private static final Music NORMAL_MUSIC = null;
 
     public static Biome coldMarshland() {
-    	//TODO add shrubbery and stuff
-    	return null;
+        //TODO add shrubbery and stuff
+        return null;
     }
-    
+
     private static Biome biome(boolean hasPrecipitation, float skyColor, float downfall, MobSpawnSettings.Builder mobSpawnSettings, BiomeGenerationSettings.Builder generationSettings, @Nullable Music music) {
         return biome(hasPrecipitation, skyColor, downfall, 4159204, 329011, null, null, mobSpawnSettings, generationSettings, music);
     }
 
     private static Biome biome(boolean hasPrecipitation, float skyColor, float downfall, int waterColor, int waterFogColor, @Nullable Integer grassColorOverride, @Nullable Integer foliageColorOverride, MobSpawnSettings.Builder mobSpawnSettings, BiomeGenerationSettings.Builder generationSettings, @Nullable Music music) {
         BiomeSpecialEffects.Builder specialEffects = new BiomeSpecialEffects.Builder()
-        	.waterColor(waterColor)
-        	.waterFogColor(waterFogColor).fogColor(12638463).skyColor(calculateSkyColor(skyColor)).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).backgroundMusic(music);
+                .waterColor(waterColor)
+                .waterFogColor(waterFogColor).fogColor(12638463).skyColor(calculateSkyColor(skyColor)).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).backgroundMusic(music);
         if (grassColorOverride != null) {
             specialEffects.grassColorOverride(grassColorOverride);
         }

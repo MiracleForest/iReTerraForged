@@ -7,11 +7,13 @@
 package raccoonman.reterraforged.client.data;
 
 import com.google.gson.JsonObject;
+
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -38,11 +40,11 @@ public abstract class LanguageProvider implements DataProvider {
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
-      	this.addTranslations();
+        this.addTranslations();
 
         if (!this.data.isEmpty())
             return this.save(cache, this.output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(this.modid).resolve("lang").resolve(this.locale + ".json"));
-        
+
         return CompletableFuture.allOf();
     }
 

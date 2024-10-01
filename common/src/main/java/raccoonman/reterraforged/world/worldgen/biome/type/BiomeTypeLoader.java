@@ -12,16 +12,16 @@ import raccoonman.reterraforged.world.worldgen.noise.NoiseUtil.Vec2f;
 public class BiomeTypeLoader {
     private static BiomeTypeLoader instance;
     private BiomeType[][] map;
-    
+
     public BiomeTypeLoader() {
         this.map = new BiomeType[256][256];
         this.generateTypeMap();
     }
-    
+
     public BiomeType[][] getTypeMap() {
         return this.map;
     }
-    
+
     public Vec2f[] getRanges(BiomeType type) {
         float minTemp = 1.0F;
         float maxTemp = 0.0F;
@@ -32,8 +32,8 @@ public class BiomeTypeLoader {
             for (int temp = 0; temp < row.length; ++temp) {
                 BiomeType t = row[temp];
                 if (t == type) {
-                    float temperature = temp / (float)(row.length - 1);
-                    float moisture = moist / (float)(this.map.length - 1);
+                    float temperature = temp / (float) (row.length - 1);
+                    float moisture = moist / (float) (this.map.length - 1);
                     minTemp = Math.min(minTemp, temperature);
                     maxTemp = Math.max(maxTemp, temperature);
                     minMoist = Math.min(minMoist, moisture);
@@ -41,9 +41,9 @@ public class BiomeTypeLoader {
                 }
             }
         }
-        return new Vec2f[] { new Vec2f(minTemp, maxTemp), new Vec2f(minMoist, maxMoist) };
+        return new Vec2f[]{new Vec2f(minTemp, maxTemp), new Vec2f(minMoist, maxMoist)};
     }
-    
+
     private void generateTypeMap() {
         try {
             BufferedImage image = ImageIO.read(BiomeType.class.getResourceAsStream("/biomes.png"));
@@ -66,7 +66,7 @@ public class BiomeTypeLoader {
             throw new RuntimeException(e);
         }
     }
-    
+
     private static BiomeType forColor(Color color) {
         BiomeType type = null;
         int closest = Integer.MAX_VALUE;
@@ -82,21 +82,21 @@ public class BiomeTypeLoader {
         }
         return type;
     }
-    
+
     private static int getDistance2(Color a, Color b) {
         int dr = a.getRed() - b.getRed();
         int dg = a.getGreen() - b.getGreen();
         int db = a.getBlue() - b.getBlue();
         return dr * dr + dg * dg + db * db;
     }
-    
+
     private static Color fromARGB(int argb) {
         int b = argb & 0xFF;
         int g = argb >> 8 & 0xFF;
         int r = argb >> 16 & 0xFF;
         return new Color(r, g, b);
     }
-    
+
     public static BiomeTypeLoader getInstance() {
         if (BiomeTypeLoader.instance == null) {
             BiomeTypeLoader.instance = new BiomeTypeLoader();

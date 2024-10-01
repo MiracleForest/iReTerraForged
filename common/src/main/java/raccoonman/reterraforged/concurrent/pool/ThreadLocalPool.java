@@ -12,33 +12,34 @@ public class ThreadLocalPool<T> {
     private Supplier<T> factory;
     private Consumer<T> cleaner;
     private ThreadLocal<Pool<T>> local;
-    
+
     public ThreadLocalPool(int size, Supplier<T> factory) {
-        this(size, factory, t -> {});
+        this(size, factory, t -> {
+        });
     }
-    
+
     public ThreadLocalPool(int size, Supplier<T> factory, Consumer<T> cleaner) {
         this.size = size;
         this.factory = factory;
         this.cleaner = cleaner;
         this.local = ThreadLocal.withInitial(this::createPool);
     }
-    
+
     public Resource<T> get() {
         return this.local.get().retain();
     }
-    
+
     private Pool<T> createPool() {
         return new Pool<>(this.size, this.factory, this.cleaner);
     }
-    
+
     private static class Pool<T> {
         private int size;
         private Supplier<T> factory;
         private Consumer<T> cleaner;
         private List<Resource<T>> pool;
         private int index;
-        
+
         private Pool(int size, Supplier<T> factory, Consumer<T> cleaner) {
             this.size = size;
             this.index = size - 1;
@@ -49,7 +50,7 @@ public class ThreadLocalPool<T> {
                 this.pool.add(new PoolResource<>(factory.get(), this));
             }
         }
-        
+
         private Resource<T> retain() {
             if (this.index > 0) {
                 Resource<T> value = this.pool.remove(this.index);
@@ -58,7 +59,7 @@ public class ThreadLocalPool<T> {
             }
             return new PoolResource<>(this.factory.get(), this);
         }
-        
+
         private void restore(Resource<T> resource) {
             if (this.index + 1 < this.size) {
                 this.cleaner.accept(resource.get());
@@ -67,26 +68,26 @@ public class ThreadLocalPool<T> {
             }
         }
     }
-    
+
     private static class PoolResource<T> implements Resource<T> {
         private T value;
         private Pool<T> pool;
-        
+
         private PoolResource(T value, Pool<T> pool) {
             this.value = value;
             this.pool = pool;
         }
-        
+
         @Override
         public T get() {
             return this.value;
         }
-        
+
         @Override
         public boolean isOpen() {
             return true;
         }
-        
+
         @Override
         public void close() {
             this.pool.restore(this);

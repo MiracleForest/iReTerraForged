@@ -29,20 +29,20 @@ import raccoonman.reterraforged.data.preset.settings.StructureSettings;
 
 public class StructureSettingsPage extends PresetEditorPage {
 
-	public StructureSettingsPage(PresetConfigScreen screen, PresetEntry preset) {
-		super(screen, preset);
-	}
+    public StructureSettingsPage(PresetConfigScreen screen, PresetEntry preset) {
+        super(screen, preset);
+    }
 
-	@Override
-	public Component title() {
-		return Component.translatable(RTFTranslationKeys.GUI_STRUCTURE_SETTINGS_TITLE);
-	}
-	
-	@Override
-	public void init() {
-		super.init();
-		
-		Preset preset = this.preset.getPreset();
+    @Override
+    public Component title() {
+        return Component.translatable(RTFTranslationKeys.GUI_STRUCTURE_SETTINGS_TITLE);
+    }
+
+    @Override
+    public void init() {
+        super.init();
+
+        Preset preset = this.preset.getPreset();
 //		StructureSettings structures = preset.structures();
 //		
 //		WorldCreationContext worldSettings = this.screen.getSettings();
@@ -100,33 +100,33 @@ public class StructureSettingsPage extends PresetEditorPage {
 //			this.left.addWidget(salt);
 //			this.left.addWidget(disabled);
 //		});
-	}
+    }
 
-	@Override
-	public Optional<Page> previous() {
-		return Optional.of(new FilterSettingsPage(this.screen, this.preset));
-	}
+    @Override
+    public Optional<Page> previous() {
+        return Optional.of(new FilterSettingsPage(this.screen, this.preset));
+    }
 
-	@Override
-	public Optional<Page> next() {
-		return Optional.of(new MiscellaneousPage(this.screen, this.preset));
-	}
-	
+    @Override
+    public Optional<Page> next() {
+        return Optional.of(new MiscellaneousPage(this.screen, this.preset));
+    }
+
 //	private static StructureSettings.StructureEntry makeEntry(StructureSelectionEntry entry) {
 //		return new StructureSettings.StructureEntry(entry.structure().unwrap(), entry.weight());
 //	}
 
-	private static boolean isOverworldStructureSet(WorldDimensions dimensions, Holder.Reference<StructureSet> holder) {
-		Set<Holder<Biome>> overworldBiomes = dimensions.overworld().getBiomeSource().possibleBiomes();
-		for(StructureSelectionEntry structureEntry : holder.value().structures()) {
-			Structure structure = structureEntry.structure().value();
+    private static boolean isOverworldStructureSet(WorldDimensions dimensions, Holder.Reference<StructureSet> holder) {
+        Set<Holder<Biome>> overworldBiomes = dimensions.overworld().getBiomeSource().possibleBiomes();
+        for (StructureSelectionEntry structureEntry : holder.value().structures()) {
+            Structure structure = structureEntry.structure().value();
 
-			for(Holder<Biome> biome : structure.biomes()) {
-				if(overworldBiomes.contains(biome)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+            for (Holder<Biome> biome : structure.biomes()) {
+                if (overworldBiomes.contains(biome)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -11,13 +11,13 @@ import raccoonman.reterraforged.world.worldgen.biome.RTFClimateSampler;
 @Mixin(Climate.Sampler.class)
 @Implements(@Interface(iface = RTFClimateSampler.class, prefix = "reterraforged$RTFClimateSampler$"))
 class MixinClimateSampler {
-	private BlockPos spawnSearchCenter = BlockPos.ZERO;
-	
-	public void reterraforged$RTFClimateSampler$setSpawnSearchCenter(BlockPos spawnSearchCenter) {
-		this.spawnSearchCenter = spawnSearchCenter;
-	}
-	
-	public BlockPos reterraforged$RTFClimateSampler$getSpawnSearchCenter() {
-		return this.spawnSearchCenter;
-	}
+    private BlockPos spawnSearchCenter = BlockPos.ZERO;
+
+    public void reterraforged$RTFClimateSampler$setSpawnSearchCenter(BlockPos spawnSearchCenter) {
+        this.spawnSearchCenter = spawnSearchCenter;
+    }
+
+    public BlockPos reterraforged$RTFClimateSampler$getSpawnSearchCenter() {
+        return this.spawnSearchCenter;
+    }
 }

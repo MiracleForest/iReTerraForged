@@ -19,43 +19,44 @@ import raccoonman.reterraforged.forge.mixin.MixinBiomeGenerationSettingsPlainsBu
 import raccoonman.reterraforged.world.worldgen.biome.modifier.Filter;
 import raccoonman.reterraforged.world.worldgen.biome.modifier.Order;
 
-record AddModifier(Order order, GenerationStep.Decoration step, Optional<Filter> biomes, HolderSet<PlacedFeature> features) implements ForgeBiomeModifier {
-	public static final Codec<AddModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		Order.CODEC.fieldOf("order").forGetter(AddModifier::order),
-		GenerationStep.Decoration.CODEC.fieldOf("step").forGetter(AddModifier::step),
-		Filter.CODEC.optionalFieldOf("biomes").forGetter(AddModifier::biomes),
-		PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(AddModifier::features)
-	).apply(instance, AddModifier::new));
+record AddModifier(Order order, GenerationStep.Decoration step, Optional<Filter> biomes,
+                   HolderSet<PlacedFeature> features) implements ForgeBiomeModifier {
+    public static final Codec<AddModifier> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Order.CODEC.fieldOf("order").forGetter(AddModifier::order),
+            GenerationStep.Decoration.CODEC.fieldOf("step").forGetter(AddModifier::step),
+            Filter.CODEC.optionalFieldOf("biomes").forGetter(AddModifier::biomes),
+            PlacedFeature.LIST_CODEC.fieldOf("features").forGetter(AddModifier::features)
+    ).apply(instance, AddModifier::new));
 
-	@Override
-	public void modify(Holder<Biome> biome, Phase phase, Builder builder) {
-		if(phase == Phase.AFTER_EVERYTHING) {
-			if(builder.getGenerationSettings() instanceof MixinBiomeGenerationSettingsPlainsBuilder builderAccessor) {
-				if(this.biomes.isPresent() && !this.biomes.get().test(biome)) {
-					return;
-				}
-				
-				List<List<Holder<PlacedFeature>>> featureSteps = builderAccessor.getFeatures();
-				int index = this.step.ordinal();
-	
-				while (index >= featureSteps.size()) {
-					featureSteps.add(Collections.emptyList());
-				}
-	
-				featureSteps.set(index, this.add(featureSteps.get(index)));
-			} else {
-				throw new IllegalStateException();
-			}
-		}
-	}
+    @Override
+    public void modify(Holder<Biome> biome, Phase phase, Builder builder) {
+        if (phase == Phase.AFTER_EVERYTHING) {
+            if (builder.getGenerationSettings() instanceof MixinBiomeGenerationSettingsPlainsBuilder builderAccessor) {
+                if (this.biomes.isPresent() && !this.biomes.get().test(biome)) {
+                    return;
+                }
 
-	private List<Holder<PlacedFeature>> add(@Nullable List<Holder<PlacedFeature>> values) {
-		if (values == null) return this.features.stream().toList();
-		return this.order.add(values, this.features.stream().toList());
-	}
+                List<List<Holder<PlacedFeature>>> featureSteps = builderAccessor.getFeatures();
+                int index = this.step.ordinal();
 
-	@Override
-	public Codec<AddModifier> codec() {
-		return CODEC;
-	}
+                while (index >= featureSteps.size()) {
+                    featureSteps.add(Collections.emptyList());
+                }
+
+                featureSteps.set(index, this.add(featureSteps.get(index)));
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+    }
+
+    private List<Holder<PlacedFeature>> add(@Nullable List<Holder<PlacedFeature>> values) {
+        if (values == null) return this.features.stream().toList();
+        return this.order.add(values, this.features.stream().toList());
+    }
+
+    @Override
+    public Codec<AddModifier> codec() {
+        return CODEC;
+    }
 }

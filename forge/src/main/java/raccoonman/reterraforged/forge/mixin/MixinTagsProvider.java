@@ -14,20 +14,20 @@ import net.minecraftforge.common.data.ExistingFileHelper.IResourceType;
 @Mixin(TagsProvider.class)
 class MixinTagsProvider {
 
-	@Redirect(
-		remap = false,
-		method = "lambda$getOrCreateRawBuilder$9", 
-		at = @At(
-			remap = false,
-			value = "INVOKE",
-			target = "Lnet/minecraftforge/common/data/ExistingFileHelper;trackGenerated(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraftforge/common/data/ExistingFileHelper$IResourceType;)V"
-		)
-	)
-	void trackGenerated(@Nullable ExistingFileHelper fileHelper, ResourceLocation loc, IResourceType type) {
-		// what the hell forge
-		// they even annotated it with @Nullable
-		if(fileHelper != null) {
-			fileHelper.trackGenerated(loc, type);
-		}
-	}
+    @Redirect(
+            remap = false,
+            method = "lambda$getOrCreateRawBuilder$9",
+            at = @At(
+                    remap = false,
+                    value = "INVOKE",
+                    target = "Lnet/minecraftforge/common/data/ExistingFileHelper;trackGenerated(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraftforge/common/data/ExistingFileHelper$IResourceType;)V"
+            )
+    )
+    void trackGenerated(@Nullable ExistingFileHelper fileHelper, ResourceLocation loc, IResourceType type) {
+        // what the hell forge
+        // they even annotated it with @Nullable
+        if (fileHelper != null) {
+            fileHelper.trackGenerated(loc, type);
+        }
+    }
 }

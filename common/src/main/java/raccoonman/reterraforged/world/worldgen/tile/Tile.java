@@ -8,61 +8,61 @@ import raccoonman.reterraforged.world.worldgen.cell.Cell;
 import raccoonman.reterraforged.world.worldgen.cell.CellLookup;
 
 public class Tile implements SafeCloseable, CellLookup {
-	private int x, z;
-	private int chunkX, chunkZ;
-	private int size;
-	private int border;
-	private Size blockSize;
-	private Size chunkSize;
-	private Resource<Cell[]> cacheResource;
-	private Resource<Chunk[]> chunkResource;
-	private Cell[] cache;
-	private Chunk[] chunks;
-	
-	public Tile(int x, int z, int size, int border, Size blockSize, Size chunkSize, Resource<Cell[]> cacheResource, Resource<Chunk[]> chunkResource) {
-		this.x = x;
-		this.z = z;
+    private int x, z;
+    private int chunkX, chunkZ;
+    private int size;
+    private int border;
+    private Size blockSize;
+    private Size chunkSize;
+    private Resource<Cell[]> cacheResource;
+    private Resource<Chunk[]> chunkResource;
+    private Cell[] cache;
+    private Chunk[] chunks;
+
+    public Tile(int x, int z, int size, int border, Size blockSize, Size chunkSize, Resource<Cell[]> cacheResource, Resource<Chunk[]> chunkResource) {
+        this.x = x;
+        this.z = z;
         this.chunkX = x << size;
         this.chunkZ = z << size;
         this.size = size;
         this.border = border;
-		this.blockSize = blockSize;
-		this.chunkSize = chunkSize;
-		this.cacheResource = cacheResource;
-		this.chunkResource = chunkResource;
-		this.cache = cacheResource.get();
-		this.chunks = chunkResource.get();
-	}
-	
-	public int getX() {
-		return this.x;
-	}
-	
-	public int getZ() {
-		return this.z;
-	}
-	
-	@Override
-	public Cell lookup(int blockX, int blockZ) {
-		int border = this.blockSize.border();
+        this.blockSize = blockSize;
+        this.chunkSize = chunkSize;
+        this.cacheResource = cacheResource;
+        this.chunkResource = chunkResource;
+        this.cache = cacheResource.get();
+        this.chunks = chunkResource.get();
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getZ() {
+        return this.z;
+    }
+
+    @Override
+    public Cell lookup(int blockX, int blockZ) {
+        int border = this.blockSize.border();
         int relBlockX = border + this.blockSize.mask(blockX);
         int relBlockZ = border + this.blockSize.mask(blockZ);
         int index = this.blockSize.indexOf(relBlockX, relBlockZ);
         return this.cache[index];
-	}
-	
-	public Chunk getChunkWriter(int chunkX, int chunkZ) {
+    }
+
+    public Chunk getChunkWriter(int chunkX, int chunkZ) {
         int index = this.chunkSize.indexOf(chunkX, chunkZ);
         return this.computeChunk(index, chunkX, chunkZ);
-	}
-	
-	public Chunk getChunkReader(int chunkX, int chunkZ) {
+    }
+
+    public Chunk getChunkReader(int chunkX, int chunkZ) {
         int relChunkX = this.chunkSize.border() + this.chunkSize.mask(chunkX);
         int relChunkZ = this.chunkSize.border() + this.chunkSize.mask(chunkZ);
         int index = this.chunkSize.indexOf(relChunkX, relChunkZ);
         return this.computeChunk(index, chunkX, chunkZ);
-	}
-	
+    }
+
     public void iterate(Cell.Visitor visitor) {
         for (int dz = 0; dz < this.blockSize.size(); ++dz) {
             int z = this.blockSize.border() + dz;
@@ -75,44 +75,44 @@ public class Tile implements SafeCloseable, CellLookup {
         }
     }
 
-	public int getBlockX() {
-		return Size.chunkToBlock(this.chunkX);
-	}
+    public int getBlockX() {
+        return Size.chunkToBlock(this.chunkX);
+    }
 
-	public int getBlockZ() {
-		return Size.chunkToBlock(this.chunkZ);
-	}
+    public int getBlockZ() {
+        return Size.chunkToBlock(this.chunkZ);
+    }
 
-	public Size getBlockSize() {
-		return this.blockSize;
-	}
+    public Size getBlockSize() {
+        return this.blockSize;
+    }
 
-	public Size getChunkSize() {
-		return this.chunkSize;
-	}
+    public Size getChunkSize() {
+        return this.chunkSize;
+    }
 
-	public Cell[] getBacking() {
-		return this.cache;
-	}
+    public Cell[] getBacking() {
+        return this.cache;
+    }
 
-	public Cell getCellRaw(int x, int z) {
-		int index = Tile.this.blockSize.indexOf(x, z);
+    public Cell getCellRaw(int x, int z) {
+        int index = Tile.this.blockSize.indexOf(x, z);
         if (index < 0 || index >= Tile.this.blockSize.arraySize()) {
             return Cell.empty();
         }
         return Tile.this.cache[index];
-	}
+    }
 
-	@Override
-	public void close() {
+    @Override
+    public void close() {
         for (Cell cell : this.cache) {
-        	cell.reset();
+            cell.reset();
         }
         Arrays.fill(this.chunks, null);
-		this.cacheResource.close();
-		this.chunkResource.close();
-	}
-	
+        this.cacheResource.close();
+        this.chunkResource.close();
+    }
+
     private Chunk computeChunk(int index, int chunkX, int chunkZ) {
         Chunk chunk = this.chunks[index];
         if (chunk == null) {
@@ -121,63 +121,63 @@ public class Tile implements SafeCloseable, CellLookup {
         }
         return chunk;
     }
-	
-	public class Chunk {
+
+    public class Chunk {
         private int chunkX;
         private int chunkZ;
         private int blockX;
         private int blockZ;
         private int regionBlockX;
         private int regionBlockZ;
-		
+
         private float highestPoint;
-        
-		public Chunk(int regionChunkX, int regionChunkZ) {
+
+        public Chunk(int regionChunkX, int regionChunkZ) {
             this.regionBlockX = regionChunkX << 4;
             this.regionBlockZ = regionChunkZ << 4;
             this.chunkX = Tile.this.chunkX + regionChunkX - Tile.this.border;
             this.chunkZ = Tile.this.chunkZ + regionChunkZ - Tile.this.border;
             this.blockX = this.chunkX << 4;
             this.blockZ = this.chunkZ << 4;
-            
+
             this.highestPoint = Float.MIN_VALUE;
-		}
-		
-		public void updateHighestPoint(Cell cell) {
-            if(cell.height > this.highestPoint) {
-            	this.highestPoint = cell.height;
+        }
+
+        public void updateHighestPoint(Cell cell) {
+            if (cell.height > this.highestPoint) {
+                this.highestPoint = cell.height;
             }
-		}
-		
-		public float getHighestPoint() {
-			return this.highestPoint;
-		}
-		
+        }
+
+        public float getHighestPoint() {
+            return this.highestPoint;
+        }
+
         public int getChunkX() {
             return this.chunkX;
         }
-        
+
         public int getChunkZ() {
             return this.chunkZ;
         }
-        
+
         public int getBlockX() {
             return this.blockX;
         }
-        
+
         public int getBlockZ() {
             return this.blockZ;
         }
-        
+
         public Cell getCell(int blockX, int blockZ) {
             int relX = this.regionBlockX + (blockX & 0xF);
             int relZ = this.regionBlockZ + (blockZ & 0xF);
             int index = Tile.this.blockSize.indexOf(relX, relZ);
             return Tile.this.cache[index];
         }
-        
+
         public static int clampToNearestCell(int height, int cellHeight) {
-        	return (height / cellHeight + 1) * cellHeight;
+            return (height / cellHeight + 1) * cellHeight;
         }
-	}
+    }
 }

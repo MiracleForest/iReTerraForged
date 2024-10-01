@@ -15,7 +15,7 @@ public class TemplateBuffer extends PasteBuffer {
     private final BufferBitSet placementMask = new BufferBitSet();
 
     public TemplateBuffer() {
-    	this.setRecording(true);
+        this.setRecording(true);
     }
 
     public TemplateBuffer init(LevelAccessor world, BlockPos origin, Vec3i p1, Vec3i p2) {
@@ -29,7 +29,7 @@ public class TemplateBuffer extends PasteBuffer {
 
     public void record(int i, BlockInfo block, BlockPos pastePos, TemplatePlacement<?> placement, PasteConfig config) {
         if (!config.replaceSolid() && !placement.canReplaceAt(this.world, pastePos)) {
-        	this.placementMask.set(block.pos().getX(), block.pos().getY(), block.pos().getZ());
+            this.placementMask.set(block.pos().getX(), block.pos().getY(), block.pos().getZ());
             return;
         }
 

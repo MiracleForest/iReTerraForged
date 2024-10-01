@@ -31,17 +31,17 @@ public final class PresetBiomeData {
     public static final ResourceKey<Biome> STONE_FOREST = createKey("stone_forest");
     public static final ResourceKey<Biome> TAIGA_SCRUB = createKey("taiga_scrub");
     public static final ResourceKey<Biome> WARM_BEACH = createKey("warm_beach");
-	
-	public static void bootstrap(Preset preset, BootstapContext<Biome> ctx) {
-		MiscellaneousSettings miscellaneousSettings = preset.miscellaneous();
-		
-		if(miscellaneousSettings.customBiomeFeatures) {
-			HolderGetter<PlacedFeature> placedFeatures = ctx.lookup(Registries.PLACED_FEATURE);
-			HolderGetter<ConfiguredWorldCarver<?>> configuredWorldCarvers = ctx.lookup(Registries.CONFIGURED_CARVER);
 
-		}
-	}
-	
+    public static void bootstrap(Preset preset, BootstapContext<Biome> ctx) {
+        MiscellaneousSettings miscellaneousSettings = preset.miscellaneous();
+
+        if (miscellaneousSettings.customBiomeFeatures) {
+            HolderGetter<PlacedFeature> placedFeatures = ctx.lookup(Registries.PLACED_FEATURE);
+            HolderGetter<ConfiguredWorldCarver<?>> configuredWorldCarvers = ctx.lookup(Registries.CONFIGURED_CARVER);
+
+        }
+    }
+
     private static ResourceKey<Biome> createKey(String string) {
         return ResourceKey.create(Registries.BIOME, RTFCommon.location(string));
     }

@@ -1,4 +1,4 @@
-package raccoonman.reterraforged.mixin; 
+package raccoonman.reterraforged.mixin;
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -43,109 +43,109 @@ import raccoonman.reterraforged.world.worldgen.noise.module.Noises;
 @Mixin(RandomState.class)
 @Implements(@Interface(iface = RTFRandomState.class, prefix = "reterraforged$RTFRandomState$"))
 class MixinRandomState {
-	@Shadow
-	@Final
-	private Climate.Sampler sampler;
-	@Shadow
-	@Final
+    @Shadow
+    @Final
+    private Climate.Sampler sampler;
+    @Shadow
+    @Final
     private SurfaceSystem surfaceSystem;
-	
-	@Nullable
-	private Preset preset;
-	@Nullable
-	private NoiseSampler globalSampler;
-	@Nullable
-	private RegistryAccess registryAccess;
-	
-	@Deprecated
-	private boolean hasContext;
-	@Deprecated
-	@Nullable
-	private GeneratorContext generatorContext;
-	
-	private long seed;
-	private DensityFunction.Visitor densityFunctionWrapper;
-	
-	@Redirect(
-		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/world/level/levelgen/NoiseRouter;mapAll(Lnet/minecraft/world/level/levelgen/DensityFunction$Visitor;)Lnet/minecraft/world/level/levelgen/NoiseRouter;"
-		),
-		method = "<init>",
-		require = 1
-	)
-	private NoiseRouter RandomState(NoiseRouter router, DensityFunction.Visitor visitor, NoiseGeneratorSettings noiseGeneratorSettings, HolderGetter<NormalNoise.NoiseParameters> params, final long seed) {
-		this.seed = seed;
-		this.densityFunctionWrapper = new DensityFunction.Visitor() {
-			
-			@Override
-			public DensityFunction apply(DensityFunction function) {
-				if(function instanceof NoiseSampler.Marker marker) {
-					return new NoiseSampler(marker.noise(), (int) seed);
-				}
-				if(function instanceof CellSampler.Marker marker) {
-					MixinRandomState.this.hasContext |= true;
-					return new CellSampler(Suppliers.memoize(() -> MixinRandomState.this.generatorContext), marker.field());
-				}
-				return visitor.apply(function);
-			}
 
-			@Override
-			public NoiseHolder visitNoise(NoiseHolder noiseHolder) {
-	            return visitor.visitNoise(noiseHolder);
-	        }
-		};
-		return router.mapAll(this.densityFunctionWrapper);
-	}
+    @Nullable
+    private Preset preset;
+    @Nullable
+    private NoiseSampler globalSampler;
+    @Nullable
+    private RegistryAccess registryAccess;
 
-	public void reterraforged$RTFRandomState$initialize(RegistryAccess registryAccess) {
-		this.registryAccess = registryAccess;
-		
-		RegistryLookup<Preset> presets = registryAccess.lookupOrThrow(RTFRegistries.PRESET);
-		RegistryLookup<DensityFunction> functions = registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION);
-		
-		if((Object) this.sampler instanceof TBClimateSampler tbClimateSampler && TBCompat.isEnabled()) {
-			functions.get(TBNoiseRouterData.UNIQUENESS).ifPresent((uniqueness) -> {
-				tbClimateSampler.setUniqueness(uniqueness.value().mapAll(this.densityFunctionWrapper));
-			});
-		}
-		
-		presets.get(PresetData.PRESET).ifPresent((presetHolder) -> {
-			this.preset = presetHolder.value();
+    @Deprecated
+    private boolean hasContext;
+    @Deprecated
+    @Nullable
+    private GeneratorContext generatorContext;
 
-			if(this.hasContext) {
-				//TODO move this somewhere else
-				CacheManager.clear();
-				
-				PerformanceConfig config = PerformanceConfig.read(PerformanceConfig.DEFAULT_FILE_PATH)
-					.resultOrPartial(RTFCommon.LOGGER::error)
-					.orElseGet(PerformanceConfig::makeDefault);
-				this.generatorContext = GeneratorContext.makeCached(this.preset, (int) this.seed, config.tileSize(), config.batchCount(), ThreadPools.availableProcessors() > 4);
-			}
-		});
-	}
-	
-	@Nullable
-	public RegistryAccess reterraforged$RTFRandomState$registryAccess() {
-		return this.registryAccess;
-	}
-	
-	@Nullable
-	public Preset reterraforged$RTFRandomState$preset() {
-		return this.preset;
-	}
-	
-	@Nullable
-	public GeneratorContext reterraforged$RTFRandomState$generatorContext() {
-		return this.generatorContext;
-	}
+    private long seed;
+    private DensityFunction.Visitor densityFunctionWrapper;
 
-	@Nullable
-	public DensityFunction reterraforged$RTFRandomState$wrap(DensityFunction function) {
-		return function.mapAll(this.densityFunctionWrapper);
-	}
+    @Redirect(
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/levelgen/NoiseRouter;mapAll(Lnet/minecraft/world/level/levelgen/DensityFunction$Visitor;)Lnet/minecraft/world/level/levelgen/NoiseRouter;"
+            ),
+            method = "<init>",
+            require = 1
+    )
+    private NoiseRouter RandomState(NoiseRouter router, DensityFunction.Visitor visitor, NoiseGeneratorSettings noiseGeneratorSettings, HolderGetter<NormalNoise.NoiseParameters> params, final long seed) {
+        this.seed = seed;
+        this.densityFunctionWrapper = new DensityFunction.Visitor() {
 
-	public Noise reterraforged$RTFRandomState$wrap(Noise noise) {
-		return Noises.shiftSeed(noise, (int) this.seed);
-	}
+            @Override
+            public DensityFunction apply(DensityFunction function) {
+                if (function instanceof NoiseSampler.Marker marker) {
+                    return new NoiseSampler(marker.noise(), (int) seed);
+                }
+                if (function instanceof CellSampler.Marker marker) {
+                    MixinRandomState.this.hasContext |= true;
+                    return new CellSampler(Suppliers.memoize(() -> MixinRandomState.this.generatorContext), marker.field());
+                }
+                return visitor.apply(function);
+            }
+
+            @Override
+            public NoiseHolder visitNoise(NoiseHolder noiseHolder) {
+                return visitor.visitNoise(noiseHolder);
+            }
+        };
+        return router.mapAll(this.densityFunctionWrapper);
+    }
+
+    public void reterraforged$RTFRandomState$initialize(RegistryAccess registryAccess) {
+        this.registryAccess = registryAccess;
+
+        RegistryLookup<Preset> presets = registryAccess.lookupOrThrow(RTFRegistries.PRESET);
+        RegistryLookup<DensityFunction> functions = registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION);
+
+        if ((Object) this.sampler instanceof TBClimateSampler tbClimateSampler && TBCompat.isEnabled()) {
+            functions.get(TBNoiseRouterData.UNIQUENESS).ifPresent((uniqueness) -> {
+                tbClimateSampler.setUniqueness(uniqueness.value().mapAll(this.densityFunctionWrapper));
+            });
+        }
+
+        presets.get(PresetData.PRESET).ifPresent((presetHolder) -> {
+            this.preset = presetHolder.value();
+
+            if (this.hasContext) {
+                //TODO move this somewhere else
+                CacheManager.clear();
+
+                PerformanceConfig config = PerformanceConfig.read(PerformanceConfig.DEFAULT_FILE_PATH)
+                        .resultOrPartial(RTFCommon.LOGGER::error)
+                        .orElseGet(PerformanceConfig::makeDefault);
+                this.generatorContext = GeneratorContext.makeCached(this.preset, (int) this.seed, config.tileSize(), config.batchCount(), ThreadPools.availableProcessors() > 4);
+            }
+        });
+    }
+
+    @Nullable
+    public RegistryAccess reterraforged$RTFRandomState$registryAccess() {
+        return this.registryAccess;
+    }
+
+    @Nullable
+    public Preset reterraforged$RTFRandomState$preset() {
+        return this.preset;
+    }
+
+    @Nullable
+    public GeneratorContext reterraforged$RTFRandomState$generatorContext() {
+        return this.generatorContext;
+    }
+
+    @Nullable
+    public DensityFunction reterraforged$RTFRandomState$wrap(DensityFunction function) {
+        return function.mapAll(this.densityFunctionWrapper);
+    }
+
+    public Noise reterraforged$RTFRandomState$wrap(Noise noise) {
+        return Noises.shiftSeed(noise, (int) this.seed);
+    }
 }

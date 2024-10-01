@@ -19,13 +19,13 @@ public class LakePopulator {
     private float bankMin;
     private float bankMax;
     protected Vec2f center;
-    
+
     private LakePopulator2 populator2;
-    
+
     public LakePopulator(Vec2f center, float radius, float multiplier, LakeConfig config) {
-    	this.populator2 = new LakePopulator2(center, radius, multiplier, config);
-    	
-    	float lake = radius * multiplier;
+        this.populator2 = new LakePopulator2(center, radius, multiplier, config);
+
+        float lake = radius * multiplier;
         float valley = 275.0F * multiplier;
         this.valley = valley;
         this.valley2 = valley * valley;
@@ -39,7 +39,7 @@ public class LakePopulator {
         this.lakeDistance2 = lake * lake;
         this.valleyDistance2 = this.valley2 - this.lakeDistance2;
     }
-    
+
     public void apply(Cell cell, float x, float z) {
         float distance2 = this.getDistance2(x, z);
         if (distance2 > this.valley2) {
@@ -75,23 +75,23 @@ public class LakePopulator {
         cell.riverDistance *= 1.0F - valleyAlpha;
         cell.riverDistance = Math.min(cell.riverDistance, 1.0F - valleyAlpha);
     }
-    
+
     public void recordBounds(Boundsf.Builder builder) {
         builder.record(this.center.x() - this.valley * 1.2F, this.center.y() - this.valley * 1.2F);
         builder.record(this.center.x() + this.valley * 1.2F, this.center.y() + this.valley * 1.2F);
     }
-    
+
     public boolean overlaps(float x, float z, float radius2) {
         float dist2 = this.getDistance2(x, z);
         return dist2 < this.lakeDistance2 + radius2;
     }
-    
+
     protected float getDistance2(float x, float z) {
         float dx = this.center.x() - x;
         float dz = this.center.y() - z;
         return dx * dx + dz * dz;
     }
-    
+
     protected float getBankHeight(Cell cell) {
         float bankHeightAlpha = NoiseUtil.map(cell.height, this.bankAlphaMin, this.bankAlphaMax, this.bankAlphaRange);
         return NoiseUtil.lerp(this.bankMin, this.bankMax, bankHeightAlpha);

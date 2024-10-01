@@ -11,7 +11,7 @@ import java.util.Properties;
 public class BiomeTypeColors {
     private static final BiomeTypeColors INSTANCE = new BiomeTypeColors();
     private Map<String, Color> colors;
-    
+
     private BiomeTypeColors() {
         this.colors = new HashMap<>();
         try (InputStream inputStream = BiomeType.class.getResourceAsStream("/biomes.txt")) {
@@ -25,15 +25,15 @@ public class BiomeTypeColors {
             e.printStackTrace();
         }
     }
-    
+
     public Color getColor(String name, Color defaultColor) {
         return this.colors.getOrDefault(name, defaultColor);
     }
-    
+
     public static BiomeTypeColors getInstance() {
         return BiomeTypeColors.INSTANCE;
     }
-    
+
     public static void main(String[] args) throws Throwable {
         try (FileWriter writer = new FileWriter("biome_colors.properties")) {
             Properties properties = new Properties();

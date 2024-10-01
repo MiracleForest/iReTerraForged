@@ -1,120 +1,120 @@
 package raccoonman.reterraforged.world.worldgen.terrain;
 
 public interface ITerrain {
-	
-	default float erosionModifier() {
-		return 1.0F;
-	}
 
-	default boolean isFlat() {
-		return false;
-	}
+    default float erosionModifier() {
+        return 1.0F;
+    }
 
-	default boolean isRiver() {
-		return false;
-	}
+    default boolean isFlat() {
+        return false;
+    }
 
-	default boolean isShallowOcean() {
-		return false;
-	}
+    default boolean isRiver() {
+        return false;
+    }
 
-	default boolean isDeepOcean() {
-		return false;
-	}
+    default boolean isShallowOcean() {
+        return false;
+    }
 
-	default boolean isCoast() {
-		return false;
-	}
+    default boolean isDeepOcean() {
+        return false;
+    }
 
-	default boolean isSubmerged() {
-		return this.isDeepOcean() || this.isShallowOcean() || this.isRiver() || this.isLake();
-	}
+    default boolean isCoast() {
+        return false;
+    }
 
-	default boolean isOverground() {
-		return false;
-	}
+    default boolean isSubmerged() {
+        return this.isDeepOcean() || this.isShallowOcean() || this.isRiver() || this.isLake();
+    }
 
-	default boolean overridesRiver() {
-		return this.isDeepOcean() || this.isShallowOcean() || this.isCoast();
-	}
+    default boolean isOverground() {
+        return false;
+    }
 
-	default boolean overridesCoast() {
-		return this.isVolcano();
-	}
+    default boolean overridesRiver() {
+        return this.isDeepOcean() || this.isShallowOcean() || this.isCoast();
+    }
 
-	default boolean isLake() {
-		return false;
-	}
+    default boolean overridesCoast() {
+        return this.isVolcano();
+    }
 
-	default boolean isWetland() {
-		return false;
-	}
+    default boolean isLake() {
+        return false;
+    }
 
-	default boolean isMountain() {
-		return false;
-	}
+    default boolean isWetland() {
+        return false;
+    }
 
-	default boolean isVolcano() {
-		return false;
-	}
+    default boolean isMountain() {
+        return false;
+    }
 
-	public interface Delegate extends ITerrain {
-		ITerrain getDelegate();
+    default boolean isVolcano() {
+        return false;
+    }
 
-		default float erosionModifier() {
-			return this.getDelegate().erosionModifier();
-		}
+    public interface Delegate extends ITerrain {
+        ITerrain getDelegate();
 
-		default boolean isFlat() {
-			return this.getDelegate().isFlat();
-		}
+        default float erosionModifier() {
+            return this.getDelegate().erosionModifier();
+        }
 
-		default boolean isRiver() {
-			return this.getDelegate().isRiver();
-		}
+        default boolean isFlat() {
+            return this.getDelegate().isFlat();
+        }
 
-		default boolean isShallowOcean() {
-			return this.getDelegate().isShallowOcean();
-		}
+        default boolean isRiver() {
+            return this.getDelegate().isRiver();
+        }
 
-		default boolean isDeepOcean() {
-			return this.getDelegate().isDeepOcean();
-		}
+        default boolean isShallowOcean() {
+            return this.getDelegate().isShallowOcean();
+        }
 
-		default boolean isCoast() {
-			return this.getDelegate().isCoast();
-		}
+        default boolean isDeepOcean() {
+            return this.getDelegate().isDeepOcean();
+        }
 
-		default boolean overridesRiver() {
-			return this.getDelegate().overridesRiver();
-		}
+        default boolean isCoast() {
+            return this.getDelegate().isCoast();
+        }
 
-		default boolean overridesCoast() {
-			return this.getDelegate().overridesCoast();
-		}
+        default boolean overridesRiver() {
+            return this.getDelegate().overridesRiver();
+        }
 
-		default boolean isLake() {
-			return this.getDelegate().isLake();
-		}
+        default boolean overridesCoast() {
+            return this.getDelegate().overridesCoast();
+        }
 
-		default boolean isWetland() {
-			return this.getDelegate().isWetland();
-		}
+        default boolean isLake() {
+            return this.getDelegate().isLake();
+        }
 
-		default boolean isOverground() {
-			return this.getDelegate().isOverground();
-		}
+        default boolean isWetland() {
+            return this.getDelegate().isWetland();
+        }
 
-		default boolean isSubmerged() {
-			return this.getDelegate().isSubmerged();
-		}
+        default boolean isOverground() {
+            return this.getDelegate().isOverground();
+        }
 
-		default boolean isMountain() {
-			return this.getDelegate().isMountain();
-		}
+        default boolean isSubmerged() {
+            return this.getDelegate().isSubmerged();
+        }
 
-		default boolean isVolcano() {
-			return this.getDelegate().isVolcano();
-		}
-	}
+        default boolean isMountain() {
+            return this.getDelegate().isMountain();
+        }
+
+        default boolean isVolcano() {
+            return this.getDelegate().isVolcano();
+        }
+    }
 }

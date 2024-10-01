@@ -11,7 +11,7 @@ public class TemplateRegion {
     private int maxX, maxZ;
 
     public TemplateRegion init(BlockPos pos) {
-    	this.centerX = pos.getX() >> 4;
+        this.centerX = pos.getX() >> 4;
         this.centerZ = pos.getZ() >> 4;
         this.minX = this.centerX - SIZE;
         this.minZ = this.centerZ - SIZE;

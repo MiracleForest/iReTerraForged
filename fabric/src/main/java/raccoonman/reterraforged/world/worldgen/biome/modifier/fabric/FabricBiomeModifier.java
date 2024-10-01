@@ -14,15 +14,15 @@ import raccoonman.reterraforged.mixin.MixinBiomeGenerationSettings;
 import raccoonman.reterraforged.world.worldgen.biome.modifier.BiomeModifier;
 
 public interface FabricBiomeModifier extends BiomeModifier {
-	void apply(BiomeSelectionContext selectionContext, BiomeModificationContext modificationContext);
-	
-	default void rebuildFlowerFeatures(BiomeGenerationSettings generationSettings) {
-		if(generationSettings instanceof MixinBiomeGenerationSettings biomeGenerationSettings) {
-			biomeGenerationSettings.setFlowerFeatures(Suppliers.memoize(() -> {
-				return biomeGenerationSettings.getFeatures().stream().flatMap(HolderSet::stream).map(Holder::value).flatMap(PlacedFeature::getFeatures).filter((configuredFeature) -> {
-					return configuredFeature.feature() == Feature.FLOWER;
-				}).collect(ImmutableList.toImmutableList());
-			}));
-		}
-	}
+    void apply(BiomeSelectionContext selectionContext, BiomeModificationContext modificationContext);
+
+    default void rebuildFlowerFeatures(BiomeGenerationSettings generationSettings) {
+        if (generationSettings instanceof MixinBiomeGenerationSettings biomeGenerationSettings) {
+            biomeGenerationSettings.setFlowerFeatures(Suppliers.memoize(() -> {
+                return biomeGenerationSettings.getFeatures().stream().flatMap(HolderSet::stream).map(Holder::value).flatMap(PlacedFeature::getFeatures).filter((configuredFeature) -> {
+                    return configuredFeature.feature() == Feature.FLOWER;
+                }).collect(ImmutableList.toImmutableList());
+            }));
+        }
+    }
 }

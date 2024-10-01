@@ -8,10 +8,11 @@ import raccoonman.reterraforged.world.worldgen.noise.module.Noises;
 
 @Deprecated
 public class ColumnDecorator {
-	private static final Noise VARIANCE = Noises.perlin(0, 100, 1);
+    private static final Noise VARIANCE = Noises.perlin(0, 100, 1);
 
     public static void fillDownSolid(ChunkAccess chunk, BlockPos.MutableBlockPos pos, int from, int to, BlockState state) {
-        for (int dy = from; dy > to; dy--) { ;
+        for (int dy = from; dy > to; dy--) {
+            ;
             replaceSolid(chunk, pos.setY(dy), state);
         }
     }
@@ -22,7 +23,7 @@ public class ColumnDecorator {
         }
         chunk.setBlockState(pos, state, false);
     }
-	
+
     public static float sampleNoise(float x, float z, float scale, float bias) {
         return VARIANCE.compute(x, z, 0) * scale + bias;
     }

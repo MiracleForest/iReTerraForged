@@ -10,23 +10,23 @@ import raccoonman.reterraforged.concurrent.cache.map.LongMap;
 import raccoonman.reterraforged.concurrent.cache.map.StampedBoundLongMap;
 
 public class CacheManager {
-	private static final List<Cache<?>> CACHES = Collections.synchronizedList(new LinkedList<>());
-	
-	public static <V extends ExpiringEntry> Cache<V> createCache(int capacity, long expireTime, long pollInterval, TimeUnit unit) {
-		return createCache(capacity, expireTime, pollInterval, unit, StampedBoundLongMap::new);
-	}
-	
-	public static <V extends ExpiringEntry> Cache<V> createCache(int capacity, long expireTime, long pollInterval, TimeUnit unit, IntFunction<LongMap<V>> mapFunc) {
-		Cache<V> cache = new Cache<>(capacity, expireTime, pollInterval, unit, mapFunc);
-		CACHES.add(cache);
-		return cache;
-	}
-	
-	public static void clear() {
-		for(Cache<?> cache : CACHES) {
-			cache.close();
-		}
-		
-		CACHES.clear();
-	}
+    private static final List<Cache<?>> CACHES = Collections.synchronizedList(new LinkedList<>());
+
+    public static <V extends ExpiringEntry> Cache<V> createCache(int capacity, long expireTime, long pollInterval, TimeUnit unit) {
+        return createCache(capacity, expireTime, pollInterval, unit, StampedBoundLongMap::new);
+    }
+
+    public static <V extends ExpiringEntry> Cache<V> createCache(int capacity, long expireTime, long pollInterval, TimeUnit unit, IntFunction<LongMap<V>> mapFunc) {
+        Cache<V> cache = new Cache<>(capacity, expireTime, pollInterval, unit, mapFunc);
+        CACHES.add(cache);
+        return cache;
+    }
+
+    public static void clear() {
+        for (Cache<?> cache : CACHES) {
+            cache.close();
+        }
+
+        CACHES.clear();
+    }
 }

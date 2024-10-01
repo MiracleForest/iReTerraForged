@@ -14,27 +14,27 @@ import net.minecraft.world.level.levelgen.SurfaceRules.Context;
 import raccoonman.reterraforged.world.worldgen.RTFRandomState;
 
 record BiomeTagCondition(TagKey<Biome> tag) implements SurfaceRules.ConditionSource {
-	public static final Codec<BiomeTagCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-		TagKey.hashedCodec(Registries.BIOME).fieldOf("tag").forGetter(BiomeTagCondition::tag)
-	).apply(instance, BiomeTagCondition::new));
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public SurfaceRules.Condition apply(Context ctx) {
-		if((Object) ctx.randomState instanceof RTFRandomState rtfRandomState) {
-			RegistryLookup<Biome> registry = rtfRandomState.registryAccess().lookupOrThrow(Registries.BIOME);
-			return SurfaceRules.isBiome(registry.getOrThrow(this.tag)
-				.stream()
-				.map((holder) -> holder.unwrapKey().orElseThrow())
-				.toArray(ResourceKey[]::new)
-			).apply(ctx);
-		} else {
-			throw new IllegalStateException();
-		}
-	}
+    public static final Codec<BiomeTagCondition> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            TagKey.hashedCodec(Registries.BIOME).fieldOf("tag").forGetter(BiomeTagCondition::tag)
+    ).apply(instance, BiomeTagCondition::new));
 
-	@Override
-	public KeyDispatchDataCodec<BiomeTagCondition> codec() {
-		return new KeyDispatchDataCodec<>(CODEC);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public SurfaceRules.Condition apply(Context ctx) {
+        if ((Object) ctx.randomState instanceof RTFRandomState rtfRandomState) {
+            RegistryLookup<Biome> registry = rtfRandomState.registryAccess().lookupOrThrow(Registries.BIOME);
+            return SurfaceRules.isBiome(registry.getOrThrow(this.tag)
+                    .stream()
+                    .map((holder) -> holder.unwrapKey().orElseThrow())
+                    .toArray(ResourceKey[]::new)
+            ).apply(ctx);
+        } else {
+            throw new IllegalStateException();
+        }
+    }
+
+    @Override
+    public KeyDispatchDataCodec<BiomeTagCondition> codec() {
+        return new KeyDispatchDataCodec<>(CODEC);
+    }
 }

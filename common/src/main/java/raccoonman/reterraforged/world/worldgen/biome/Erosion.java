@@ -9,22 +9,22 @@ public enum Erosion implements BiomeParameter {
     LEVEL_4(0.05F, 0.45F),
     LEVEL_5(0.45F, 0.55F),
     LEVEL_6(0.55F, 1.0F);
-	
-	private float min;
-	private float max;
-	
-	private Erosion(float min, float max) {
-		this.min = min;
-		this.max = max;
-	}
-	
-	@Override
-	public float min() {
-		return this.min;
-	}
-	
-	@Override
-	public float max() {
-		return this.max;
-	}
+
+    private float min;
+    private float max;
+
+    private Erosion(float min, float max) {
+        this.min = min;
+        this.max = max;
+    }
+
+    @Override
+    public float min() {
+        return this.min;
+    }
+
+    @Override
+    public float max() {
+        return this.max;
+    }
 }
